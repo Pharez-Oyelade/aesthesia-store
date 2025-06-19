@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prata&display=swap");
+
+@import "tailwindcss";
+
+* {
+  font-family: outfit;
+}
+
+.preta-regular {
+  font-family: "Prata", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+a {
+  border-bottom: 2px solid transparent;
+  padding-bottom: 2px;
+  transition: border-bottom 0.3s ease-in;
+}
+
+a.active {
+  border-bottom: 2px solid #fff;
+}
+
+a.filter.active {
+  border-bottom: 2px solid #000;
+}
+
+input[type="checkbox"] {
+  accent-color: red;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  a.active {
+    background-color: black;
+    color: white;
+  }
+}
