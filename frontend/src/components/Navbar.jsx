@@ -42,18 +42,18 @@ const Navbar = () => {
       } ${isHovered ? "bg-white text-black shadow-md" : ""} `}
     >
       <Link to="/">
-        {/* <img
+        <img
           src={isScrolled || isHovered ? assets.logo_dark : assets.logo_light}
           className="w-36"
           alt=""
-        /> */}
-        <p
+        />
+        {/* <p
           className={`text-3xl ${
             isScrolled || isHovered ? "text-black" : "text-white"
           }`}
         >
           D'VORA
-        </p>
+        </p> */}
       </Link>
 
       <ul className="hidden sm:flex gap-5 text-sm">
