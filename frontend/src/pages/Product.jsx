@@ -10,6 +10,13 @@ const Product = () => {
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
+  const [quantity, setQuantity] = useState(1);
+  const [measurements, setMeasurements] = useState({
+    waist: "",
+    length: "",
+    hips: "",
+    bust: "",
+  });
 
   const fetchProductData = async () => {
     products.map((item) => {
@@ -24,6 +31,15 @@ const Product = () => {
   useEffect(() => {
     fetchProductData();
   }, [productId, productname, products]);
+
+  const handleMeasurementChange = (e) => {
+    setMeasurements({ ...measurements, [e.target.name]: e.target.value });
+  };
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    addToCart(productData._id, size, measurements, quantity);
+  };
 
   return productData ? (
     <div className="bg-gradient-to-br from-white to-gray-100 min-h-screen py-10">
@@ -97,12 +113,82 @@ const Product = () => {
                 ))}
               </div>
             </div>
-            <button
-              onClick={() => addToCart(productData._id, size)}
-              className="w-full md:w-auto bg-gradient-to-r from-red-700 to-red-500 hover:from-red-800 hover:to-red-600 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95"
+            {/* Measurements Form */}
+            <form
+              onSubmit={handleAddToCart}
+              className="flex flex-col gap-4 mt-4"
             >
-              Add to Cart
-            </button>
+              <p>Measurements for fitting</p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <input
+                  type="number"
+                  name="waist"
+                  value={measurements.waist}
+                  onChange={handleMeasurementChange}
+                  placeholder="Waist (inches)"
+                  className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200"
+                  min={0}
+                  required
+                />
+                <input
+                  type="number"
+                  name="length"
+                  value={measurements.length}
+                  onChange={handleMeasurementChange}
+                  placeholder="Length (inches)"
+                  className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200"
+                  min={0}
+                  required
+                />
+                <input
+                  type="number"
+                  name="hips"
+                  value={measurements.hips}
+                  onChange={handleMeasurementChange}
+                  placeholder="Hips (inches)"
+                  className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200"
+                  min={0}
+                  required
+                />
+                <input
+                  type="number"
+                  name="bust"
+                  value={measurements.bust}
+                  onChange={handleMeasurementChange}
+                  placeholder="Bust (inches)"
+                  className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200"
+                  min={0}
+                  required
+                />
+              </div>
+              {/* Quantity Controls */}
+              <div className="flex items-center gap-4 mt-2">
+                <span className="font-medium">Quantity:</span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                  className="w-8 h-8 rounded-full bg-gray-200 text-xl font-bold flex items-center justify-center hover:bg-red-100"
+                >
+                  -
+                </button>
+                <span className="text-lg font-semibold w-8 text-center">
+                  {quantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setQuantity((q) => q + 1)}
+                  className="w-8 h-8 rounded-full bg-gray-200 text-xl font-bold flex items-center justify-center hover:bg-red-100"
+                >
+                  +
+                </button>
+              </div>
+              <button
+                type="submit"
+                className="w-full md:w-auto bg-gradient-to-r from-red-700 to-red-500 hover:from-red-800 hover:to-red-600 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95 mt-4"
+              >
+                Add to Cart
+              </button>
+            </form>
           </div>
           <div className="border-t pt-6 mt-6 text-sm text-gray-500 flex flex-col gap-1">
             <p>✔️ 100% Original Product</p>

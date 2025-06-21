@@ -16,6 +16,8 @@ import Jewelry from "./pages/Jewelry";
 import SearchBar from "./components/SearchBar";
 import { ToastContainer } from "react-toastify";
 import Wishlist from "./pages/Wishlist";
+import PlaceOrder from "./pages/PlaceOrder";
+import Orders from "./pages/Orders";
 
 const App = () => {
   const navigate = useNavigate();
@@ -48,6 +50,12 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/place-order" element={<PlaceOrder />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route
+              path="*"
+              element={<h1 className="text-center text-2xl">Page Not Found</h1>}
+            />
           </Routes>
         </div>
       )}

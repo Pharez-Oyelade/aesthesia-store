@@ -38,11 +38,11 @@ const FeaturedGrid = () => {
         <Title text1="FEATURED" text2="SECTIONS" />
       </div> */}
 
-      <div className="grid grid-cols-2 gap-4 gap-y-3 mb-20">
+      <div className="grid grid-row sm:grid-cols-2 gap-4 gap-y-3 mb-20">
         {images.map((img, idx) => (
           <div
             key={idx}
-            className="group overflow-hidden relative h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] cursor-pointer"
+            className="group overflow-hidden relative h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] cursor-pointer rounded-2xl"
           >
             <img
               src={img}

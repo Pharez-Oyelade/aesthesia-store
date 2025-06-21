@@ -6,6 +6,11 @@ import { IoMdHeart } from "react-icons/io";
 const ProductItem = ({ id, image, name, price }) => {
   const { currency, addToWishlist } = useContext(shopContext);
 
+  const handleWishlist = (e) => {
+    e.preventDefault(); // Prevent navigation when clicking heart
+    addToWishlist(id);
+  };
+
   return (
     <Link to={`/product/${id}`} className="text-gray-700 cursor-pointer">
       <div className="relative group overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 rounded-3xl">
@@ -16,8 +21,9 @@ const ProductItem = ({ id, image, name, price }) => {
         />
         <div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition">
           <button
-            onClick={() => addToWishlist()}
-            className="bg-red-400 text-white px-3 py-3 rounded-full cursor-pointer"
+            onClick={handleWishlist}
+            className="text-white text-2xl px-3 py-3 rounded-full cursor-pointer"
+            title="Add to Wishlist"
           >
             <IoMdHeart />
           </button>
