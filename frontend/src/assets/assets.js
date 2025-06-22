@@ -64,7 +64,7 @@ import main_1 from './main_1.jpg'
 
 import logo from './logo.png'
 import logo_light from './Logo-Light.png'
-import logo_dark from './Logo_dark.png'
+import logo_dark from './logo_dark.png'
 import hero_img from './hero_img.png'
 import cart_icon from './cart_icon.png'
 import bin_icon from './bin_icon.png'
