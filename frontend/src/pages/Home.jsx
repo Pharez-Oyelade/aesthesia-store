@@ -12,7 +12,9 @@ const Home = () => {
       <NewProducts />
       <Policy />
       <FeaturedGrid />
-      <NewsletterBox />
+      <div className="px-4">
+        <NewsletterBox />
+      </div>
     </div>
   );
 };

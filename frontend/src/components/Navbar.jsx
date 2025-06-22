@@ -44,8 +44,8 @@ const Navbar = () => {
       <Link to="/">
         <img
           src={isScrolled || isHovered ? assets.logo_dark : assets.logo_light}
-          className="w-36"
-          alt=""
+          className="w-20 sm:w-36"
+          alt="Aesthesia Logo"
         />
         {/* <p
           className={`text-3xl ${
@@ -102,7 +102,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <div className="cursor-pointer hover:text-black">
+        <div className="cursor-pointer hover:text-black hidden sm:block">
           <Link to="/wishlist">
             <FaRegHeart />
           </Link>
@@ -171,6 +171,13 @@ const Navbar = () => {
             to="/contact"
           >
             CONTACT
+          </NavLink>
+          <NavLink
+            onClick={() => setIsVisible(false)}
+            className="py-2 pl-6"
+            to="/wishlist"
+          >
+            WISHLIST
           </NavLink>
         </div>
       </div>
