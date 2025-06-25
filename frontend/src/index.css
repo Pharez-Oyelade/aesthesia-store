@@ -22,9 +22,9 @@ a.active {
   border-bottom: 2px solid #fff;
 }
 
-a:hover {
+/* a:hover {
   border-bottom: 2px solid #000;
-}
+} */
 
 a.filter.active {
   border-bottom: 2px solid #000;
