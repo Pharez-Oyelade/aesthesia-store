@@ -65,13 +65,28 @@ const Navbar = () => {
         >
           <p>Home</p>
         </NavLink>
-        <NavLink to="/collection" className={`${textColor} ${hoverColor}`}>
+        <NavLink
+          to="/collection"
+          className={`${textColor} ${hoverColor} ${
+            isHovered || isScrolled ? "filter" : ""
+          }`}
+        >
           <p>Collections</p>
         </NavLink>
-        <NavLink to="/about" className={`${textColor} ${hoverColor}`}>
+        <NavLink
+          to="/about"
+          className={`${textColor} ${hoverColor} ${
+            isHovered || isScrolled ? "filter" : ""
+          }`}
+        >
           <p>About</p>
         </NavLink>
-        <NavLink to="/contact" className={`${textColor} ${hoverColor}`}>
+        <NavLink
+          to="/contact"
+          className={`${textColor} ${hoverColor} ${
+            isHovered || isScrolled ? "filter" : ""
+          }`}
+        >
           <p>Contact</p>
         </NavLink>
       </ul>
