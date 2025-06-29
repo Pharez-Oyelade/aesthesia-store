@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import { MdOutlineSearch } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
@@ -19,6 +19,8 @@ const Navbar = () => {
   const textColor = isDark ? "text-white" : "text-black";
   const hoverColor = "hover:text-black";
 
+  const profileRef = useRef(null);
+
   const {
     setShowSearch,
     navigate,
@@ -36,6 +38,20 @@ const Navbar = () => {
     setCartItems({});
     setWishlist([]);
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowUserDropdown(false);
+      }
+    };
+    if (showUserDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showUserDropdown]);
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -112,7 +128,7 @@ const Navbar = () => {
           <MdOutlineSearch />
         </div>
 
-        <div className="group relative">
+        <div className="group relative" ref={profileRef}>
           <div
             onClick={() => {
               if (!token) {
@@ -125,7 +141,6 @@ const Navbar = () => {
             className={`cursor-pointer ${hoverColor} relative outline-none`}
           >
             <CgProfile />
-            {/* Dropdown here */}
             {token && showUserDropdown && (
               <div className="absolute dropdown-menu right-0 pt-4 z-50">
                 <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded shadow">
@@ -152,22 +167,6 @@ const Navbar = () => {
               </div>
             )}
           </div>
-          {/* {token && (
-            <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
-              <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded">
-                <p className="cursor-pointer hover:text-black">My Profile</p>
-                <p
-                  onClick={() => navigate("/orders")}
-                  className="cursor-pointer hover:text-black"
-                >
-                  Orders
-                </p>
-                <p onClick={logout} className="cursor-pointer hover:text-black">
-                  Logout
-                </p>
-              </div>
-            </div>
-          )} */}
         </div>
 
         <div className="cursor-pointer hover:text-black hidden sm:block">

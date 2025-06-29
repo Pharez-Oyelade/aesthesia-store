@@ -68,6 +68,7 @@ const PlaceOrder = () => {
   const payWithPaystack = () => {
     if (!token) {
       toast.error("You must be logged in to place an order.");
+      navigate("/login");
       return;
     }
 
@@ -127,6 +128,7 @@ const PlaceOrder = () => {
     }
     if (!token) {
       toast.error("You must be logged in to place an order.");
+      navigate("/login");
       return;
     }
     try {

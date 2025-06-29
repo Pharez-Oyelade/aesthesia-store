@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
+import { LuEyeClosed } from "react-icons/lu";
+import { LuEye } from "react-icons/lu";
 import { shopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -17,6 +19,7 @@ const Login = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -91,14 +94,28 @@ const Login = () => {
           placeholder="Email"
           required
         />
-        <input
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          type="password"
-          className="w-full px-3 py-2 border border-gray-800"
-          placeholder="Password"
-          required
-        />
+        <div className="relative w-full">
+          <input
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            type={showPassword ? "text" : "password"}
+            className="w-full px-3 py-2 border border-gray-800 pr-10"
+            placeholder="Password"
+            required
+          />
+          <span
+            className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-xl text-gray-500"
+            onMouseDown={() => setShowPassword(true)}
+            onMouseUp={() => setShowPassword(false)}
+            onMouseLeave={() => setShowPassword(false)}
+            onTouchStart={() => setShowPassword(true)}
+            onTouchEnd={() => setShowPassword(false)}
+            tabIndex={-1}
+          >
+            {showPassword ? <LuEye /> : <LuEyeClosed />}
+          </span>
+        </div>
+
         <div className="w-full flex justify-between text-sm mt-[-8px]">
           <p className="cursor-pointer">Forgot password?</p>
           {currentState === "Login" ? (

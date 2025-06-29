@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="">
           <img src={assets.logo_dark} alt="" className="mb-5 w-32" />
           <p className="w-full md:w-2/3 text-gray-600">
-            Your Wardrobe deserves more than ordiary. At Aesthesia, we deliver
+            Your Wardrobe deserves more than ordinary. At Aesthesia, we deliver
             bold styles and soft elegance for women who know what they want.
           </p>
         </div>
@@ -16,30 +16,30 @@ const Footer = () => {
         <div>
           <p className="text-xl font-medium md-5">ABOUT US</p>
           <ul className="flex flex-col gap-1 text-color-gray-600">
-            <li>Our Story`</li>
-            <li>FAQs</li>
-            <li>Shipping & Returns</li>
-            <li>Contact Us</li>
+            <li className="cursor-pointer">Our Story`</li>
+            <li className="cursor-pointer">FAQs</li>
+            <li className="cursor-pointer">Shipping & Returns</li>
+            <li className="cursor-pointer">Contact Us</li>
           </ul>
         </div>
 
         <div>
           <p className="text-xl font-medium mb-5">SHOP</p>
           <ul className="flex flex-col gap-1 text-color-gray-600">
-            <li>Jewelry</li>
-            <li>Clothings</li>
-            <li>Hair Wigs</li>
-            <li>Rere Collection</li>
-            <li>Size Guide</li>
+            <li className="cursor-pointer">Jewelry</li>
+            <li className="cursor-pointer">Clothings</li>
+            <li className="cursor-pointer">Hair Wigs</li>
+            <li className="cursor-pointer">Rere Collection</li>
+            <li className="cursor-pointer">Size Guide</li>
           </ul>
         </div>
 
         <div>
           <p className="text-xl font-medium mb-5">FOLLOW US</p>
           <ul className="flex flex-col gap-1 text-color-gray-600">
-            <li>Instagram</li>
-            <li>Facebook</li>
-            <li>Twitter</li>
+            <li className="cursor-pointer">Instagram</li>
+            <li className="cursor-pointer">Facebook</li>
+            <li className="cursor-pointer">Twitter</li>
           </ul>
         </div>
       </div>
@@ -47,7 +47,7 @@ const Footer = () => {
       <div className="">
         <hr />
         <p className="py-5 text-sm text-center">
-          &copy; 2024 Aesthesia Haven - All Rights Reserved
+          &copy; 2025 Aesthesia Haven - All Rights Reserved
         </p>
       </div>
     </div>

@@ -93,27 +93,36 @@
 
 import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assets";
+import { Link } from "react-router-dom";
 
 const slides = [
   {
     image: assets.bg_5,
     title: "MODERN, CLASSIC, ELEGANT",
     subtitle: "Discover More from our Collection",
+    b_text: "BROWSE COLLECTION",
+    link: "/collection",
   },
   {
     image: assets.bg_4,
     title: "REDIFINING BEAUTY",
     subtitle: "Learn more about our story",
+    b_text: "ABOUT US",
+    link: "/about",
   },
   {
     image: assets.green_main,
     title: "AVAILABLE WORLDWIDE",
     subtitle: "Contact us for more information",
+    b_text: "CONTACT",
+    link: "/contact",
   },
   {
     image: assets.hero_img,
     title: "UNLEASH YOUR EVERYDAY POWER",
     subtitle: "Discover what greatness feels like",
+    b_text: "RERE COLLECTION",
+    link: "/rere-collection",
   },
 ];
 
@@ -129,7 +138,7 @@ const Hero = () => {
     };
   }, [current]);
 
-  const { image, title, subtitle } = slides[current];
+  const { image, title, subtitle, b_text, link } = slides[current];
 
   return (
     <div
@@ -153,6 +162,11 @@ const Hero = () => {
         <p className="text-lg sm:text-md font-medium drop-shadow-md">
           {subtitle}
         </p>
+        <Link to={link}>
+          <button className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-red-700 to-pink-600 hover:from-red-800 hover:to-pink-700 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-300">
+            {b_text}
+          </button>
+        </Link>
       </div>
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-30">
         {slides.map((_, idx) => (
