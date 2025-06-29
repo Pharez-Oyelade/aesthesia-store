@@ -4,7 +4,9 @@ const authUser = async (req, res, next) => {
   const token = req.headers.token;
 
   if (!token) {
-    return res.json({ success: false, message: "Not authorized, Login" });
+    return res
+      .status(401)
+      .json({ success: false, message: "Not authorized, Login" });
   }
 
   try {
@@ -13,7 +15,7 @@ const authUser = async (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
-    res.json({
+    return res.status(401).json({
       success: false,
       message: error.message,
     });
