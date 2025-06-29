@@ -2,12 +2,37 @@ import React, { useContext } from "react";
 import { shopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import { IoMdHeartDislike } from "react-icons/io";
+import axios from "axios";
 
 const Wishlist = () => {
-  const { wishlist, setWishlist, products, currency } = useContext(shopContext);
+  const {
+    token,
+    backendUrl,
+    toast,
+    wishlist,
+    setWishlist,
+    products,
+    currency,
+  } = useContext(shopContext);
 
-  const handleRemove = (id) => {
+  const handleRemove = async (id) => {
     setWishlist((prev) => prev.filter((pid) => pid !== id));
+    // If user is logged in, update backend
+    if (token) {
+      try {
+        const response = await axios.post(
+          backendUrl + "/api/wishlist/add", // This toggles wishlist in your backend
+          { itemId: id },
+          { headers: { token } }
+        );
+        if (response.data.success && response.data.wishData) {
+          setWishlist(response.data.wishData);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Failed to update wishlist");
+      }
+    }
   };
 
   if (!wishlist.length) {
@@ -31,8 +56,14 @@ const Wishlist = () => {
           return (
             <div
               key={id}
-              className="bg-white rounded-xl shadow p-4 flex flex-col items-center"
+              className="bg-white rounded-xl shadow p-4 flex flex-col items-center relative"
             >
+              {/* Bestseller Tag */}
+              {product.bestseller && (
+                <span className="absolute left-2 top-2 z-10 bg-yellow-400 text-xs font-bold px-3 py-1 rounded-full shadow text-gray-900">
+                  Bestseller
+                </span>
+              )}
               <img
                 src={product.image[0]}
                 alt={product.name}
@@ -55,7 +86,8 @@ const Wishlist = () => {
                   className="text-red-600 flex items-center gap-1 text-sm hover:underline"
                   title="Remove from wishlist"
                 >
-                  <IoMdHeartDislike /> Remove
+                  <span>Remove</span>
+                  <IoMdHeartDislike />
                 </button>
               </div>
             </div>

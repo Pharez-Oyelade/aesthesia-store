@@ -12,7 +12,7 @@ const Collection = () => {
   const { products, search, showSearch } = useContext(shopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
-  const [category, setCategory] = useState([]);
+  const [sectionFilter, setSectionFilter] = useState([]); // was category
   const [sortType, setSortType] = useState("relevant");
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -27,39 +27,36 @@ const Collection = () => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
 
-  // toogle logic
-  const toggleCategory = (e) => {
-    if (category.includes(e.target.value)) {
-      setCategory((prev) => prev.filter((item) => item !== e.target.value));
+  // toggle logic for section filter
+  const toggleSection = (e) => {
+    if (sectionFilter.includes(e.target.value)) {
+      setSectionFilter((prev) =>
+        prev.filter((item) => item !== e.target.value)
+      );
     } else {
-      setCategory((prev) => [...prev, e.target.value]);
+      setSectionFilter((prev) => [...prev, e.target.value]);
     }
   };
 
   const applyFilter = () => {
-    let filteredProducts = products.slice();
+    let filtered = products.slice();
     if (showSearch && search) {
-      filteredProducts = filteredProducts.filter(
+      filtered = filtered.filter(
         (item) =>
           item.name.toLowerCase().includes(search.toLowerCase()) ||
-          item.section.toLowerCase().includes(search.toLowerCase()) ||
-          item.category.toLowerCase().includes(search.toLowerCase())
+          item.section.toLowerCase().includes(search.toLowerCase())
       );
     }
-
-    if (category.length > 0) {
-      filteredProducts = filteredProducts.filter(
-        (item) =>
-          category.includes(item.category) || category.includes(item.section)
+    if (sectionFilter.length > 0) {
+      filtered = filtered.filter((item) =>
+        sectionFilter.includes(item.section)
       );
     }
-
-    setFilterProducts(filteredProducts);
+    setFilterProducts(filtered);
   };
 
   const sortProduct = () => {
     let fpCopy = filterProducts.slice();
-
     switch (sortType) {
       case "lowest-highest":
         fpCopy.sort((a, b) => a.price - b.price);
@@ -77,7 +74,7 @@ const Collection = () => {
 
   useEffect(() => {
     applyFilter();
-  }, [category, search, showSearch]);
+  }, [sectionFilter, search, showSearch, products]);
 
   useEffect(() => {
     sortProduct();
@@ -99,53 +96,53 @@ const Collection = () => {
               className={`h-3 md:hidden ${showFilter ? "rotate-90" : ""}`}
             />
           </p>
-          {/* CATEGORY FILTER */}
+          {/* SECTION FILTER */}
           <div
             className={`border-t border-gray-200 pt-4 mt-4 ${
               showFilter ? "" : "hidden"
             } md:block`}
           >
-            <p className="mb-3 text-sm font-medium text-gray-700">CATEGORIES</p>
+            <p className="mb-3 text-sm font-medium text-gray-700">SECTIONS</p>
             <div className="flex flex-col gap-3 text-sm font-light text-gray-700">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   className="w-4 h-4 accent-red-600"
                   type="checkbox"
-                  value={"Men"}
-                  onChange={toggleCategory}
-                  checked={category.includes("Men")}
+                  value={"clothes"}
+                  onChange={toggleSection}
+                  checked={sectionFilter.includes("clothes")}
                 />
-                Men
+                Clothing
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   className="w-4 h-4 accent-red-600"
                   type="checkbox"
-                  value={"Women"}
-                  onChange={toggleCategory}
-                  checked={category.includes("Women")}
+                  value={"wigs"}
+                  onChange={toggleSection}
+                  checked={sectionFilter.includes("wigs")}
                 />
-                Women
+                Wigs
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   className="w-4 h-4 accent-red-600"
                   type="checkbox"
-                  value={"rere"}
-                  onChange={toggleCategory}
-                  checked={category.includes("rere")}
+                  value={"jewelry"}
+                  onChange={toggleSection}
+                  checked={sectionFilter.includes("jewelry")}
                 />
-                rere
+                Jewelry
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   className="w-4 h-4 accent-red-600"
                   type="checkbox"
-                  value={"Kids"}
-                  onChange={toggleCategory}
-                  checked={category.includes("Kids")}
+                  value={"rere-collection"}
+                  onChange={toggleSection}
+                  checked={sectionFilter.includes("rere-collection")}
                 />
-                Kids
+                Rere Collection
               </label>
             </div>
           </div>
@@ -169,6 +166,7 @@ const Collection = () => {
                 name={item.name}
                 price={item.price}
                 image={item.image}
+                bestseller={item.bestseller}
               />
             ))}
           </div>

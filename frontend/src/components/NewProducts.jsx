@@ -9,7 +9,7 @@ const NewProducts = () => {
 
   useEffect(() => {
     setLatestProducts(products.slice(0, 10));
-  }, []);
+  }, [products]);
 
   return (
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] py-10">
@@ -29,6 +29,7 @@ const NewProducts = () => {
             image={lp.image}
             name={lp.name}
             price={lp.price}
+            bestseller={lp.bestseller}
           />
         ))}
       </div>

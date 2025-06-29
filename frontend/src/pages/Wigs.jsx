@@ -6,7 +6,7 @@ const Wigs = () => {
   return (
     <div>
       <Banner />
-      <CollectionDisplay section="wig" />
+      <CollectionDisplay section="wigs" />
     </div>
   );
 };

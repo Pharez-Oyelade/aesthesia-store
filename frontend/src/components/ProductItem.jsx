@@ -3,7 +3,7 @@ import { shopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import { IoMdHeart } from "react-icons/io";
 
-const ProductItem = ({ id, image, name, price }) => {
+const ProductItem = ({ id, image, name, price, bestseller }) => {
   const { currency, addToWishlist, wishlist } = useContext(shopContext);
 
   const handleWishlist = (e) => {
@@ -16,6 +16,12 @@ const ProductItem = ({ id, image, name, price }) => {
   return (
     <Link to={`/product/${id}`} className="text-gray-700 cursor-pointer">
       <div className="relative group overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 rounded-3xl">
+        {/* Bestseller Tag */}
+        {bestseller && (
+          <span className="absolute left-2 top-2 z-10 bg-yellow-400 text-xs font-bold px-3 py-1 rounded-full shadow text-gray-900">
+            Bestseller
+          </span>
+        )}
         <img
           src={image[0]}
           alt=""

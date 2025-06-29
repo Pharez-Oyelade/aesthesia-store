@@ -10,7 +10,7 @@ const CollectionDisplay = ({ section }) => {
   const { products } = useContext(shopContext);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Filter products by section
+  // Filter products by section (was category)
   const filteredProducts = products.filter(
     (product) => product.section === section
   );
@@ -38,6 +38,7 @@ const CollectionDisplay = ({ section }) => {
                 name={product.name}
                 price={product.price}
                 image={product.image}
+                bestseller={product.bestseller}
               />
             ))}
           </div>

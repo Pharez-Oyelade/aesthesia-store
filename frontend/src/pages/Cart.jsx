@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { shopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
@@ -16,6 +16,9 @@ const parseMeasurements = (mKey) => {
 const Cart = () => {
   const { cartItems, products, currency, updateQuantity, navigate } =
     useContext(shopContext);
+
+  // Track selected image for each cart item (must be at top level)
+  const [selectedImages, setSelectedImages] = useState({});
 
   // Flatten cartItems into an array for rendering
   const cartData = [];
@@ -35,6 +38,10 @@ const Cart = () => {
     }
   }
 
+  const handleImageSelect = (cartKey, imgUrl) => {
+    setSelectedImages((prev) => ({ ...prev, [cartKey]: imgUrl }));
+  };
+
   if (cartData.length === 0) {
     return (
       <div className="p-8 text-center">
@@ -53,16 +60,20 @@ const Cart = () => {
         {cartData.map((item, idx) => {
           const product = products.find((p) => p._id === item._id);
           if (!product) return null;
+          const cartKey = item._id + item.size + item.mKey;
+          const mainImage = selectedImages[cartKey] || product.image[0];
           return (
             <div
-              key={item._id + item.size + item.mKey}
+              key={cartKey}
               className="flex flex-col md:flex-row items-start md:items-center gap-6 border-b pb-4"
             >
-              <img
-                src={product.image[0]}
-                alt={product.name}
-                className="w-24 h-24 object-cover rounded"
-              />
+              <div className="flex flex-col items-center gap-2">
+                <img
+                  src={mainImage}
+                  alt={product.name}
+                  className="w-24 h-24 object-cover rounded"
+                />
+              </div>
               <div className="flex-1">
                 <h3 className="font-medium text-lg">{product.name}</h3>
                 <p className="text-sm text-gray-500">Size: {item.size}</p>

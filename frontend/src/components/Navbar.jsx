@@ -18,7 +18,23 @@ const Navbar = () => {
   const textColor = isDark ? "text-white" : "text-black";
   const hoverColor = "hover:text-black";
 
-  const { setShowSearch, navigate, getCartCount } = useContext(shopContext);
+  const {
+    setShowSearch,
+    navigate,
+    getCartCount,
+    token,
+    setToken,
+    setCartItems,
+    setWishlist,
+  } = useContext(shopContext);
+
+  const logout = () => {
+    navigate("/login");
+    localStorage.removeItem("token");
+    setToken("");
+    setCartItems({});
+    setWishlist([]);
+  };
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -47,13 +63,6 @@ const Navbar = () => {
           className="w-20 sm:w-36"
           alt="Aesthesia Logo"
         />
-        {/* <p
-          className={`text-3xl ${
-            isScrolled || isHovered ? "text-black" : "text-white"
-          }`}
-        >
-          D'VORA
-        </p> */}
       </Link>
 
       <ul className="hidden sm:flex gap-5 text-sm">
@@ -103,18 +112,29 @@ const Navbar = () => {
         </div>
 
         <div className="group relative">
-          <Link to="/login">
-            <div className={`cursor-pointer ${hoverColor}`}>
-              <CgProfile />
-            </div>
-          </Link>
-          <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
-            <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded">
-              <p className="cursor-pointer hover:text-black">My Profile</p>
-              <p className="cursor-pointer hover:text-black">Orders</p>
-              <p className="cursor-pointer hover:text-black">Logout</p>
-            </div>
+          <div
+            onClick={() => (token ? null : navigate("/login"))}
+            className={`cursor-pointer ${hoverColor}`}
+          >
+            <CgProfile />
           </div>
+          {/* Dropdown */}
+          {token && (
+            <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
+              <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded">
+                <p className="cursor-pointer hover:text-black">My Profile</p>
+                <p
+                  onClick={() => navigate("/orders")}
+                  className="cursor-pointer hover:text-black"
+                >
+                  Orders
+                </p>
+                <p onClick={logout} className="cursor-pointer hover:text-black">
+                  Logout
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="cursor-pointer hover:text-black hidden sm:block">

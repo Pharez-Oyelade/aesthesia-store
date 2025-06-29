@@ -6,7 +6,7 @@ const Clothings = () => {
   return (
     <div>
       <Banner />
-      <CollectionDisplay section="clothing" />
+      <CollectionDisplay section="clothes" />
     </div>
   );
 };

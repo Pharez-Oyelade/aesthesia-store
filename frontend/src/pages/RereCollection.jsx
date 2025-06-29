@@ -6,7 +6,7 @@ const RereCollection = () => {
   return (
     <div>
       <Banner />
-      <CollectionDisplay section="rere" />
+      <CollectionDisplay section="rere-collection" />
     </div>
   );
 };
