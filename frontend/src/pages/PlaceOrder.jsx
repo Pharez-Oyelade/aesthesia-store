@@ -64,8 +64,23 @@ const PlaceOrder = () => {
     return orderItems;
   };
 
+  //Validate all delivery info fields
+  const validateForm = () => {
+    for (const key in formData) {
+      if (!formData[key] || formData[key].toString().trim() === "") {
+        return false;
+      }
+    }
+    return true;
+  };
+
   // Paystack Inline Handler
   const payWithPaystack = () => {
+    if (!validateForm()) {
+      toast.error("Please fill in all delivery information fields.");
+      return;
+    }
+
     if (!token) {
       toast.error("You must be logged in to place an order.");
       navigate("/login");
@@ -297,6 +312,9 @@ const PlaceOrder = () => {
                 </button>
               )}
             </div>
+            <p className="text-sm text-right text-gray-700 pt-3">
+              *select paystack for online payment
+            </p>
           </div>
         </div>
       </form>
