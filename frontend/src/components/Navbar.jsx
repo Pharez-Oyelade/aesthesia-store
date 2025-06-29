@@ -13,6 +13,7 @@ const Navbar = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
   const location = useLocation();
   const isDark = !(isScrolled || isHovered);
   const textColor = isDark ? "text-white" : "text-black";
@@ -113,13 +114,45 @@ const Navbar = () => {
 
         <div className="group relative">
           <div
-            onClick={() => (token ? null : navigate("/login"))}
-            className={`cursor-pointer ${hoverColor}`}
+            onClick={() => {
+              if (!token) {
+                navigate("/login");
+              } else {
+                setShowUserDropdown((prev) => !prev);
+              }
+            }}
+            tabIndex={0}
+            className={`cursor-pointer ${hoverColor} relative outline-none`}
           >
             <CgProfile />
+            {/* Dropdown here */}
+            {token && showUserDropdown && (
+              <div className="absolute dropdown-menu right-0 pt-4 z-50">
+                <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded shadow">
+                  <p className="cursor-pointer hover:text-black">My Profile</p>
+                  <p
+                    onClick={() => {
+                      navigate("/orders");
+                      setShowUserDropdown(false);
+                    }}
+                    className="cursor-pointer hover:text-black"
+                  >
+                    Orders
+                  </p>
+                  <p
+                    onClick={() => {
+                      logout();
+                      setShowUserDropdown(false);
+                    }}
+                    className="cursor-pointer hover:text-black"
+                  >
+                    Logout
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
-          {/* Dropdown */}
-          {token && (
+          {/* {token && (
             <div className="group-hover:block hidden absolute dropdown-menu right-0 pt-4">
               <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded">
                 <p className="cursor-pointer hover:text-black">My Profile</p>
@@ -134,7 +167,7 @@ const Navbar = () => {
                 </p>
               </div>
             </div>
-          )}
+          )} */}
         </div>
 
         <div className="cursor-pointer hover:text-black hidden sm:block">

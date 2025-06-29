@@ -8,9 +8,8 @@ const Footer = () => {
         <div className="">
           <img src={assets.logo_dark} alt="" className="mb-5 w-32" />
           <p className="w-full md:w-2/3 text-gray-600">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            voluptatum, quia, voluptas, voluptates quo quos quas quibusdam
-            quisquam voluptatum.
+            Your Wardrobe deserves more than ordiary. At Aesthesia, we deliver
+            bold styles and soft elegance for women who know what they want.
           </p>
         </div>
 
