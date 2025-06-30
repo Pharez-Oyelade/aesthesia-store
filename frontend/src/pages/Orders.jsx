@@ -145,8 +145,8 @@ const Orders = () => {
                       .join(", ")}
                   </div>
                 )}
-                <div className="flex items-center gap-4 mt-2">
-                  <span className="font-semibold text-red-700 flex items-center">
+                <div className="flex items-center gap-2 sm:gap-4 mt-2">
+                  <span className="font-semibold text-red-700 flex items-center text-sm sm:text-base">
                     {currency}
                     {item.price}
                   </span>
