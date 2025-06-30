@@ -1,10 +1,13 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { shopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import { IoMdHeart } from "react-icons/io";
 
 const ProductItem = ({ id, image, name, price, bestseller }) => {
   const { currency, addToWishlist, wishlist } = useContext(shopContext);
+
+  const [isHovered, setIsHovered] = useState(false);
+  const [showImage, setShowImage] = useState(image[0]);
 
   const handleWishlist = (e) => {
     e.preventDefault(); // Prevent navigation when clicking heart
@@ -23,7 +26,15 @@ const ProductItem = ({ id, image, name, price, bestseller }) => {
           </span>
         )}
         <img
-          src={image[0]}
+          onMouseEnter={() => {
+            setIsHovered(true);
+            if (image[1]) setShowImage(image[1]);
+          }}
+          onMouseLeave={() => {
+            setIsHovered(false);
+            setShowImage(image[0]);
+          }}
+          src={showImage}
           alt=""
           className="hover:scale-115 transition ease-in-out"
         />

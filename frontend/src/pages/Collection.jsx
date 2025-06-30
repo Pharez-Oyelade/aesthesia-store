@@ -207,7 +207,7 @@ const Collection = () => {
       <div className="text-center text-3xl mt-20">
         <Title text1={"FEATURED"} text2={"COLLECTIONS"} />
       </div>
-      <div className="max-w-7xl mx-auto mt-8">
+      <div className="max-w-7xl mx-auto my-8 pb-10">
         <FeaturedGrid />
       </div>
     </div>
