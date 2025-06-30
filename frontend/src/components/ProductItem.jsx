@@ -36,7 +36,9 @@ const ProductItem = ({ id, image, name, price, bestseller }) => {
           }}
           src={showImage}
           alt=""
-          className="hover:scale-115 transition ease-in-out"
+          className={`${
+            image[1] ? "" : "hover:scale-115 transition ease-in-out"
+          }`}
         />
         <div className="absolute right-2 top-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition">
           <button

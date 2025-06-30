@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import ScrollToTop from "./components/scrollToTop";
 import Home from "./pages/Home";
 import Collection from "./pages/Collection";
 import About from "./pages/About";
@@ -30,6 +31,7 @@ const App = () => {
   return (
     <div>
       <ToastContainer />
+      <ScrollToTop />
       <Navbar />
       <SearchBar />
       {isHome || isClothing || isWig || isRere || isJewelry ? (
