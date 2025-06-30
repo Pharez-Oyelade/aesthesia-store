@@ -16,7 +16,15 @@ connectDB();
 connectCloudinary();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://aesthesia-admin-panel.vercel.app",
+      "https://aesthesia-store-backend.vercel.app",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // api endpoints
