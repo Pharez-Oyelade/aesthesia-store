@@ -19,6 +19,9 @@ const Banner = () => {
   } else if (location.pathname === "/rere-collection") {
     background = assets.main_1;
     text = "RERE COLLECTION";
+  } else if (location.pathname === "/about") {
+    background = assets.the_kali;
+    text = "ABOUT US";
   }
 
   return (
