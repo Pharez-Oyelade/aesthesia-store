@@ -16,7 +16,7 @@ const Footer = () => {
         <div>
           <p className="text-xl font-medium md-5">ABOUT US</p>
           <ul className="flex flex-col gap-1 text-color-gray-600">
-            <li className="cursor-pointer">Our Story`</li>
+            <li className="cursor-pointer">Our Story</li>
             <li className="cursor-pointer">FAQs</li>
             <li className="cursor-pointer">Shipping & Returns</li>
             <li className="cursor-pointer">Contact Us</li>
