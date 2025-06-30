@@ -19,6 +19,7 @@ import { ToastContainer } from "react-toastify";
 import Wishlist from "./pages/Wishlist";
 import PlaceOrder from "./pages/PlaceOrder";
 import Orders from "./pages/Orders";
+import Profile from "./pages/Profile";
 
 const App = () => {
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ const App = () => {
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/place-order" element={<PlaceOrder />} />
             <Route path="/orders" element={<Orders />} />
+            <Route path="/profile" element={<Profile />} />
             <Route
               path="*"
               element={<h1 className="text-center text-2xl">Page Not Found</h1>}
