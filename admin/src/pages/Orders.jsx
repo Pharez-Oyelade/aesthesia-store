@@ -54,7 +54,7 @@ const Orders = ({ token }) => {
   }, [token]);
 
   return (
-    <div className="max-w-6xl mx-auto py-8">
+    <div className="w-full mx-[30%] py-8">
       <h3 className="text-3xl font-bold text-red-700 mb-8">Orders</h3>
       <div className="flex flex-col gap-6">
         {orders.map((order, index) => (
@@ -126,9 +126,9 @@ const Orders = ({ token }) => {
               className="p-2 font-semibold rounded-lg border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-red-200 transition"
             >
               <option value="Order Placed">Order Placed</option>
+              <option value="Processing">Processing</option>
               <option value="Packing">Packing</option>
-              <option value="Shipped">Shipped</option>
-              <option value="Out for delivery">Out for delivery</option>
+              <option value="Ready for Pickup">Ready for Pickup</option>
               <option value="Delivered">Delivered</option>
             </select>
           </div>

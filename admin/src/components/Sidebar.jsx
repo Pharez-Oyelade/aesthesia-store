@@ -4,8 +4,11 @@ import { assets } from "../assets/assets";
 
 const Sidebar = () => {
   return (
-    <div className="w-[20%] min-h-screen bg-gradient-to-b from-white to-gray-100 border-r-2 border-gray-200 shadow-lg rounded-tr-2xl">
+    <div className="fixed z-10 top-0 w-[20%] min-h-screen bg-gradient-to-b from-white to-gray-100 border-r-2 border-gray-200 shadow-lg rounded-tr-2xl">
       <div className="flex flex-col  gap-6 pt-10 pl-2 sm:pl-8 text-lg font-medium">
+        <div>
+          <img className="w-8 sm:w-32 mb-10" src={assets.logo_dark} alt="" />
+        </div>
         <NavLink
           className={({ isActive }) =>
             `flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 ${

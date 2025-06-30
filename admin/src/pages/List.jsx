@@ -46,7 +46,7 @@ const List = ({ token }) => {
 
   return (
     <>
-      <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100">
+      <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100 mx-[30%] w-full">
         <p className="mb-4 text-2xl font-bold text-red-700">
           All Products List
         </p>
