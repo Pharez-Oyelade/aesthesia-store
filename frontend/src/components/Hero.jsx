@@ -105,7 +105,7 @@ const slides = [
   },
   {
     image: assets.bg_4,
-    title: "REDIFINING BEAUTY",
+    title: "REDEFINING BEAUTY",
     subtitle: "Learn more about our story",
     b_text: "ABOUT US",
     link: "/about",

@@ -1,11 +1,10 @@
 import { v2 as cloudinary } from "cloudinary";
 import productModel from "../models/productModel.js";
 
-// function to add a new product
+// add a new product
 const addProduct = async (req, res) => {
   try {
-    const { name, price, description, category, section, sizes, bestseller } =
-      req.body;
+    const { name, price, description, section, sizes, bestseller } = req.body;
 
     const image1 = req.files.image1 && req.files.image1[0];
     const image2 = req.files.image2 && req.files.image2[0];

@@ -54,7 +54,7 @@ const Orders = ({ token }) => {
   }, [token]);
 
   return (
-    <div className="w-full mx-[30%] py-8">
+    <div className="w-full mx-[25%] py-8">
       <h3 className="text-3xl font-bold text-red-700 mb-8">Orders</h3>
       <div className="flex flex-col gap-6">
         {orders.map((order, index) => (
