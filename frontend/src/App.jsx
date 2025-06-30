@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import ScrollToTop from "./components/scrollToTop";
+import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import Collection from "./pages/Collection";
 import About from "./pages/About";
