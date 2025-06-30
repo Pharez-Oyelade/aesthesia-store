@@ -105,7 +105,7 @@ const Product = () => {
             <h1 className="font-bold text-3xl md:text-4xl text-gray-900 mb-2">
               {productData.name}
             </h1>
-            <div className="flex items-center gap-2 mb-4">
+            {/* <div className="flex items-center gap-2 mb-4">
               {[...Array(4)].map((_, i) => (
                 <img
                   src={assets.star_icon}
@@ -116,7 +116,7 @@ const Product = () => {
               ))}
               <img src={assets.star_dull_icon} alt="star" className="w-5 h-5" />
               <span className="ml-2 text-gray-500 text-sm">(122 reviews)</span>
-            </div>
+            </div> */}
             <p className="text-2xl font-semibold text-red-700 flex items-center mb-4">
               {currency}
               {productData.price}
