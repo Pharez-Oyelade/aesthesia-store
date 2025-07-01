@@ -4,7 +4,7 @@ import { shopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import CartTotal from "../components/CartTotal";
 
-// Helper to parse measurements key
+// parse measurements key
 const parseMeasurements = (mKey) => {
   try {
     return JSON.parse(mKey);
@@ -17,10 +17,10 @@ const Cart = () => {
   const { cartItems, products, currency, updateQuantity, navigate } =
     useContext(shopContext);
 
-  // Track selected image for each cart item (must be at top level)
+  // Tracking selected image for each cart item
   const [selectedImages, setSelectedImages] = useState({});
 
-  // Flatten cartItems into an array for rendering
+  // Flatten cartItems into an array
   const cartData = [];
   for (const itemId in cartItems) {
     for (const size in cartItems[itemId]) {

@@ -17,11 +17,11 @@ const Wishlist = () => {
 
   const handleRemove = async (id) => {
     setWishlist((prev) => prev.filter((pid) => pid !== id));
-    // If user is logged in, update backend
+    // If user is logged in, update the backend
     if (token) {
       try {
         const response = await axios.post(
-          backendUrl + "/api/wishlist/add", // This toggles wishlist in your backend
+          backendUrl + "/api/wishlist/add", // toggle wishlist in backend
           { itemId: id },
           { headers: { token } }
         );

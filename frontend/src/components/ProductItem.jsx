@@ -10,7 +10,7 @@ const ProductItem = ({ id, image, name, price, bestseller }) => {
   const [showImage, setShowImage] = useState(image[0]);
 
   const handleWishlist = (e) => {
-    e.preventDefault(); // Prevent navigation when clicking heart
+    e.preventDefault();
     addToWishlist(id);
   };
 

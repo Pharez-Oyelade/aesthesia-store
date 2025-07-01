@@ -10,7 +10,7 @@ const CollectionDisplay = ({ section }) => {
   const { products } = useContext(shopContext);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // Filter products by section (was category)
+  // Filter products by section
   const filteredProducts = products.filter(
     (product) => product.section === section
   );

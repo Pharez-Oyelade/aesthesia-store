@@ -5,7 +5,6 @@ import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
 
 const Product = () => {
-  // Use the correct param name as per your route, fallback to id if needed
   const { productId, id } = useParams();
   const { products, currency, addToCart, wishlist, addToWishlist } =
     useContext(shopContext);
@@ -105,6 +104,7 @@ const Product = () => {
             <h1 className="font-bold text-3xl md:text-4xl text-gray-900 mb-2">
               {productData.name}
             </h1>
+            {/* .........Review stars........ */}
             {/* <div className="flex items-center gap-2 mb-4">
               {[...Array(4)].map((_, i) => (
                 <img

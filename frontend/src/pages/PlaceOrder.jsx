@@ -6,7 +6,7 @@ import { shopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const PAYSTACK_PUBLIC_KEY = "pk_test_c4b2eb84f0a0f617c83c345b25ba357a5169a821"; // Replace with your real key
+const PAYSTACK_PUBLIC_KEY = "pk_test_c4b2eb84f0a0f617c83c345b25ba357a5169a821"; // replacing with live key
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");
@@ -38,7 +38,6 @@ const PlaceOrder = () => {
     setFormData((data) => ({ ...data, [name]: value }));
   };
 
-  // Build order items as in your current logic
   const buildOrderItems = () => {
     let orderItems = [];
     for (const itemId in cartItems) {
@@ -64,7 +63,7 @@ const PlaceOrder = () => {
     return orderItems;
   };
 
-  //Validate all delivery info fields
+  //Validate delivery info fields
   const validateForm = () => {
     for (const key in formData) {
       if (!formData[key] || formData[key].toString().trim() === "") {
@@ -95,7 +94,7 @@ const PlaceOrder = () => {
     const handler = window.PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
       email: formData.email,
-      amount: amount * 100, // Paystack expects kobo
+      amount: amount * 100, // to kobo forpaystack
       firstname: formData.firstName,
       lastname: formData.lastName,
       callback: function (response) {

@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { shopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
-import { Link } from "react-router-dom";
 
 const RelatedProducts = ({ section }) => {
   const { products } = useContext(shopContext);
@@ -11,7 +10,7 @@ const RelatedProducts = ({ section }) => {
   useEffect(() => {
     if (products.length > 0) {
       let productsCopy = products.slice();
-      // Filter by section (was category)
+      // Filter by section
       productsCopy = productsCopy.filter((item) => section === item.section);
       setRelated(productsCopy.slice(0, 5));
     }

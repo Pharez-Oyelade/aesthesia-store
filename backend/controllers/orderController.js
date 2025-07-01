@@ -49,7 +49,7 @@ const placeOrderPaystack = async (req, res) => {
     if (
       paystackRes.data.status &&
       paystackRes.data.data.status === "success" &&
-      paystackRes.data.data.amount === amount * 100 // Paystack returns amount in kobo
+      paystackRes.data.data.amount === amount * 100 // Paystack amount in kobo
     ) {
       const orderData = {
         userId,

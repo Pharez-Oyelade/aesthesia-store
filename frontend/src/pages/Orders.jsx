@@ -1,57 +1,3 @@
-// import React, { useEffect, useState, useContext } from "react";
-// import { shopContext } from "../context/ShopContext";
-// import axios from "axios";
-
-// const Orders = () => {
-//   // const [orders, setOrders] = useState([]);
-//   const { currency, delivery_fee, backendUrl, token } = useContext(shopContext);
-
-//   const [orderData, setOrderData] = useState([]);
-
-//   const loadOrderData = async () => {
-//     try {
-//       if (!token) {
-//         return null;
-//       }
-
-//       const response = await axios.post(
-//         backendUrl + "/api/order/userorders",
-//         {},
-//         { headers: { token } }
-//       );
-//       if (response.data.success) {
-//         let allOrdersItem = [];
-//         response.data.orders.map((order) => {
-//           order.items.map((item) => {
-//             item["status"] = order.status;
-//             item["payment"] = order.payment;
-//             item["paymentMethod"] = order.paymentMethod;
-//             item["date"] = order.date;
-//             allOrdersItem.push(item);
-//           });
-//         });
-//         setOrderData(allOrdersItem);
-//       }
-//     } catch (error) {}
-//   };
-
-//   useEffect(() => {
-//     loadOrderData();
-//   }, [token]);
-
-//   if (orderData.length === 0) {
-//     return (
-//       <div className="max-w-2xl mx-auto mt-20 text-center text-gray-600">
-//         <h2 className="text-2xl font-bold mb-4">No Orders Yet</h2>
-//         <p>Place an order to see it here.</p>
-//       </div>
-//     );
-//   }
-
-// };
-
-// export default Orders;
-
 import React, { useEffect, useState, useContext } from "react";
 import { shopContext } from "../context/ShopContext";
 import axios from "axios";
@@ -90,7 +36,7 @@ const Orders = () => {
         setOrderData(allOrdersItem);
       }
     } catch (error) {
-      // Optionally handle error
+      console.log(error);
     }
   };
 
