@@ -246,6 +246,9 @@ const PlaceOrder = () => {
             placeholder="Phone"
             required
           />
+          <p className="text-sm text-gray-700">
+            *Enter a valid email address to receive payment receipt
+          </p>
         </div>
 
         {/* .........RIGHT SIDE........ */}

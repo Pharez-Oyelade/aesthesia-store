@@ -86,7 +86,7 @@ const Navbar = () => {
         <NavLink
           to="/"
           className={`${textColor} ${hoverColor} ${
-            isHovered || isScrolled ? "filter" : ""
+            isHovered || isScrolled ? "filter nav-anchor" : ""
           }`}
         >
           <p>Home</p>
@@ -94,7 +94,7 @@ const Navbar = () => {
         <NavLink
           to="/collection"
           className={`${textColor} ${hoverColor} ${
-            isHovered || isScrolled ? "filter" : ""
+            isHovered || isScrolled ? "filter nav-anchor" : ""
           }`}
         >
           <p>Collections</p>
@@ -102,7 +102,7 @@ const Navbar = () => {
         <NavLink
           to="/about"
           className={`${textColor} ${hoverColor} ${
-            isHovered || isScrolled ? "filter" : ""
+            isHovered || isScrolled ? "filter nav-anchor" : ""
           }`}
         >
           <p>About</p>
@@ -110,7 +110,7 @@ const Navbar = () => {
         <NavLink
           to="/contact"
           className={`${textColor} ${hoverColor} ${
-            isHovered || isScrolled ? "filter" : ""
+            isHovered || isScrolled ? "filter nav-anchor" : ""
           }`}
         >
           <p>Contact</p>
