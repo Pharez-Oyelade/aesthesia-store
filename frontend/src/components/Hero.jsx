@@ -71,11 +71,11 @@ const Hero = () => {
           {subtitle}
         </p>
         <Link to={link}>
-          {/* <button className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-red-700 to-pink-600 hover:from-red-800 hover:to-pink-700 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-300">
+          <button className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-red-700 to-pink-600 hover:from-red-800 hover:to-pink-700 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-300">
             {b_text}
-          </button> */}
+          </button>
 
-          <button className=" group hover:bg-red-600 hover:shadow-xl transition-all duration-300 text-xl relative mt-5 px-10 py-5 text-white group overflow-hidden cursor-pointer">
+          {/* <button className=" group hover:bg-red-600 hover:shadow-xl transition-all duration-300 text-xl relative mt-5 px-10 py-5 text-white group overflow-hidden cursor-pointer">
             <span className="absolute text-red-600 top-0 left-0 w-3 h-3 border-t-3 border-l-3 transition-all duration-300"></span>
             <span className="absolute text-red-600 top-0 right-0 w-3 h-3 border-t-3 border-r-3 transition-all duration-300"></span>
             <span className="absolute text-red-600 bottom-0 left-0 w-3 h-3 border-b-3 border-l-3 transition-all duration-300"></span>
@@ -83,7 +83,7 @@ const Hero = () => {
 
             <span className="absolute inset-0 border-3 border-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></span>
             {b_text}
-          </button>
+          </button> */}
         </Link>
       </div>
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-30">
