@@ -67,7 +67,7 @@ const Hero = () => {
         <h1 className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg prata-regular">
           {title}
         </h1>
-        <p className="text-lg sm:text-md font-medium drop-shadow-md">
+        <p className="text-md w-[75%] sm:w-[100%] sm:text-lg font-medium drop-shadow-md">
           {subtitle}
         </p>
         <Link to={link}>
