@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import { BeatLoader } from "react-spinners";
 import FeaturedGrid from "../components/FeaturedGrid";
 import Title from "../components/Title";
 import { shopContext } from "../context/ShopContext";
@@ -15,6 +16,8 @@ const Collection = () => {
   const [sectionFilter, setSectionFilter] = useState([]); // was category
   const [sortType, setSortType] = useState("relevant");
   const [currentPage, setCurrentPage] = useState(1);
+
+  const [loading, setLoading] = useState(true);
 
   // pagination
   const totalPages = Math.ceil(filterProducts.length / PRODUCTS_PER_PAGE);
@@ -78,7 +81,16 @@ const Collection = () => {
 
   useEffect(() => {
     sortProduct();
+    setLoading(false);
   }, [sortType]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center">
+        <BeatLoader color="#b90606" />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-gradient-to-br from-white to-gray-100 min-h-screen py-0 ">

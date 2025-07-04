@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { BeatLoader } from "react-spinners";
 import { shopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
@@ -7,9 +8,20 @@ const NewProducts = () => {
   const { products } = useContext(shopContext);
   const [latestProducts, setLatestProducts] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     setLatestProducts(products.slice(0, 10).reverse());
+    setLoading(false);
   }, [products]);
+
+  if (loading) {
+    return (
+      <div className="text-center m-auto my-20">
+        <BeatLoader color="#b90606" />
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] py-10">
