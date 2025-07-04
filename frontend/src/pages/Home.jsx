@@ -22,7 +22,7 @@ const Home = () => {
           because your style should speak before you do...{" "}
         </p>
         <Link to="/about">
-          <p className="text-red-500 pt-5 cursor-pointer">About US</p>
+          <p className="text-red-500 pt-5 cursor-pointer">About Us</p>
         </Link>
       </div>
       <NewProducts />
