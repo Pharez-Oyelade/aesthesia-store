@@ -117,7 +117,12 @@ const Login = () => {
         </div>
 
         <div className="w-full flex justify-between text-sm mt-[-8px]">
-          <p className="cursor-pointer">Forgot password?</p>
+          <p
+            className="cursor-pointer"
+            onClick={() => navigate("/forgot-password")}
+          >
+            Forgot password?
+          </p>
           {currentState === "Login" ? (
             <p
               onClick={() => setCurrentState("Sign Up")}

@@ -2,6 +2,8 @@ import express from "express";
 import {
   loginUser,
   registerUser,
+  forgotPassword,
+  resetPassword,
   adminLogin,
   getUserDetails,
 } from "../controllers/userController.js";
@@ -15,6 +17,9 @@ userRouter.post("/login", loginUser);
 userRouter.post("/register", registerUser);
 // Route for admin login
 userRouter.post("/admin", adminLogin);
+
+userRouter.post("/forgot-password", forgotPassword);
+userRouter.post("/reset-password", resetPassword);
 
 // Route fetching user details
 userRouter.post("/details", authUser, getUserDetails);

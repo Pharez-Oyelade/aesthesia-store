@@ -2,6 +2,8 @@ import userModel from "../models/userModel.js";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
@@ -95,6 +97,66 @@ const registerUser = async (req, res) => {
   }
 };
 
+// Send password reset email
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await userModel.findOne({ email });
+    if (!user) return res.json({ success: false, message: "User not found" });
+
+    // Generate token
+    const token = crypto.randomBytes(32).toString("hex");
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 1000 * 60 * 60; // 1 hour
+    await user.save();
+
+    // Send email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+
+    const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${email}`;
+    await transporter.sendMail({
+      to: email,
+      subject: "Password Reset Request",
+      html: `<p>You requested a password reset. Click <a href="${resetUrl}">here</a> to reset your password. This link expires in 1 hour.</p>`,
+    });
+
+    res.json({ success: true, message: "Reset link sent to your email." });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+// Reset password
+const resetPassword = async (req, res) => {
+  try {
+    const { email, token, password } = req.body;
+    const user = await userModel.findOne({
+      email,
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+    if (!user)
+      return res.json({ success: false, message: "Invalid or expired token" });
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ success: true, message: "Password reset successful" });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
 // route for admin login
 const adminLogin = async (req, res) => {
   // Logic for admin login
@@ -148,4 +210,11 @@ const getUserDetails = async (req, res) => {
   }
 };
 
-export { loginUser, registerUser, adminLogin, getUserDetails };
+export {
+  loginUser,
+  registerUser,
+  forgotPassword,
+  resetPassword,
+  adminLogin,
+  getUserDetails,
+};
