@@ -17,7 +17,7 @@ const Collection = () => {
   const [sortType, setSortType] = useState("relevant");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
 
   // pagination
   const totalPages = Math.ceil(filterProducts.length / PRODUCTS_PER_PAGE);
@@ -81,12 +81,11 @@ const Collection = () => {
 
   useEffect(() => {
     sortProduct();
-    setLoading(false);
   }, [sortType]);
 
-  if (loading) {
+  if (!products || products.length === 0) {
     return (
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center min-h-[40vh]">
         <BeatLoader color="#b90606" />
       </div>
     );
