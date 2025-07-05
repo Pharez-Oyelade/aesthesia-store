@@ -33,3 +33,10 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+// Preventing Render from sleeping by pinging the server every 14 minutes
+setInterval(() => {
+  fetch("https://aesthesia-store-backend.onrender.com/")
+    .then(() => console.log("Self-ping to prevent sleep"))
+    .catch((err) => console.log("Self-ping failed:", err));
+}, 14 * 60 * 1000); //14 minutes in milliseconds
