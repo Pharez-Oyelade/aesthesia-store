@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { shopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import { IoMdHeart } from "react-icons/io";
@@ -15,6 +15,10 @@ const ProductItem = ({ id, image, name, price, bestseller }) => {
   };
 
   const isWishlisted = wishlist && wishlist.includes(id);
+
+  useEffect(() => {
+    setShowImage(image[0]);
+  }, [image]);
 
   return (
     <Link to={`/product/${id}`} className="text-gray-700 cursor-pointer">
