@@ -75,13 +75,43 @@ const Collection = () => {
     }
   };
 
-  useEffect(() => {
-    applyFilter();
-  }, [sectionFilter, search, showSearch, products]);
+  // useEffect(() => {
+  //   applyFilter();
+  // }, [sectionFilter, search, showSearch, products]);
+
+  // useEffect(() => {
+  //   sortProduct();
+  // }, [sortType]);
 
   useEffect(() => {
-    sortProduct();
-  }, [sortType]);
+    let filtered = products.slice();
+    if (showSearch && search) {
+      filtered = filtered.filter(
+        (item) =>
+          item.name.toLowerCase().includes(search.toLowerCase()) ||
+          item.section.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    if (sectionFilter.length > 0) {
+      filtered = filtered.filter((item) =>
+        sectionFilter.includes(item.section)
+      );
+    }
+
+    // Sort after filtering
+    switch (sortType) {
+      case "lowest-highest":
+        filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "highest-lowest":
+        filtered.sort((a, b) => b.price - a.price);
+        break;
+      default:
+        break;
+    }
+
+    setFilterProducts(filtered);
+  }, [sectionFilter, search, showSearch, products, sortType]);
 
   if (!products || products.length === 0) {
     return (
