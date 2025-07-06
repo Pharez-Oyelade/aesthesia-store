@@ -2,7 +2,7 @@ import React from "react";
 
 const SortSelect = ({ sortType, setSortType }) => (
   <select
-    className="border-2 border-gray-300 text-sm p-2"
+    className="border-2 border-gray-300 text-xs sm:text-sm p-2"
     value={sortType}
     onChange={(e) => setSortType(e.target.value)}
   >

@@ -161,11 +161,12 @@ const Collection = () => {
         {/* RIGHT SIDE */}
         <main className="flex-1 pb-10">
           <div className="flex sm:flex-row justify-between items-center mb-8 gap-4">
-            <div className="text-2xl">
+            <div className="text-lg sm:text-2xl ">
               <Title text1={"ALL"} text2={"Collections"} />
             </div>
 
             {/* PRODUCT SORT */}
+
             <SortSelect sortType={sortType} setSortType={setSortType} />
           </div>
           {/* MAP PRODUCTS */}
