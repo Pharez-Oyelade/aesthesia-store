@@ -7,7 +7,7 @@ import { assets } from "../assets/assets";
 import ProductItem from "../components/ProductItem";
 import SortSelect from "../components/SortSelect";
 
-const PRODUCTS_PER_PAGE = 16;
+const PRODUCTS_PER_PAGE = 20;
 
 const Collection = () => {
   const { products, search, showSearch } = useContext(shopContext);
@@ -93,9 +93,9 @@ const Collection = () => {
 
   return (
     <div className="bg-gradient-to-br from-white to-gray-100 min-h-screen py-0 ">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-8">
+      <div className="max-w-7xl mx-auto px-5 pt-5 flex flex-col md:flex-row gap-8">
         {/* FILTER OPTIONS */}
-        <aside className="w-full md:w-64 bg-white rounded-2xl shadow-md p-6 mb-8 md:mb-0">
+        <aside className="w-full md:w-64 bg-white rounded-xl shadow-xs p-6 mb-0 md:mb-0">
           <p
             onClick={() => setShowFilter(!showFilter)}
             className="my-2 text-xl flex items-center cursor-pointer gap-2 font-semibold text-gray-800"
@@ -159,7 +159,7 @@ const Collection = () => {
           </div>
         </aside>
         {/* RIGHT SIDE */}
-        <main className="flex-1 py-10">
+        <main className="flex-1 pb-10">
           <div className="flex sm:flex-row justify-between items-center mb-8 gap-4">
             <div className="text-2xl">
               <Title text1={"ALL"} text2={"Collections"} />
@@ -197,7 +197,7 @@ const Collection = () => {
                   onClick={() => goToPage(idx + 1)}
                   className={`px-4 py-2 border rounded-lg bg-white shadow hover:bg-red-100 transition-all duration-150 ${
                     currentPage === idx + 1
-                      ? "bg-red-600 text-white font-bold"
+                      ? "bg-red-600 text-gray-300 border-red-600 font-bold"
                       : ""
                   }`}
                 >

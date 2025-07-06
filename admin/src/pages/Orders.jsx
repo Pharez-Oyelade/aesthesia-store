@@ -6,6 +6,14 @@ import { backendUrl, currency } from "../App";
 import { toast } from "react-toastify";
 import { assets } from "../assets/assets";
 
+function formatDate(date) {
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
 const Orders = ({ token }) => {
   const [orders, setOrders] = useState([]);
 
@@ -115,7 +123,8 @@ const Orders = ({ token }) => {
                   {order.payment ? "Done" : "Pending"}
                 </span>
               </p>
-              <p>Date: {new Date(order.date).toLocaleDateString()}</p>
+              {/* <p>Date: {new Date(order.date).toLocaleDateString()}</p> */}
+              <p>Date: {formatDate(order.date)}</p>
             </div>
             <p className="flex items-center gap-1 text-lg font-bold text-red-700">
               {currency} {order.amount}

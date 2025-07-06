@@ -10,6 +10,14 @@ const statusColors = {
   cancelled: "bg-red-100 text-red-800",
 };
 
+function formatDate(date) {
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
 const Orders = () => {
   const { currency, delivery_fee, backendUrl, token } = useContext(shopContext);
   const [orderData, setOrderData] = useState([]);
@@ -113,9 +121,13 @@ const Orders = () => {
                   </span>
                 </div>
               </div>
-              <div className="text-xs text-gray-400 mt-3">
+              {/* <div className="text-xs text-gray-400 mt-3">
                 Ordered on:{" "}
-                {item.date ? new Date(item.date).toLocaleString() : "Unknown"}
+                {item.date ? new Date(item.date).toLocaleString() : "Unknown"}                
+              </div> */}
+
+              <div className="text-xs text-gray-400 mt-3">
+                Ordered on: {item.date ? formatDate(item.date) : "Unknown"}
               </div>
             </div>
           </div>
