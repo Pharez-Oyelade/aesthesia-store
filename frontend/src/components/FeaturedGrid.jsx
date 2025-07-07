@@ -4,10 +4,10 @@ import { assets } from "../assets/assets";
 
 const FeaturedGrid = () => {
   const images = [
-    assets.main_1,
+    assets.bg_1_main,
     assets.jewelry_bg,
     assets.hair_bg,
-    assets.the_kali,
+    assets.bg_3_main,
   ];
 
   const overlays = [

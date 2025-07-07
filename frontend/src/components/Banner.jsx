@@ -8,7 +8,7 @@ const Banner = () => {
   let background, text;
 
   if (location.pathname === "/clothing") {
-    background = assets.the_kali;
+    background = assets.bg_3_main;
     text = "CLOTHINGS";
   } else if (location.pathname === "/wigs") {
     background = assets.hair_bg;
@@ -17,10 +17,10 @@ const Banner = () => {
     background = assets.jewelry_bg;
     text = "JEWELRY";
   } else if (location.pathname === "/rere-collection") {
-    background = assets.main_1;
+    background = assets.bg_1_main;
     text = "RERE COLLECTION";
   } else if (location.pathname === "/about") {
-    background = assets.the_kali;
+    background = assets.bg_main_1;
     text = "ABOUT US";
   }
 

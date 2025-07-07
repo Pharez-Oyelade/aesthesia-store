@@ -134,10 +134,10 @@ const Orders = ({ token }) => {
               value={order.status}
               className="p-2 font-semibold rounded-lg border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-red-200 transition"
             >
-              <option value="Order Placed">Order Placed</option>
+              <option value="Order Received">Order Received</option>
               <option value="Processing">Processing</option>
-              <option value="Packing">Packing</option>
-              <option value="Ready for Pickup">Ready for Pickup</option>
+              <option value="Processed">Processed</option>
+              <option value="Shipped">Shipped</option>
               <option value="Delivered">Delivered</option>
             </select>
           </div>

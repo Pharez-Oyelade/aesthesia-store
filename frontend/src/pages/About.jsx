@@ -4,6 +4,7 @@ import { assets } from "../assets/assets";
 import NewsletterBox from "../components/NewsletterBox";
 import Banner from "../components/Banner";
 import { useLocation } from "react-router-dom";
+import Policy from "../components/Policy";
 
 const About = () => {
   const location = useLocation();
@@ -38,31 +39,30 @@ const About = () => {
           />
           <div className="flex flex-col justify-center gap-6 md:w-2/3 text-gray-700">
             <p className="text-lg leading-relaxed">
-              Welcome to{" "}
-              <span className="font-bold text-red-700">Aesthesia</span>, where
-              modern elegance meets timeless classics. Our passion is to help
-              you express your unique style with confidence and grace. Every
-              piece in our collection is thoughtfully curated to inspire and
-              empower you, no matter the occasion.
+              We are super excited for you to meet us! <br /> Welcome to{" "}
+              <span className="text-[#691110]">Aesthesia,</span>
+              where beauty finds definition for what it truly is, taking on the
+              form and style of different individuals, and with every unique
+              signature, leaving a breathtaking trail. <br /> Here your style is
+              your expression, your statement to the world of the beauty you
+              express and exude, and when you do, you inspire the confidence in
+              others to embrace their beautiful. Aesthesia has been a proud
+              purveyor of premium beauty and fashion products for the past three
+              years (mainly clothing, hairs and accessories) and we are curating
+              a diversity of fashion products and styles in order to further
+              inspire your beauty.
             </p>
-            <p className="text-lg leading-relaxed">
-              From luxurious fabrics to exquisite craftsmanship, we believe in
-              quality and authenticity. Our journey is driven by a love for
-              fashion, a commitment to sustainability, and a desire to make
-              every customer feel special.
+
+            <p className="text-lg">
+              We invite you to join us in our mission to redefine, amplify, and
+              simplify the essence of beauty. With our newly expanded range of
+              offerings, we promise to bring you not just products but a
+              lifestyle that lets you embrace your beautiful. your way
             </p>
-            <div>
-              <b className="text-xl text-gray-900 block mb-2">Our Mission</b>
-              <p className="text-base text-gray-600">
-                To redefine beauty and style by offering exceptional products
-                and experiences that celebrate individuality, creativity, and
-                confidence.
-              </p>
-            </div>
           </div>
         </div>
 
-        <section id="our-story">
+        {/* <section id="our-story">
           <div className="text-2xl text-center py-8">
             <Title text1={"OUR"} text2={"STORY"} />
           </div>
@@ -94,6 +94,16 @@ const About = () => {
               and the pursuit of beauty in all its forms.
             </p>
           </div>
+        </section> */}
+
+        <section id="policies">
+          <div className="text-2xl text-center py-8">
+            <Title text1={"OUR"} text2={"POLICIES"} />
+          </div>
+
+          <div>
+            <Policy />
+          </div>
         </section>
 
         <div className="text-2xl text-center py-8">
@@ -120,9 +130,9 @@ const About = () => {
           <div className="flex-1 bg-white rounded-2xl shadow-md px-8 py-10 flex flex-col gap-4 items-center border-t-4 border-green-600">
             <b className="text-lg text-green-600">Exceptional Service</b>
             <p className="text-gray-600 text-base text-center">
-              Our team is dedicated to your satisfaction. We listen, we care,
-              and we go the extra mile to ensure you feel valued and supported
-              every step of the way.
+              We are dedicated to your satisfaction. We listen, we care, and we
+              go the extra mile to ensure you feel valued and supported every
+              step of the way.
             </p>
           </div>
         </div>

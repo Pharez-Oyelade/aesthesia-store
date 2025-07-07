@@ -76,8 +76,12 @@ const Navbar = () => {
     >
       <Link to="/">
         <img
-          src={isScrolled || isHovered ? assets.logo_dark : assets.logo_light}
-          className="w-20 sm:w-36"
+          src={
+            isScrolled || isHovered
+              ? assets.aesthesia_logo_dark
+              : assets.aesthesia_logo_light
+          }
+          className="w-36 sm:w-60"
           alt="Aesthesia Logo"
         />
       </Link>

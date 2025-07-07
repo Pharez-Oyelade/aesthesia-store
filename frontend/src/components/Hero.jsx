@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const slides = [
   {
-    image: assets.bg_5,
+    image: assets.bg_main_1,
     title: "MODERN, CLASSIC, ELEGANT",
     subtitle:
       "Where confidence meets fashion - discover wigs, jewelry, and outfits for your everyday slay",
@@ -12,21 +12,21 @@ const slides = [
     link: "/collection",
   },
   {
-    image: assets.bg_4,
+    image: assets.bg_1_main,
     title: "REDEFINING BEAUTY",
     subtitle: "Learn more about our story",
     b_text: "ABOUT US",
     link: "/about",
   },
   {
-    image: assets.green_main,
+    image: assets.bg_2_main,
     title: "STYLED TO RULE. SLAY BOLD. SHINE LOUD",
     subtitle: "Contact us for more information",
     b_text: "CONTACT",
     link: "/contact",
   },
   {
-    image: assets.hero_img,
+    image: assets.bg_3_main,
     title: "UNLEASH YOUR EVERYDAY POWER",
     subtitle: "Discover what greatness feels like",
     b_text: "RERE COLLECTION",
@@ -71,7 +71,7 @@ const Hero = () => {
           {subtitle}
         </p>
         <Link to={link}>
-          <button className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-red-700 to-pink-600 hover:from-red-800 hover:to-pink-700 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-300">
+          <button className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-700 hover:from-red-800 hover:to-pink-700 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-300">
             {b_text}
           </button>
 

@@ -8,7 +8,11 @@ const Footer = () => {
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
       <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr_1fr] gap-14 my-10 mt-40 text-sm ">
         <div className="">
-          <img src={assets.logo_dark} alt="" className="mb-5 w-32" />
+          <img
+            src={assets.aesthesia_logo_footer}
+            alt=""
+            className="mb-5 w-20"
+          />
           <p className="w-full md:w-2/3 text-gray-600">
             Your Wardrobe deserves more than ordinary. At Aesthesia, we deliver
             bold styles and soft elegance for women who know what they want.
@@ -18,8 +22,8 @@ const Footer = () => {
         <div>
           <p className="text-xl font-medium mb-5">ABOUT US</p>
           <ul className="flex flex-col gap-1 text-color-gray-600">
-            <HashLink smooth to="/about#our-story">
-              <li className="cursor-pointer">Our Story</li>
+            <HashLink smooth to="/about#policies">
+              <li className="cursor-pointer">Our Policies</li>
             </HashLink>
             <HashLink smooth to="/about#faqs">
               <li className="cursor-pointer">FAQs</li>

@@ -23,11 +23,11 @@ a.active {
 }
 
 .nav-anchor:hover {
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid #691110;
 }
 
 a.filter.active {
-  border-bottom: 2px solid #000;
+  border-bottom: 2px solid #691110;
 }
 
 input[type="checkbox"] {

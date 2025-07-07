@@ -17,12 +17,12 @@ const Home = () => {
         </div>
 
         <p className="text-xl w-full">
-          At <span className="text-red-700">Aesthesia</span>, we curate fashion
+          At <span className="text-red-800">Aesthesia</span>, we curate fashion
           that inspires self-expression, confidence, and creativity, <br />{" "}
           because your style should speak before you do...{" "}
         </p>
         <Link to="/about">
-          <p className="text-red-500 pt-5 cursor-pointer">About Us</p>
+          <p className="text-red-700 pt-5 cursor-pointer">About Us</p>
         </Link>
       </div>
       <NewProducts />
