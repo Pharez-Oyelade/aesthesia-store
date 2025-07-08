@@ -67,7 +67,13 @@ const Footer = () => {
       <div className="">
         <hr />
         <p className="py-5 text-sm text-center">
-          &copy; 2025 Aesthesia Haven - All Rights Reserved
+          &copy; 2025 Aesthesia Haven - All Rights Reserved | website by{" "}
+          <a
+            className="text-red-600"
+            href="https://pharez-oyelade.github.io/my-portfolio/"
+          >
+            Pharez
+          </a>
         </p>
       </div>
     </div>
