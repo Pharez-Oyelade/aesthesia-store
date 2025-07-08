@@ -194,7 +194,7 @@ const Add = ({ token }) => {
           Product Sizes
         </label>
         <div className="flex gap-3 flex-wrap">
-          {["S", "M", "L", "XL"].map((sz) => (
+          {["8", "10", "12", "14", "16", "18"].map((sz) => (
             <div
               key={sz}
               onClick={() =>

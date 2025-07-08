@@ -57,9 +57,21 @@ const Footer = () => {
         <div>
           <p className="text-xl font-medium mb-5">FOLLOW US</p>
           <ul className="flex flex-col gap-1 text-color-gray-600">
-            <li className="cursor-pointer">Instagram</li>
-            <li className="cursor-pointer">Facebook</li>
-            <li className="cursor-pointer">Twitter</li>
+            <li className="cursor-pointer">
+              <a href="https://www.facebook.com/profile.php?id=61569345876696">
+                Facebook
+              </a>
+            </li>
+
+            <li className="cursor-pointer">
+              <a href="https://www.instagram.com/aesthesia_haven">Instagram</a>
+            </li>
+
+            <li className="cursor-pointer">
+              <a href="https://www.instagram.com/aesthesia_hair">
+                Aesthesia Hair
+              </a>
+            </li>
           </ul>
         </div>
       </div>
