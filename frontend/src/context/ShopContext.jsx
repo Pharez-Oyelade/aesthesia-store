@@ -28,10 +28,10 @@ const ShopContextProvider = (props) => {
     //   toast.error("Select Product Size");
     //   return;
     // }
-    if (!measurements || Object.values(measurements).some((v) => !v)) {
-      toast.error("Please fill all measurements");
-      return;
-    }
+    // if (!measurements || Object.values(measurements).some((v) => !v)) {
+    //   toast.error("Please fill all measurements");
+    //   return;
+    // }
     if (quantity < 1) {
       toast.error("Quantity must be at least 1");
       return;

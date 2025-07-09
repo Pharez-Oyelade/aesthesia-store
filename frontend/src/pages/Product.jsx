@@ -19,6 +19,7 @@ const Product = () => {
     length: "",
     hips: "",
     bust: "",
+    sleeveLength: "",
   });
 
   // Find product when products or params change
@@ -45,14 +46,14 @@ const Product = () => {
   // Add to cart handler
   const handleAddToCart = (e) => {
     e.preventDefault();
-    // if (availableSizes.length > 0 && !size) {
-    //   alert("Please select a size");
-    //   return;
-    // }
-    if (requiresMeasurements && Object.values(measurements).some((v) => !v)) {
-      alert("Please fill all measurements");
+    if (availableSizes.length > 0 && !size) {
+      alert("Please select a size");
       return;
     }
+    // if (requiresMeasurements && Object.values(measurements).some((v) => !v)) {
+    //   alert("Please fill all measurements");
+    //   return;
+    // }
     addToCart(
       productData._id,
       size,
@@ -124,26 +125,69 @@ const Product = () => {
             <p className="text-gray-600 mb-6 leading-relaxed">
               {productData.description}
             </p>
-            {availableSizes.length > 0 && (
-              <div className="mb-6">
-                <p className="font-medium mb-2">Select Size</p>
-                <div className="flex gap-3 flex-wrap">
-                  {availableSizes.map((item, index) => (
-                    <button
-                      onClick={() => setSize(item)}
-                      key={index}
-                      className={`px-5 py-2 rounded-lg border-2 transition-all duration-200 font-semibold text-gray-700 focus:outline-none ${
-                        item === size
-                          ? "border-red-600 bg-red-50 text-red-700"
-                          : "border-gray-300 bg-white hover:bg-gray-100"
-                      }`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
+
+            {productData.sizes && productData.sizes.length > 0 && (
+              <div>
+                {availableSizes.length > 0 && (
+                  <div className="mb-6">
+                    <p className="font-medium mb-2">Select Size</p>
+                    <div className="flex gap-3 flex-wrap">
+                      {availableSizes.map((item, index) => (
+                        <button
+                          onClick={() => setSize(item)}
+                          key={index}
+                          required
+                          className={`px-5 py-2 rounded-lg border-2 transition-all duration-200 font-semibold text-gray-700 focus:outline-none ${
+                            item === size
+                              ? "border-red-600 bg-red-50 text-red-700"
+                              : "border-gray-300 bg-white hover:bg-gray-100"
+                          }`}
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-sm text-gray-500">
+                      *Click to Reference{" "}
+                      <span className="text-[#691110] underline">
+                        <a href="#size-guide">Size guide</a>
+                      </span>
+                    </p>
+                  </div>
+                )}
               </div>
             )}
+
+            <div className="mt-4 p-4 border-l-4 border-yellow-500 bg-yellow-800 dark:bg-yellow-900 dark:text-yellow-100 rounded-md text-sm">
+              <h4 className="font-semibold mb-1">
+                Size Selection and Custom Fit Disclaimer
+              </h4>
+              <p className="mb-1">
+                Please Select your preferred size from the available options.
+                You may also provide your{" "}
+                <span className="font-medium">exact body measurements</span> for
+                a more tailored fit.{" "}
+              </p>
+              <p className="mb-1">
+                If you{" "}
+                <span className="font-semibold">
+                  do not enter your measurements
+                </span>{" "}
+                , your order will be processed using our{" "}
+                <span className="font-semibold">standard sizing </span>
+                based on the size you selected.
+              </p>{" "}
+              <p>
+                Need help choosing a size?{" "}
+                <a
+                  href="#size-guide"
+                  className="underline font-medium text-blue-600 hover:text-blue-800"
+                >
+                  View our Size Guide
+                </a>
+              </p>
+            </div>
+
             {/* Measurements Form */}
             {requiresMeasurements && (
               <form
@@ -160,7 +204,6 @@ const Product = () => {
                     placeholder="Waist (inches)"
                     className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200"
                     min={0}
-                    required
                   />
                   <input
                     type="number"
@@ -170,7 +213,6 @@ const Product = () => {
                     placeholder="Length (inches)"
                     className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200"
                     min={0}
-                    required
                   />
                   <input
                     type="number"
@@ -180,7 +222,6 @@ const Product = () => {
                     placeholder="Hips (inches)"
                     className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200"
                     min={0}
-                    required
                   />
                   <input
                     type="number"
@@ -190,7 +231,15 @@ const Product = () => {
                     placeholder="Bust (inches)"
                     className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200"
                     min={0}
-                    required
+                  />
+                  <input
+                    type="number"
+                    name="sleeveLength"
+                    value={measurements.sleeveLength}
+                    onChange={handleMeasurementChange}
+                    placeholder="Sleeve Length(inches)"
+                    className="border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-200"
+                    min={0}
                   />
                 </div>
                 {/* Quantity Controls */}
@@ -278,7 +327,10 @@ const Product = () => {
         <div className="flex gap-4 border-b pb-4 mb-6">
           <b className="text-lg border-b-2 border-red-600 pb-2">Description</b>
         </div>
-        <div className="flex flex-col gap-4 text-gray-600 text-base leading-relaxed">
+        <div
+          className="flex flex-col gap-4 text-gray-600 text-base leading-relaxed"
+          id="size-guide"
+        >
           <p>{productData.description}</p>
           <p>Size Guide</p>
         </div>
