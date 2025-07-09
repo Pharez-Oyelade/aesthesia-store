@@ -110,7 +110,7 @@ const Product = () => {
               {productData.price}
             </p> */}
 
-            <p className="text-2xl font-semibold text-red-700 flex items-center mb-4">
+            <div className="text-2xl font-semibold text-red-700 flex items-center mb-4">
               {productData.onSale ? (
                 <>
                   <span className="flex items-center line-through text-gray-400 mr-3">
@@ -131,7 +131,7 @@ const Product = () => {
                   {productData.price}
                 </div>
               )}
-            </p>
+            </div>
             <p className="text-gray-600 mb-6 leading-relaxed">
               {productData.description}
             </p>

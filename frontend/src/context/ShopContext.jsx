@@ -9,6 +9,7 @@ export const shopContext = createContext();
 const ShopContextProvider = (props) => {
   const currency = <TbCurrencyNaira />;
   const delivery_fee = 100;
+  const VAT_RATE = 0.075; //7.5%
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -17,6 +18,10 @@ const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState("");
   const navigate = useNavigate();
+
+  const getVAT = () => {
+    return getCartAmount() * VAT_RATE;
+  };
 
   // Helper to create a unique key for measurements
   const getMeasurementsKey = (measurements) => {
@@ -129,7 +134,9 @@ const ShopContextProvider = (props) => {
         for (const mKey in cartItems[items][size]) {
           try {
             if (cartItems[items][size][mKey] > 0) {
-              totalAmount += itemInfo.price * cartItems[items][size][mKey];
+              totalAmount += itemInfo.onSale
+                ? itemInfo.salePrice * cartItems[items][size][mKey]
+                : itemInfo.price * cartItems[items][size][mKey];
             }
           } catch (error) {}
         }
@@ -245,6 +252,8 @@ const ShopContextProvider = (props) => {
     setToken,
     getUserCart,
     getUserWishlist,
+    VAT_RATE,
+    getVAT,
   };
 
   return (
