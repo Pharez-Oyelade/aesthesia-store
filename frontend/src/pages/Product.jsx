@@ -22,6 +22,8 @@ const Product = () => {
     sleeveLength: "",
   });
 
+  const charLimit = 150;
+
   // Find product when products or params change
   useEffect(() => {
     if (products && products.length > 0) {
@@ -133,7 +135,18 @@ const Product = () => {
               )}
             </div>
             <p className="text-gray-600 mb-6 leading-relaxed">
-              {productData.description}
+              {/* {productData.description} */}
+              {productData.description.length > charLimit
+                ? productData.description.substring(0, charLimit) + "..."
+                : productData.description}
+              {productData.description.length > charLimit && (
+                <a
+                  href="#description"
+                  className="cursor-pointer underline text-sm text-blue-600"
+                >
+                  Full description
+                </a>
+              )}
             </p>
             {productData.sizes && productData.sizes.length > 0 && (
               <div>
@@ -330,7 +343,10 @@ const Product = () => {
         </div>
       </div>
       {/* Description & Reviews */}
-      <div className="max-w-6xl mx-auto mt-12 bg-white rounded-2xl shadow-lg p-8">
+      <div
+        id="description"
+        className="max-w-6xl mx-auto mt-12 bg-white rounded-2xl shadow-lg p-8"
+      >
         <div className="flex gap-4 border-b pb-4 mb-6">
           <b className="text-lg border-b-2 border-red-600 pb-2">Description</b>
         </div>
