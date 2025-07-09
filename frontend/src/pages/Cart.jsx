@@ -86,7 +86,10 @@ const Cart = () => {
                 </div>
                 <p className="text-md text-gray-500 flex items-center gap-1 mt-2">
                   Price: {currency}
-                  {product.price}
+                  {/* {product.price} */}
+                  {product.onSale
+                    ? product.salePrice * item.quantity
+                    : product.price * item.quantity}
                 </p>
                 <div className="flex items-center gap-2 mt-2">
                   <label htmlFor={`qty-${idx}`}>Qty:</label>
@@ -110,7 +113,10 @@ const Cart = () => {
               </div>
               <div className="font-semibold flex items-center gap-1 mt-2 md:mt-0">
                 {currency}
-                {product.price * item.quantity}
+                {/* {product.price * item.quantity} */}
+                {product.onSale
+                  ? product.salePrice * item.quantity
+                  : product.price * item.quantity}
               </div>
 
               <img

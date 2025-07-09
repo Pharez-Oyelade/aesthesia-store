@@ -3,7 +3,15 @@ import { shopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import { IoMdHeart } from "react-icons/io";
 
-const ProductItem = ({ id, image, name, price, bestseller }) => {
+const ProductItem = ({
+  id,
+  image,
+  name,
+  price,
+  bestseller,
+  onSale,
+  salePrice,
+}) => {
   const { currency, addToWishlist, wishlist } = useContext(shopContext);
 
   const [isHovered, setIsHovered] = useState(false);
@@ -29,6 +37,16 @@ const ProductItem = ({ id, image, name, price, bestseller }) => {
             Bestseller
           </span>
         )}
+        {onSale && (
+          <span
+            className={`absolute left-2 z-10 bg-red-500 text-xs font-bold px-3 py-1 rounded-full shadow text-white ${
+              bestseller ? "top-10" : "top-2"
+            } `}
+          >
+            Sale
+          </span>
+        )}
+
         <img
           onMouseEnter={() => {
             setIsHovered(true);
@@ -57,9 +75,28 @@ const ProductItem = ({ id, image, name, price, bestseller }) => {
         </div>
       </div>
       <p className="pt-3 pb-1 text-sm">{name}</p>
-      <p className="text-sm font-medium flex items-center ">
+      {/* <p className="text-sm font-medium flex items-center ">
         {currency}
         {price}
+      </p> */}
+      <p className="text-sm font-medium flex items-center ">
+        {onSale ? (
+          <>
+            <span className="flex items-center line-through text-gray-400 mr-2">
+              {currency}
+              {price}
+            </span>
+            <span className="flex items-center   text-red-600">
+              {currency}
+              {salePrice}
+            </span>
+          </>
+        ) : (
+          <>
+            {currency}
+            {price}
+          </>
+        )}
       </p>
     </Link>
   );

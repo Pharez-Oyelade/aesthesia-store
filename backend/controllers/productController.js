@@ -4,7 +4,17 @@ import productModel from "../models/productModel.js";
 // add a new product
 const addProduct = async (req, res) => {
   try {
-    const { name, price, description, section, sizes, bestseller } = req.body;
+    // edit added for sale flow
+    const {
+      name,
+      price,
+      description,
+      section,
+      sizes,
+      bestseller,
+      onSale,
+      salePrice,
+    } = req.body;
 
     const image1 = req.files.image1 && req.files.image1[0];
     const image2 = req.files.image2 && req.files.image2[0];
@@ -53,6 +63,41 @@ const addProduct = async (req, res) => {
   }
 };
 
+// Update product
+const updateProduct = async (req, res) => {
+  try {
+    const {
+      id,
+      name,
+      description,
+      price,
+      section,
+      sizes,
+      bestseller,
+      onSale,
+      salePrice,
+    } = req.body;
+
+    const updateFields = {
+      ...(name && { name }),
+      ...(description && { description }),
+      ...(price && { price: Number(price) }),
+      ...(section && { section }),
+      ...(sizes && { sizes: JSON.parse(sizes) }),
+      ...(typeof bestseller !== "undefined" && { bestseller }),
+      ...(typeof onSale !== "undefined" && { onSale }),
+      ...(typeof salePrice !== "undefined" && { salePrice: Number(salePrice) }),
+    };
+
+    await productModel.findByIdAndUpdate(id, updateFields);
+
+    res.json({ success: true, message: "Product updated successfully" });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 // function for listing all products
 const listProducts = async (req, res) => {
   try {
@@ -90,4 +135,10 @@ const singleProduct = async (req, res) => {
   }
 };
 
-export { listProducts, addProduct, removeProduct, singleProduct };
+export {
+  listProducts,
+  addProduct,
+  removeProduct,
+  singleProduct,
+  updateProduct,
+};

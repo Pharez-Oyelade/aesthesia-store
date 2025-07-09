@@ -42,6 +42,8 @@ const NewProducts = () => {
             name={lp.name}
             price={lp.price}
             bestseller={lp.bestseller}
+            onSale={lp.onSale}
+            salePrice={lp.salePrice}
           />
         ))}
       </div>

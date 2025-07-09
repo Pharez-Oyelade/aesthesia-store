@@ -209,6 +209,8 @@ const Collection = () => {
                 price={item.price}
                 image={item.image}
                 bestseller={item.bestseller}
+                onSale={item.onSale}
+                salePrice={item.salePrice}
               />
             ))}
           </div>

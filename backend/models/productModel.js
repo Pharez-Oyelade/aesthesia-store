@@ -29,6 +29,18 @@ const productSchema = new mongoose.Schema({
   bestseller: {
     type: Boolean,
   },
+
+  // Testing Sale flow
+  onSale: {
+    type: Boolean,
+    default: false,
+  },
+  salePrice: {
+    type: Number,
+    default: 0,
+  },
+  // End flow additions
+
   date: {
     type: Number,
     required: true,

@@ -7,6 +7,19 @@ const List = ({ token }) => {
   const [list, setList] = useState([]);
   const [showConfirm, setShowConfirm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [editProduct, setEditProduct] = useState(null); // product being edited
+  const [editFields, setEditFields] = useState({
+    name: "",
+    description: "",
+    price: "",
+    section: "",
+    sizes: [],
+    bestseller: false,
+    onSale: false,
+    salePrice: "",
+  });
+
+  const FEATURE_EDIT_PRODUCTS = false;
 
   const fetchList = async () => {
     try {
@@ -89,16 +102,163 @@ const List = ({ token }) => {
                 {currency}
                 {item.price}
               </p>
-              <button
-                onClick={() => handleDeleteClick(item)}
-                className="text-center text-lg bg-red-100 text-red-700 rounded-full px-4 py-1 font-bold hover:bg-red-200 transition"
-              >
-                X
-              </button>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={() => handleDeleteClick(item)}
+                  className="text-center text-lg bg-red-100 text-red-700 rounded-full px-4 py-1 font-bold hover:bg-red-200 transition"
+                >
+                  X
+                </button>
+                {FEATURE_EDIT_PRODUCTS && (
+                  <button
+                    onClick={() => {
+                      setEditProduct(item);
+                      setEditFields({
+                        name: item.name || "",
+                        description: item.description || "",
+                        price: item.price || "",
+                        section: item.section || "",
+                        sizes: item.sizes || [],
+                        bestseller: item.bestseller || false,
+                        onSale: item.onSale || false,
+                        salePrice:
+                          item.salePrice !== undefined &&
+                          item.salePrice !== null
+                            ? item.salePrice
+                            : "",
+                      });
+                    }}
+                    className="bg-blue-100 text-blue-700 rounded-full px-4 py-1 font-bold hover:bg-blue-200"
+                  >
+                    Edit
+                  </button>
+                )}
+              </div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Edit Product Modal */}
+      {editProduct && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-transparent bg-opacity-50"
+          style={{ backdropFilter: "blur(2px)" }}
+        >
+          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative">
+            <button
+              className="absolute top-3 right-3 text-gray-400 hover:text-red-600 text-2xl font-bold"
+              onClick={() => setEditProduct(null)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <h2 className="text-xl font-bold mb-4">Edit Product</h2>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                try {
+                  const response = await axios.post(
+                    backendUrl + "/api/product/update",
+                    {
+                      id: editProduct._id,
+                      ...editFields,
+                      sizes: JSON.stringify(editFields.sizes),
+                    },
+                    { headers: { token } }
+                  );
+                  if (response.data.success) {
+                    toast.success("Product updated successfully");
+                    setEditProduct(null);
+                    await fetchList();
+                  } else {
+                    toast.error(response.data.message);
+                  }
+                } catch (error) {
+                  toast.error(error.message);
+                }
+              }}
+              className="flex flex-col gap-4"
+            >
+              {/* Example fields */}
+              <label className="font-medium">
+                Name
+                <input
+                  className="w-full px-3 py-2 border rounded-lg mt-1"
+                  value={editFields.name || ""}
+                  onChange={(e) =>
+                    setEditFields((f) => ({ ...f, name: e.target.value }))
+                  }
+                />
+              </label>
+              <label className="font-medium">
+                Bestseller
+                <input
+                  type="checkbox"
+                  className="ml-2 accent-red-600"
+                  checked={editFields.bestseller}
+                  onChange={(e) =>
+                    setEditFields((f) => ({
+                      ...f,
+                      bestseller: e.target.checked,
+                    }))
+                  }
+                />
+              </label>
+              <label className="font-medium">
+                On Sale
+                <input
+                  type="checkbox"
+                  className="ml-2 accent-red-600"
+                  checked={editFields.onSale}
+                  onChange={(e) =>
+                    setEditFields((f) => ({ ...f, onSale: e.target.checked }))
+                  }
+                />
+              </label>
+              {editFields.onSale && (
+                <label className="font-medium">
+                  Sale Price
+                  <input
+                    type="number"
+                    className="w-full px-3 py-2 border rounded-lg mt-1"
+                    value={
+                      editFields.salePrice !== undefined &&
+                      editFields.salePrice !== null
+                        ? editFields.salePrice
+                        : ""
+                    }
+                    onChange={(e) =>
+                      setEditFields((f) => ({
+                        ...f,
+                        salePrice: e.target.value,
+                      }))
+                    }
+                    placeholder="Sale Price"
+                    min={0}
+                  />
+                </label>
+              )}
+              {/* Add more fields as needed */}
+              <div className="flex gap-2 mt-4">
+                <button
+                  type="submit"
+                  className="flex-1 bg-red-700 hover:bg-red-800 text-white font-bold py-2 rounded-lg transition"
+                >
+                  Save
+                </button>
+                <button
+                  type="button"
+                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 rounded-lg transition"
+                  onClick={() => setEditProduct(null)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Confirmation Dialog */}
       {showConfirm && selectedProduct && (

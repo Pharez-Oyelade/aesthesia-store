@@ -105,27 +105,36 @@ const Product = () => {
             <h1 className="font-bold text-3xl md:text-4xl text-gray-900 mb-2">
               {productData.name}
             </h1>
-            {/* .........Review stars........ */}
-            {/* <div className="flex items-center gap-2 mb-4">
-              {[...Array(4)].map((_, i) => (
-                <img
-                  src={assets.star_icon}
-                  alt="star"
-                  className="w-5 h-5"
-                  key={i}
-                />
-              ))}
-              <img src={assets.star_dull_icon} alt="star" className="w-5 h-5" />
-              <span className="ml-2 text-gray-500 text-sm">(122 reviews)</span>
-            </div> */}
-            <p className="text-2xl font-semibold text-red-700 flex items-center mb-4">
+            {/* <p className="text-2xl font-semibold text-red-700 flex items-center mb-4">
               {currency}
               {productData.price}
+            </p> */}
+
+            <p className="text-2xl font-semibold text-red-700 flex items-center mb-4">
+              {productData.onSale ? (
+                <>
+                  <span className="flex items-center line-through text-gray-400 mr-3">
+                    {currency}
+                    {productData.price}
+                  </span>
+                  <span className="flex items-center text-red-600">
+                    {currency}
+                    {productData.salePrice}
+                  </span>
+                  <span className="ml-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
+                    Sale
+                  </span>
+                </>
+              ) : (
+                <div className="flex items-center">
+                  {currency}
+                  {productData.price}
+                </div>
+              )}
             </p>
             <p className="text-gray-600 mb-6 leading-relaxed">
               {productData.description}
             </p>
-
             {productData.sizes && productData.sizes.length > 0 && (
               <div>
                 {availableSizes.length > 0 && (
@@ -157,7 +166,6 @@ const Product = () => {
                 )}
               </div>
             )}
-
             <div className="mt-4 p-4 border-l-4 border-yellow-500 bg-yellow-800 dark:bg-yellow-900 dark:text-yellow-100 rounded-md text-sm">
               <h4 className="font-semibold mb-1">
                 Size Selection and Custom Fit Disclaimer
@@ -187,7 +195,6 @@ const Product = () => {
                 </a>
               </p>
             </div>
-
             {/* Measurements Form */}
             {requiresMeasurements && (
               <form
