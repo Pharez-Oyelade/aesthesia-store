@@ -44,7 +44,7 @@ const Product = () => {
     (productData && productData.section === "rere-collection");
   const availableSizes =
     productData && productData.sizes
-      ? productData.sizes.sizes.slice().sort((a, b) => Number(a) - Number(b))
+      ? productData.sizes.slice().sort((a, b) => Number(a) - Number(b))
       : [];
 
   // Add to cart handler
