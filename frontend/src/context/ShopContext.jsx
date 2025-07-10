@@ -6,9 +6,16 @@ import axios from "axios";
 
 export const shopContext = createContext();
 
+const deliveryFees = {
+  "Lagos Mainland": 1000,
+  "Lagos Island": 1500,
+  Abuja: 2500,
+  Other: 3000,
+};
+
 const ShopContextProvider = (props) => {
   const currency = <TbCurrencyNaira />;
-  const delivery_fee = 100;
+  // const delivery_fee = 100;
   const VAT_RATE = 0.075; //7.5%
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [search, setSearch] = useState("");
@@ -18,6 +25,9 @@ const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState("");
   const navigate = useNavigate();
+
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [delivery_fee, setDeliveryFee] = useState(0);
 
   const getVAT = () => {
     return getCartAmount() * VAT_RATE;
@@ -218,6 +228,14 @@ const ShopContextProvider = (props) => {
   };
 
   useEffect(() => {
+    if (selectedLocation && deliveryFees[selectedLocation] !== undefined) {
+      setDeliveryFee(deliveryFees[selectedLocation]);
+    } else {
+      setDeliveryFee(0);
+    }
+  }, [selectedLocation]);
+
+  useEffect(() => {
     getProductsData();
   }, []);
 
@@ -233,6 +251,10 @@ const ShopContextProvider = (props) => {
     products,
     currency,
     delivery_fee,
+    setDeliveryFee,
+    deliveryFees,
+    selectedLocation,
+    setSelectedLocation,
     search,
     setSearch,
     showSearch,

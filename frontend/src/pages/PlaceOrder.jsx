@@ -18,8 +18,11 @@ const PlaceOrder = () => {
     cartItems,
     setCartItems,
     getCartAmount,
-    delivery_fee,
     products,
+    setSelectedLocation,
+    selectedLocation,
+    deliveryFees,
+    delivery_fee,
     getVAT,
   } = useContext(shopContext);
 
@@ -32,6 +35,11 @@ const PlaceOrder = () => {
     state: "",
     phone: "",
   });
+
+  // New: handle location change
+  const onLocationChange = (e) => {
+    setSelectedLocation(e.target.value);
+  };
 
   const onChangeHandler = (event) => {
     const name = event.target.name;
@@ -71,6 +79,7 @@ const PlaceOrder = () => {
         return false;
       }
     }
+    if (!selectedLocation) return false;
     return true;
   };
 
@@ -91,7 +100,7 @@ const PlaceOrder = () => {
       toast.error("Paystack script not loaded");
       return;
     }
-    const amount = getCartAmount() + getVAT();
+    const amount = getCartAmount() + delivery_fee + getVAT();
     const handler = window.PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
       email: formData.email,
@@ -210,6 +219,21 @@ const PlaceOrder = () => {
             placeholder="Email Address"
             required
           />
+          {/* ...other inputs... */}
+          <select
+            name="location"
+            value={selectedLocation}
+            onChange={onLocationChange}
+            className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
+            required
+          >
+            <option value="">Select Delivery Location</option>
+            {Object.keys(deliveryFees).map((loc) => (
+              <option key={loc} value={loc}>
+                {loc} ({deliveryFees[loc]})
+              </option>
+            ))}
+          </select>
           <input
             onChange={onChangeHandler}
             name="street"
