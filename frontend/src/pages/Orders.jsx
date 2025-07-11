@@ -110,7 +110,10 @@ const Orders = () => {
                 <div className="flex items-center gap-2 sm:gap-4 mt-2">
                   <span className="font-semibold text-red-700 flex items-center text-sm sm:text-base">
                     {/* {item.price + item.price * VAT_RATE} */}
-                    {formatPrice(item.price + delivery_fee + getVAT())}
+                    {formatPrice(
+                      item.price * item.quantity +
+                        item.price * item.quantity * VAT_RATE
+                    )}
                   </span>
                   <span
                     className={`px-2 py-0.5 rounded text-xs font-semibold ${
