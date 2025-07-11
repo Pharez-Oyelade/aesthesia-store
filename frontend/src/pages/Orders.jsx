@@ -19,8 +19,15 @@ function formatDate(date) {
 }
 
 const Orders = () => {
-  const { currency, delivery_fee, backendUrl, token, VAT_RATE } =
-    useContext(shopContext);
+  const {
+    currency,
+    delivery_fee,
+    backendUrl,
+    token,
+    VAT_RATE,
+    getVAT,
+    formatPrice,
+  } = useContext(shopContext);
   const [orderData, setOrderData] = useState([]);
 
   const loadOrderData = async () => {
@@ -102,8 +109,8 @@ const Orders = () => {
                 )}
                 <div className="flex items-center gap-2 sm:gap-4 mt-2">
                   <span className="font-semibold text-red-700 flex items-center text-sm sm:text-base">
-                    {currency}
-                    {item.price + item.price * VAT_RATE}
+                    {/* {item.price + item.price * VAT_RATE} */}
+                    {formatPrice(item.price + delivery_fee + getVAT())}
                   </span>
                   <span
                     className={`px-2 py-0.5 rounded text-xs font-semibold ${

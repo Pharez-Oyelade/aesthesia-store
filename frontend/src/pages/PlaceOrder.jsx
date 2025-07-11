@@ -124,7 +124,7 @@ const PlaceOrder = () => {
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + getVAT(),
+        amount: getCartAmount() + delivery_fee + getVAT(),
         reference: response.reference,
         vat: getVAT(),
       };
