@@ -12,7 +12,8 @@ const ProductItem = ({
   onSale,
   salePrice,
 }) => {
-  const { currency, addToWishlist, wishlist } = useContext(shopContext);
+  const { currency, addToWishlist, wishlist, formatPrice } =
+    useContext(shopContext);
 
   const [isHovered, setIsHovered] = useState(false);
   const [showImage, setShowImage] = useState(image[0]);
@@ -83,19 +84,14 @@ const ProductItem = ({
         {onSale ? (
           <>
             <span className="flex items-center line-through text-gray-400 mr-2">
-              {currency}
-              {price}
+              {formatPrice(price)}
             </span>
             <span className="flex items-center   text-red-600">
-              {currency}
-              {salePrice}
+              {formatPrice(salePrice)}
             </span>
           </>
         ) : (
-          <>
-            {currency}
-            {price}
-          </>
+          <>{formatPrice(price)}</>
         )}
       </p>
     </Link>

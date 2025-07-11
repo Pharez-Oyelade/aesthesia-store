@@ -14,8 +14,14 @@ const parseMeasurements = (mKey) => {
 };
 
 const Cart = () => {
-  const { cartItems, products, currency, updateQuantity, navigate } =
-    useContext(shopContext);
+  const {
+    cartItems,
+    products,
+    currency,
+    updateQuantity,
+    navigate,
+    formatPrice,
+  } = useContext(shopContext);
 
   // Tracking selected image for each cart item
   const [selectedImages, setSelectedImages] = useState({});
@@ -85,11 +91,11 @@ const Cart = () => {
                   ))}
                 </div>
                 <p className="text-md text-gray-500 flex items-center gap-1 mt-2">
-                  Price: {currency}
+                  Price: {""}
                   {/* {product.price} */}
                   {product.onSale
-                    ? product.salePrice * item.quantity
-                    : product.price * item.quantity}
+                    ? formatPrice(product.salePrice * item.quantity)
+                    : formatPrice(product.price * item.quantity)}
                 </p>
                 <div className="flex items-center gap-2 mt-2">
                   <label htmlFor={`qty-${idx}`}>Qty:</label>
@@ -112,11 +118,10 @@ const Cart = () => {
                 </div>
               </div>
               <div className="font-semibold flex items-center gap-1 mt-2 md:mt-0">
-                {currency}
                 {/* {product.price * item.quantity} */}
                 {product.onSale
-                  ? product.salePrice * item.quantity
-                  : product.price * item.quantity}
+                  ? formatPrice(product.salePrice * item.quantity)
+                  : formatPrice(product.price * item.quantity)}
               </div>
 
               <img

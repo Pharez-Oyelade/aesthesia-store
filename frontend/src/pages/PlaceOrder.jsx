@@ -234,6 +234,9 @@ const PlaceOrder = () => {
               </option>
             ))}
           </select>
+          <p className="m-0 p-0 text-xs text-gray-500">
+            *Shipping fees based on delivery location
+          </p>
           <input
             onChange={onChangeHandler}
             name="street"

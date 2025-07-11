@@ -13,6 +13,19 @@ const deliveryFees = {
   Other: 3000,
 };
 
+// const formatNumberWithCommas = (number) => {
+//   return number.toLocaleString("en-NG");
+// };
+
+const formatPrice = (amount) => {
+  return amount.toLocaleString("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+};
+
 const ShopContextProvider = (props) => {
   const currency = <TbCurrencyNaira />;
   // const delivery_fee = 100;
@@ -276,6 +289,8 @@ const ShopContextProvider = (props) => {
     getUserWishlist,
     VAT_RATE,
     getVAT,
+    // formatNumberWithCommas,
+    formatPrice,
   };
 
   return (

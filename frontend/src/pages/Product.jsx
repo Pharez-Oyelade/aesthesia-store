@@ -6,8 +6,14 @@ import RelatedProducts from "../components/RelatedProducts";
 
 const Product = () => {
   const { productId, id } = useParams();
-  const { products, currency, addToCart, wishlist, addToWishlist } =
-    useContext(shopContext);
+  const {
+    products,
+    currency,
+    addToCart,
+    wishlist,
+    addToWishlist,
+    formatPrice,
+  } = useContext(shopContext);
 
   // Find product after products are loaded
   const [productData, setProductData] = useState(null);
@@ -118,12 +124,10 @@ const Product = () => {
               {productData.onSale ? (
                 <>
                   <span className="flex items-center line-through text-gray-400 mr-3">
-                    {currency}
-                    {productData.price}
+                    {formatPrice(productData.price)}
                   </span>
                   <span className="flex items-center text-red-600">
-                    {currency}
-                    {productData.salePrice}
+                    {formatPrice(productData.salePrice)}
                   </span>
                   <span className="ml-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
                     Sale
@@ -131,8 +135,7 @@ const Product = () => {
                 </>
               ) : (
                 <div className="flex items-center">
-                  {currency}
-                  {productData.price}
+                  {formatPrice(productData.price)}
                 </div>
               )}
             </div>
@@ -358,6 +361,9 @@ const Product = () => {
         >
           <p>{productData.description}</p>
           <p>Size Guide</p>
+          {/* <div>
+            <img src={assets.size_chart_demo} className="w-100" alt="" />
+          </div> */}
         </div>
       </div>
       {/* Related Products */}

@@ -8,6 +8,7 @@ import bg_5 from "./bg-5.jpg";
 import the_kali from "./thr_kali.jpg";
 import green_main from "./green_main.png";
 import main_1 from "./main_1.jpg";
+import size_chart_demo from "./size-chart-demo.png";
 
 import logo from "./logo.png";
 import logo_light from "./Logo-Light.png";
@@ -79,4 +80,5 @@ export const assets = {
   green_main,
   contact,
   contact_2,
+  size_chart_demo,
 };
