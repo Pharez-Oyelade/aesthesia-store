@@ -211,6 +211,7 @@ const Collection = () => {
                 bestseller={item.bestseller}
                 preorder={item.preorder}
                 onSale={item.onSale}
+                soldOut={item.soldOut}
                 salePrice={item.salePrice}
               />
             ))}

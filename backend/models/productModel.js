@@ -47,6 +47,10 @@ const productSchema = new mongoose.Schema({
   preorder: {
     type: Boolean,
   },
+  soldOut: {
+    type: Boolean,
+    default: false,
+  },
   // End flow additions
 
   date: {

@@ -42,6 +42,7 @@ const NewProducts = () => {
             name={lp.name}
             price={lp.price}
             bestseller={lp.bestseller}
+            soldOut={lp.soldOut}
             preorder={lp.preorder}
             onSale={lp.onSale}
             salePrice={lp.salePrice}

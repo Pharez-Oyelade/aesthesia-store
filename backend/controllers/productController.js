@@ -82,6 +82,7 @@ const updateProduct = async (req, res) => {
       preorder,
       onSale,
       salePrice,
+      soldOut,
     } = req.body;
 
     const updateFields = {
@@ -93,6 +94,7 @@ const updateProduct = async (req, res) => {
       ...(colors && { colors: JSON.parse(colors) }),
       ...(typeof bestseller !== "undefined" && { bestseller }),
       ...(typeof preorder !== "undefined" && { preorder }),
+      ...(typeof soldOut !== "undefined" && { soldOut }),
       ...(typeof onSale !== "undefined" && { onSale }),
       ...(typeof salePrice !== "undefined" && { salePrice: Number(salePrice) }),
     };

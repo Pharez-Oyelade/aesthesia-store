@@ -18,6 +18,7 @@ const List = ({ token }) => {
     onSale: false,
     salePrice: "",
     preorder: false,
+    soldOut: false,
   });
 
   const FEATURE_EDIT_PRODUCTS = true;
@@ -122,6 +123,7 @@ const List = ({ token }) => {
                         sizes: item.sizes || [],
                         bestseller: item.bestseller || false,
                         preorder: item.preorder || false,
+                        soldOut: item.soldOut || false,
                         onSale: item.onSale || false,
                         salePrice:
                           item.salePrice !== undefined &&
@@ -265,6 +267,21 @@ const List = ({ token }) => {
                     setEditFields((f) => ({
                       ...f,
                       preorder: e.target.checked,
+                    }))
+                  }
+                />
+              </label>
+
+              <label htmlFor="" className="font-medium">
+                Sold Out
+                <input
+                  type="checkbox"
+                  className="ml-2 accent-red-600"
+                  checked={editFields.soldOut}
+                  onChange={(e) =>
+                    setEditFields((f) => ({
+                      ...f,
+                      soldOut: e.target.checked,
                     }))
                   }
                 />

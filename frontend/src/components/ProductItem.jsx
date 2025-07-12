@@ -12,6 +12,7 @@ const ProductItem = ({
   onSale,
   salePrice,
   preorder,
+  soldOut,
 }) => {
   const { currency, addToWishlist, wishlist, formatPrice } =
     useContext(shopContext);
@@ -59,6 +60,19 @@ const ProductItem = ({
             } `}
           >
             Sale
+          </span>
+        )}
+        {soldOut && (
+          <span
+            className={`absolute left-2 z-10 bg-red-500 text-xs font-bold px-3 py-1 rounded-full shadow text-white ${
+              bestseller && preorder
+                ? "top-18"
+                : bestseller || preorder
+                ? "top-10"
+                : "top-2"
+            } `}
+          >
+            Sold Out
           </span>
         )}
 
