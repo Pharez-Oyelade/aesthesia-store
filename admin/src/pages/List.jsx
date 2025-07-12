@@ -19,7 +19,7 @@ const List = ({ token }) => {
     salePrice: "",
   });
 
-  const FEATURE_EDIT_PRODUCTS = false;
+  const FEATURE_EDIT_PRODUCTS = true;
 
   const fetchList = async () => {
     try {
