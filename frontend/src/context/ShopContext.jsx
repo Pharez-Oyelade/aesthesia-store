@@ -29,7 +29,7 @@ const formatPrice = (amount) => {
 const ShopContextProvider = (props) => {
   const currency = <TbCurrencyNaira />;
   // const delivery_fee = 100;
-  const VAT_RATE = 0.075; //7.5%
+  // const VAT_RATE = 0.075; //7.5%
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -42,9 +42,9 @@ const ShopContextProvider = (props) => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [delivery_fee, setDeliveryFee] = useState(0);
 
-  const getVAT = () => {
-    return getCartAmount() * VAT_RATE;
-  };
+  // const getVAT = () => {
+  //   return getCartAmount() * VAT_RATE;
+  // };
 
   // Helper to create a unique key for measurements
   const getMeasurementsKey = (measurements) => {
@@ -52,14 +52,6 @@ const ShopContextProvider = (props) => {
   };
 
   const addToCart = async (itemId, size, color, measurements, quantity = 1) => {
-    // if (!size) {
-    //   toast.error("Select Product Size");
-    //   return;
-    // }
-    // if (!measurements || Object.values(measurements).some((v) => !v)) {
-    //   toast.error("Please fill all measurements");
-    //   return;
-    // }
     if (quantity < 1) {
       toast.error("Quantity must be at least 1");
       return;
@@ -304,8 +296,8 @@ const ShopContextProvider = (props) => {
     setToken,
     getUserCart,
     getUserWishlist,
-    VAT_RATE,
-    getVAT,
+    // VAT_RATE,
+    // getVAT,
     // formatNumberWithCommas,
     formatPrice,
   };

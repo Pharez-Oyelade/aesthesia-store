@@ -23,7 +23,6 @@ const PlaceOrder = () => {
     selectedLocation,
     deliveryFees,
     delivery_fee,
-    getVAT,
   } = useContext(shopContext);
 
   const [formData, setFormData] = useState({
@@ -103,7 +102,7 @@ const PlaceOrder = () => {
       toast.error("Paystack script not loaded");
       return;
     }
-    const amount = getCartAmount() + delivery_fee + getVAT();
+    const amount = getCartAmount() + delivery_fee;
     const handler = window.PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
       email: formData.email,
@@ -127,9 +126,8 @@ const PlaceOrder = () => {
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + delivery_fee + getVAT(),
+        amount: getCartAmount() + delivery_fee,
         reference: response.reference,
-        vat: getVAT(),
       };
       const res = await axios.post(
         backendUrl + "/api/order/paystack",
