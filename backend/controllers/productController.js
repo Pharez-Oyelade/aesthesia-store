@@ -14,6 +14,7 @@ const addProduct = async (req, res) => {
       bestseller,
       onSale,
       salePrice,
+      preorder,
     } = req.body;
 
     const image1 = req.files.image1 && req.files.image1[0];
@@ -45,6 +46,7 @@ const addProduct = async (req, res) => {
       price: Number(price),
       section,
       bestseller: bestseller === "true" ? true : false,
+      preorder: preorder === "true" ? true : false,
       sizes: JSON.parse(sizes),
       image: imagesUrl,
       date: Date.now(),
@@ -85,6 +87,7 @@ const updateProduct = async (req, res) => {
       ...(section && { section }),
       ...(sizes && { sizes: JSON.parse(sizes) }),
       ...(typeof bestseller !== "undefined" && { bestseller }),
+      ...(typeof preorder !== "undefined" && { preorder }),
       ...(typeof onSale !== "undefined" && { onSale }),
       ...(typeof salePrice !== "undefined" && { salePrice: Number(salePrice) }),
     };

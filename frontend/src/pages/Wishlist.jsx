@@ -64,6 +64,12 @@ const Wishlist = () => {
                   Bestseller
                 </span>
               )}
+              {/* Preorder Tag */}
+              {product.preorder && (
+                <span className="absolute left-2 top-10 z-10 bg-yellow-400 text-xs font-bold px-3 py-1 rounded-full shadow text-gray-900">
+                  Preorder
+                </span>
+              )}
               <img
                 src={product.image[0]}
                 alt={product.name}

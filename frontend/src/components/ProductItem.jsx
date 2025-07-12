@@ -11,6 +11,7 @@ const ProductItem = ({
   bestseller,
   onSale,
   salePrice,
+  preorder,
 }) => {
   const { currency, addToWishlist, wishlist, formatPrice } =
     useContext(shopContext);
@@ -38,10 +39,23 @@ const ProductItem = ({
             Bestseller
           </span>
         )}
+        {preorder && (
+          <span
+            className={`absolute left-2 z-10 bg-yellow-400 text-xs font-bold px-3 py-1 rounded-full shadow text-gray-900 ${
+              bestseller ? "top-10" : "top-2"
+            }`}
+          >
+            Preorder
+          </span>
+        )}
         {onSale && (
           <span
             className={`absolute left-2 z-10 bg-red-500 text-xs font-bold px-3 py-1 rounded-full shadow text-white ${
-              bestseller ? "top-10" : "top-2"
+              bestseller && preorder
+                ? "top-18"
+                : bestseller || preorder
+                ? "top-10"
+                : "top-2"
             } `}
           >
             Sale

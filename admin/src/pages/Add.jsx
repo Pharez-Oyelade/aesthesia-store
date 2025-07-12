@@ -14,6 +14,7 @@ const Add = ({ token }) => {
   const [price, setPrice] = useState("");
   const [section, setSection] = useState("clothes");
   const [bestseller, setBestseller] = useState(false);
+  const [preorder, setPreorder] = useState(false);
   const [sizes, setSizes] = useState([]);
 
   const [loading, setLoading] = useState(false);
@@ -32,6 +33,7 @@ const Add = ({ token }) => {
       formData.append("price", price);
       formData.append("section", section);
       formData.append("bestseller", bestseller);
+      formData.append("preorder", preorder);
       formData.append("sizes", JSON.stringify(sizes.length > 0 ? sizes : []));
 
       image1 && formData.append("image1", image1);
@@ -57,6 +59,7 @@ const Add = ({ token }) => {
         setPrice("");
         setSection("clothes");
         setBestseller(false);
+        setPreorder(false);
         setSizes([]);
         setImage1(false);
         setImage2(false);
@@ -228,6 +231,21 @@ const Add = ({ token }) => {
           htmlFor="bestseller"
         >
           Add to bestseller
+        </label>
+      </div>
+      <div className="flex items-center gap-3 mt-2">
+        <input
+          onChange={() => setPreorder((prev) => !prev)}
+          checked={preorder}
+          type="checkbox"
+          id="preorder"
+          className="accent-red-700 w-5 h-5"
+        />
+        <label
+          className="cursor-pointer font-medium text-gray-700"
+          htmlFor="preorder"
+        >
+          Add to preorder
         </label>
       </div>
       <button

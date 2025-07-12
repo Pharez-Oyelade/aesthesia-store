@@ -115,6 +115,23 @@ const Product = () => {
             <h1 className="font-bold text-3xl md:text-4xl text-gray-900 mb-2">
               {productData.name}
             </h1>
+
+            {/* Preorder Tag */}
+            {productData.preorder && (
+              <div className="mb-4">
+                <span className="bg-yellow-400 text-yellow-900 text-sm font-bold px-3 py-1 rounded-full shadow">
+                  Preorder
+                </span>
+                <div className="mt-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <p className="text-sm text-yellow-800">
+                    <strong>Preorder Notice:</strong> This item is available for
+                    preorder. Your order will be processed and shipped once the
+                    item becomes available.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* <p className="text-2xl font-semibold text-red-700 flex items-center mb-4">
               {currency}
               {productData.price}
@@ -292,7 +309,7 @@ const Product = () => {
                   type="submit"
                   className="w-full md:w-auto bg-gradient-to-r from-[#691110] to-red-700 hover:from-red-800 hover:to-red-600 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95 mt-4"
                 >
-                  Add to Cart
+                  {productData.preorder ? "Preorder Now" : "Add to Cart"}
                 </button>
               </form>
             )}
@@ -323,7 +340,7 @@ const Product = () => {
                   onClick={handleAddToCart}
                   className="w-full md:w-auto bg-gradient-to-r from-red-700 to-red-500 hover:from-red-800 hover:to-red-600 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95 mt-4"
                 >
-                  Add to Cart
+                  {productData.preorder ? "Preorder Now" : "Add to Cart"}
                 </button>
               </div>
             )}

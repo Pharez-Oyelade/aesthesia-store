@@ -39,6 +39,10 @@ const productSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  preorder: {
+    type: Boolean,
+    default: false,
+  },
   // End flow additions
 
   date: {

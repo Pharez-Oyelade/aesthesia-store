@@ -30,6 +30,9 @@ const RelatedProducts = ({ section }) => {
             price={item.price}
             image={item.image}
             bestseller={item.bestseller}
+            preorder={item.preorder}
+            onSale={item.onSale}
+            salePrice={item.salePrice}
           />
         ))}
       </div>

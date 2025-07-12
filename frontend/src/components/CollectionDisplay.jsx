@@ -39,6 +39,9 @@ const CollectionDisplay = ({ section }) => {
                 price={product.price}
                 image={product.image}
                 bestseller={product.bestseller}
+                preorder={product.preorder}
+                onSale={product.onSale}
+                salePrice={product.salePrice}
               />
             ))}
           </div>
