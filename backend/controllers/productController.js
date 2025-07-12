@@ -11,6 +11,7 @@ const addProduct = async (req, res) => {
       description,
       section,
       sizes,
+      colors,
       bestseller,
       onSale,
       salePrice,
@@ -48,6 +49,7 @@ const addProduct = async (req, res) => {
       bestseller: bestseller === "true" ? true : false,
       preorder: preorder === "true" ? true : false,
       sizes: JSON.parse(sizes),
+      colors: colors ? JSON.parse(colors) : [],
       image: imagesUrl,
       date: Date.now(),
     };
@@ -75,7 +77,9 @@ const updateProduct = async (req, res) => {
       price,
       section,
       sizes,
+      colors,
       bestseller,
+      preorder,
       onSale,
       salePrice,
     } = req.body;
@@ -86,6 +90,7 @@ const updateProduct = async (req, res) => {
       ...(price && { price: Number(price) }),
       ...(section && { section }),
       ...(sizes && { sizes: JSON.parse(sizes) }),
+      ...(colors && { colors: JSON.parse(colors) }),
       ...(typeof bestseller !== "undefined" && { bestseller }),
       ...(typeof preorder !== "undefined" && { preorder }),
       ...(typeof onSale !== "undefined" && { onSale }),

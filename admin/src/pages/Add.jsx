@@ -16,6 +16,8 @@ const Add = ({ token }) => {
   const [bestseller, setBestseller] = useState(false);
   const [preorder, setPreorder] = useState(false);
   const [sizes, setSizes] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [newColor, setNewColor] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -35,6 +37,10 @@ const Add = ({ token }) => {
       formData.append("bestseller", bestseller);
       formData.append("preorder", preorder);
       formData.append("sizes", JSON.stringify(sizes.length > 0 ? sizes : []));
+      formData.append(
+        "colors",
+        JSON.stringify(colors.length > 0 ? colors : [])
+      );
 
       image1 && formData.append("image1", image1);
       image2 && formData.append("image2", image2);
@@ -61,6 +67,8 @@ const Add = ({ token }) => {
         setBestseller(false);
         setPreorder(false);
         setSizes([]);
+        setColors([]);
+        setNewColor("");
         setImage1(false);
         setImage2(false);
         setImage3(false);
@@ -217,6 +225,53 @@ const Add = ({ token }) => {
             </div>
           ))}
         </div>
+      </div>
+      <div>
+        <label className="mb-2 font-semibold text-gray-700 block">
+          Product Colors (Optional)
+        </label>
+        <div className="flex gap-2 mb-3">
+          <input
+            type="text"
+            value={newColor}
+            onChange={(e) => setNewColor(e.target.value)}
+            placeholder="Add a color (e.g., Red, Blue, Black)"
+            className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-200 outline-none transition"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              if (newColor.trim() && !colors.includes(newColor.trim())) {
+                setColors([...colors, newColor.trim()]);
+                setNewColor("");
+              }
+            }}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+          >
+            Add
+          </button>
+        </div>
+        {colors.length > 0 && (
+          <div className="flex gap-2 flex-wrap">
+            {colors.map((color, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 bg-gray-100 px-3 py-1 rounded-lg"
+              >
+                <span className="text-sm font-medium">{color}</span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setColors(colors.filter((_, i) => i !== index))
+                  }
+                  className="text-red-500 hover:text-red-700 text-sm"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       <div className="flex items-center gap-3 mt-2">
         <input

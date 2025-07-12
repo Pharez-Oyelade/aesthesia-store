@@ -30,15 +30,18 @@ const Cart = () => {
   const cartData = [];
   for (const itemId in cartItems) {
     for (const size in cartItems[itemId]) {
-      for (const mKey in cartItems[itemId][size]) {
-        if (cartItems[itemId][size][mKey] > 0) {
-          cartData.push({
-            _id: itemId,
-            size,
-            measurements: parseMeasurements(mKey),
-            quantity: cartItems[itemId][size][mKey],
-            mKey,
-          });
+      for (const colorKey in cartItems[itemId][size]) {
+        for (const mKey in cartItems[itemId][size][colorKey]) {
+          if (cartItems[itemId][size][colorKey][mKey] > 0) {
+            cartData.push({
+              _id: itemId,
+              size,
+              color: colorKey === "no-color" ? "" : colorKey,
+              measurements: parseMeasurements(mKey),
+              quantity: cartItems[itemId][size][colorKey][mKey],
+              mKey,
+            });
+          }
         }
       }
     }
@@ -83,6 +86,9 @@ const Cart = () => {
               <div className="flex-1">
                 <h3 className="font-medium text-lg">{product.name}</h3>
                 <p className="text-sm text-gray-500">Size: {item.size}</p>
+                {item.color && (
+                  <p className="text-sm text-gray-500">Color: {item.color}</p>
+                )}
                 <div className="flex flex-wrap gap-2 text-xs text-gray-600 mt-1">
                   {Object.entries(item.measurements).map(([key, value]) => (
                     <span key={key} className="bg-gray-100 px-2 py-1 rounded">
@@ -109,6 +115,7 @@ const Cart = () => {
                       updateQuantity(
                         item._id,
                         item.size,
+                        item.color,
                         item.measurements,
                         qty
                       );
@@ -126,7 +133,13 @@ const Cart = () => {
 
               <img
                 onClick={() =>
-                  updateQuantity(item._id, item.size, item.measurements, 0)
+                  updateQuantity(
+                    item._id,
+                    item.size,
+                    item.color,
+                    item.measurements,
+                    0
+                  )
                 }
                 src={assets.bin_icon}
                 className="w-4 mr-4 sm:w-5 cursor-pointer"

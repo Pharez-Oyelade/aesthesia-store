@@ -51,19 +51,22 @@ const PlaceOrder = () => {
     let orderItems = [];
     for (const itemId in cartItems) {
       for (const size in cartItems[itemId]) {
-        for (const mKey in cartItems[itemId][size]) {
-          if (cartItems[itemId][size][mKey] > 0) {
-            const product = products.find((p) => p._id === itemId);
-            if (product) {
-              orderItems.push({
-                _id: itemId,
-                name: product.name,
-                price: product.price,
-                image: product.image,
-                size,
-                measurements: JSON.parse(mKey),
-                quantity: cartItems[itemId][size][mKey],
-              });
+        for (const colorKey in cartItems[itemId][size]) {
+          for (const mKey in cartItems[itemId][size][colorKey]) {
+            if (cartItems[itemId][size][colorKey][mKey] > 0) {
+              const product = products.find((p) => p._id === itemId);
+              if (product) {
+                orderItems.push({
+                  _id: itemId,
+                  name: product.name,
+                  price: product.price,
+                  image: product.image,
+                  size,
+                  color: colorKey === "no-color" ? "" : colorKey,
+                  measurements: JSON.parse(mKey),
+                  quantity: cartItems[itemId][size][colorKey][mKey],
+                });
+              }
             }
           }
         }

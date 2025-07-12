@@ -84,6 +84,9 @@ const Orders = ({ token }) => {
                       {item.size && (
                         <span className="text-gray-500">({item.size})</span>
                       )}
+                      {item.color && (
+                        <span className="text-gray-500"> - {item.color}</span>
+                      )}
                     </p>
                     {item.measurements && (
                       <p className="text-xs text-gray-500">

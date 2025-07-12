@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
   userId: { type: String, required: true },
-  items: { type: Array, required: true },
+  items: { type: Array, required: true }, // Each item will include color if selected
   amount: { type: Number, required: true },
   address: { type: Object, required: true },
   status: { type: String, required: true, default: "Order Placed" },

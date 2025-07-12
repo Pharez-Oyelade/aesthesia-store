@@ -3,25 +3,34 @@ import userModel from "../models/userModel.js";
 // add products to user cart
 const addToCart = async (req, res) => {
   try {
-    const { userId, itemId, size, measurements, quantity } = req.body;
+    const { userId, itemId, size, color, measurements, quantity } = req.body;
 
     const userData = await userModel.findById(userId);
     let cartData = await userData.cartData;
 
+    const colorKey = color || "no-color";
     if (cartData[itemId]) {
       if (cartData[itemId][size]) {
-        const mKey = JSON.stringify(measurements);
-        if (cartData[itemId][size][mKey]) {
-          cartData[itemId][size][mKey] += quantity;
+        if (cartData[itemId][size][colorKey]) {
+          const mKey = JSON.stringify(measurements);
+          if (cartData[itemId][size][colorKey][mKey]) {
+            cartData[itemId][size][colorKey][mKey] += quantity;
+          } else {
+            cartData[itemId][size][colorKey][mKey] = quantity;
+          }
         } else {
-          cartData[itemId][size][mKey] = quantity;
+          cartData[itemId][size][colorKey] = {
+            [JSON.stringify(measurements)]: quantity,
+          };
         }
       } else {
-        cartData[itemId][size] = { [JSON.stringify(measurements)]: quantity };
+        cartData[itemId][size] = {
+          [colorKey]: { [JSON.stringify(measurements)]: quantity },
+        };
       }
     } else {
       cartData[itemId] = {
-        [size]: { [JSON.stringify(measurements)]: quantity },
+        [size]: { [colorKey]: { [JSON.stringify(measurements)]: quantity } },
       };
     }
 
@@ -43,12 +52,13 @@ const addToCart = async (req, res) => {
 // update products in user cart
 const updateCart = async (req, res) => {
   try {
-    const { userId, itemId, size, measurements, quantity } = req.body;
+    const { userId, itemId, size, color, measurements, quantity } = req.body;
 
     const userData = await userModel.findById(userId);
     let cartData = await userData.cartData;
 
-    cartData[itemId][size][JSON.stringify(measurements)] = quantity;
+    const colorKey = color || "no-color";
+    cartData[itemId][size][colorKey][JSON.stringify(measurements)] = quantity;
 
     await userModel.findByIdAndUpdate(userId, { cartData });
 

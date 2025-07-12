@@ -51,7 +51,7 @@ const ShopContextProvider = (props) => {
     return JSON.stringify(measurements || {});
   };
 
-  const addToCart = async (itemId, size, measurements, quantity = 1) => {
+  const addToCart = async (itemId, size, color, measurements, quantity = 1) => {
     // if (!size) {
     //   toast.error("Select Product Size");
     //   return;
@@ -69,12 +69,15 @@ const ShopContextProvider = (props) => {
     setCartItems((prevCart) => {
       let cartData = structuredClone(prevCart);
       const mKey = getMeasurementsKey(measurements);
+      const colorKey = color || "no-color";
       if (!cartData[itemId]) cartData[itemId] = {};
       if (!cartData[itemId][size]) cartData[itemId][size] = {};
-      if (cartData[itemId][size][mKey]) {
-        cartData[itemId][size][mKey] += quantity;
+      if (!cartData[itemId][size][colorKey])
+        cartData[itemId][size][colorKey] = {};
+      if (cartData[itemId][size][colorKey][mKey]) {
+        cartData[itemId][size][colorKey][mKey] += quantity;
       } else {
-        cartData[itemId][size][mKey] = quantity;
+        cartData[itemId][size][colorKey][mKey] = quantity;
       }
       return cartData;
     });
@@ -83,7 +86,7 @@ const ShopContextProvider = (props) => {
       try {
         await axios.post(
           backendUrl + "/api/cart/add",
-          { itemId, size, measurements, quantity },
+          { itemId, size, color, measurements, quantity },
           {
             headers: { token },
           }
@@ -99,31 +102,43 @@ const ShopContextProvider = (props) => {
     let totalCount = 0;
     for (const items in cartItems) {
       for (const size in cartItems[items]) {
-        for (const mKey in cartItems[items][size]) {
-          try {
-            if (cartItems[items][size][mKey] > 0) {
-              totalCount += cartItems[items][size][mKey];
-            }
-          } catch (error) {}
+        for (const colorKey in cartItems[items][size]) {
+          for (const mKey in cartItems[items][size][colorKey]) {
+            try {
+              if (cartItems[items][size][colorKey][mKey] > 0) {
+                totalCount += cartItems[items][size][colorKey][mKey];
+              }
+            } catch (error) {}
+          }
         }
       }
     }
     return totalCount;
   };
 
-  const updateQuantity = async (itemId, size, measurements, quantity) => {
+  const updateQuantity = async (
+    itemId,
+    size,
+    color,
+    measurements,
+    quantity
+  ) => {
     setCartItems((prevCart) => {
       let cartData = structuredClone(prevCart);
       const mKey = getMeasurementsKey(measurements);
+      const colorKey = color || "no-color";
       if (
         cartData[itemId] &&
         cartData[itemId][size] &&
-        cartData[itemId][size][mKey] !== undefined
+        cartData[itemId][size][colorKey] &&
+        cartData[itemId][size][colorKey][mKey] !== undefined
       ) {
-        cartData[itemId][size][mKey] = quantity;
+        cartData[itemId][size][colorKey][mKey] = quantity;
         // Remove if quantity is 0
         if (quantity === 0) {
-          delete cartData[itemId][size][mKey];
+          delete cartData[itemId][size][colorKey][mKey];
+          if (Object.keys(cartData[itemId][size][colorKey]).length === 0)
+            delete cartData[itemId][size][colorKey];
           if (Object.keys(cartData[itemId][size]).length === 0)
             delete cartData[itemId][size];
           if (Object.keys(cartData[itemId]).length === 0)
@@ -137,7 +152,7 @@ const ShopContextProvider = (props) => {
       try {
         await axios.post(
           backendUrl + "/api/cart/update",
-          { itemId, size, measurements, quantity },
+          { itemId, size, color, measurements, quantity },
           {
             headers: { token },
           }
@@ -154,14 +169,16 @@ const ShopContextProvider = (props) => {
     for (const items in cartItems) {
       let itemInfo = products.find((product) => product._id === items);
       for (const size in cartItems[items]) {
-        for (const mKey in cartItems[items][size]) {
-          try {
-            if (cartItems[items][size][mKey] > 0) {
-              totalAmount += itemInfo.onSale
-                ? itemInfo.salePrice * cartItems[items][size][mKey]
-                : itemInfo.price * cartItems[items][size][mKey];
-            }
-          } catch (error) {}
+        for (const colorKey in cartItems[items][size]) {
+          for (const mKey in cartItems[items][size][colorKey]) {
+            try {
+              if (cartItems[items][size][colorKey][mKey] > 0) {
+                totalAmount += itemInfo.onSale
+                  ? itemInfo.salePrice * cartItems[items][size][colorKey][mKey]
+                  : itemInfo.price * cartItems[items][size][colorKey][mKey];
+              }
+            } catch (error) {}
+          }
         }
       }
     }

@@ -17,6 +17,7 @@ const List = ({ token }) => {
     bestseller: false,
     onSale: false,
     salePrice: "",
+    preorder: false,
   });
 
   const FEATURE_EDIT_PRODUCTS = true;
@@ -120,6 +121,7 @@ const List = ({ token }) => {
                         section: item.section || "",
                         sizes: item.sizes || [],
                         bestseller: item.bestseller || false,
+                        preorder: item.preorder || false,
                         onSale: item.onSale || false,
                         salePrice:
                           item.salePrice !== undefined &&
@@ -192,6 +194,19 @@ const List = ({ token }) => {
                 />
               </label>
               <label className="font-medium">
+                Price
+                <input
+                  type="number"
+                  className="w-full px-3 py-2 border rounded-lg mt-1"
+                  value={editFields.price || ""}
+                  min="0"
+                  onChange={(e) =>
+                    setEditFields((f) => ({ ...f, price: e.target.value }))
+                  }
+                />
+              </label>
+
+              <label className="font-medium">
                 Bestseller
                 <input
                   type="checkbox"
@@ -239,7 +254,23 @@ const List = ({ token }) => {
                   />
                 </label>
               )}
-              {/* Add more fields as needed */}
+
+              <label className="font-medium">
+                Preorder
+                <input
+                  type="checkbox"
+                  className="ml-2 accent-red-600"
+                  checked={editFields.preorder}
+                  onChange={(e) =>
+                    setEditFields((f) => ({
+                      ...f,
+                      preorder: e.target.checked,
+                    }))
+                  }
+                />
+              </label>
+
+              {/* more fields?*/}
               <div className="flex gap-2 mt-4">
                 <button
                   type="submit"

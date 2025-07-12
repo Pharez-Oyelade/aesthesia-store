@@ -26,6 +26,11 @@ const productSchema = new mongoose.Schema({
     required: false, // Now optional
     default: [],
   },
+  colors: {
+    type: Array,
+    required: false, // Optional colors
+    default: [],
+  },
   bestseller: {
     type: Boolean,
   },
@@ -41,7 +46,6 @@ const productSchema = new mongoose.Schema({
   },
   preorder: {
     type: Boolean,
-    default: false,
   },
   // End flow additions
 
