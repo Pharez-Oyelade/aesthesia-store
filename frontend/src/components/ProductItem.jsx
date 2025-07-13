@@ -110,7 +110,7 @@ const ProductItem = ({
       </p> */}
       <p className="text-sm font-medium flex items-center ">
         {onSale ? (
-          <>
+          <span className="flex items-center flex-wrap">
             <span className="flex items-center line-through text-gray-400 mr-2">
               {currency}
               {convertPrice(price)}
@@ -119,7 +119,7 @@ const ProductItem = ({
               {currency}
               {convertPrice(salePrice)}
             </span>
-          </>
+          </span>
         ) : (
           <>
             {currency}

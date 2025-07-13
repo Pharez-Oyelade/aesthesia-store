@@ -162,7 +162,7 @@ const Product = () => {
 
             <div className="text-2xl font-semibold text-red-700 flex items-center mb-4">
               {productData.onSale ? (
-                <>
+                <p className="flex flex-wrap items-center">
                   <span className="flex items-center line-through text-gray-400 mr-3">
                     {currency}
                     {convertPrice(productData.price)}
@@ -174,7 +174,7 @@ const Product = () => {
                   <span className="ml-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
                     Sale
                   </span>
-                </>
+                </p>
               ) : (
                 <div className="flex items-center">
                   {currency}
