@@ -8,6 +8,7 @@ import productRouter from "./routes/productRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import wishlistRouter from "./routes/wishRoute.js";
+import mailRouter from "./routes/mailchimpRoute.js";
 
 // App configuration
 const app = express();
@@ -25,6 +26,7 @@ app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/wishlist", wishlistRouter);
+app.use("/api/mailchimp", mailRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the API!");

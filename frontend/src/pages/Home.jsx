@@ -6,11 +6,15 @@ import NewProducts from "../components/NewProducts";
 import Policy from "../components/Policy";
 import NewsletterBox from "../components/NewsletterBox";
 import Title from "../components/Title";
+import PromotionBanner from "../components/PromotionBanner";
 
 const Home = () => {
   return (
     <div className="">
       <Hero />
+      <div>
+        <PromotionBanner />
+      </div>
       <div className="text-center mt-20 border-y-2 w-[75%] m-auto py-10">
         <div className="text-2xl sm:text-3xl">
           <Title text1={"Modern Elegance"} text2={"Meets Timeless Style"} />

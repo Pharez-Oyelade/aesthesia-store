@@ -21,6 +21,19 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  const [marketingConsent, setMarketingConsent] = useState(false);
+
+  const subscribeToMailchimp = async (user) => {
+    try {
+      await axios.post(backendUrl + "/api/mailchimp/subscribe", {
+        email: user.email,
+        name: user.name,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -35,6 +48,9 @@ const Login = () => {
           localStorage.setItem("token", response.data.token);
           getUserCart(response.data.token);
           getUserWishlist(response.data.token);
+          if (marketingConsent) {
+            subscribeToMailchimp({ email, name });
+          }
         } else {
           toast.error(response.data.message);
         }
@@ -115,6 +131,20 @@ const Login = () => {
             {showPassword ? <LuEye /> : <LuEyeClosed />}
           </span>
         </div>
+
+        {currentState === "Sign Up" && (
+          <div className="flex items-center gap-2 w-full">
+            <input
+              type="checkbox"
+              id="marketingConsent"
+              checked={marketingConsent}
+              onChange={(e) => setMarketingConsent(e.target.checked)}
+            />
+            <label htmlFor="marketingConsent">
+              I would like to receive updates, promotions, and banners.
+            </label>
+          </div>
+        )}
 
         <div className="w-full flex justify-between text-sm mt-[-8px]">
           <p
