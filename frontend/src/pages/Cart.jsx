@@ -21,6 +21,7 @@ const Cart = () => {
     updateQuantity,
     navigate,
     formatPrice,
+    convertPrice,
   } = useContext(shopContext);
 
   // Tracking selected image for each cart item
@@ -126,9 +127,10 @@ const Cart = () => {
               </div>
               <div className="font-semibold flex items-center gap-1 mt-2 md:mt-0">
                 {/* {product.price * item.quantity} */}
+                {currency}
                 {product.onSale
-                  ? formatPrice(product.salePrice * item.quantity)
-                  : formatPrice(product.price * item.quantity)}
+                  ? convertPrice(product.salePrice * item.quantity)
+                  : convertPrice(product.price * item.quantity)}
               </div>
 
               <img

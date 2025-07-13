@@ -14,7 +14,7 @@ const ProductItem = ({
   preorder,
   soldOut,
 }) => {
-  const { currency, addToWishlist, wishlist, formatPrice } =
+  const { currency, addToWishlist, wishlist, formatPrice, convertPrice } =
     useContext(shopContext);
 
   const [isHovered, setIsHovered] = useState(false);
@@ -112,14 +112,19 @@ const ProductItem = ({
         {onSale ? (
           <>
             <span className="flex items-center line-through text-gray-400 mr-2">
-              {formatPrice(price)}
+              {currency}
+              {convertPrice(price)}
             </span>
             <span className="flex items-center   text-red-600">
-              {formatPrice(salePrice)}
+              {currency}
+              {convertPrice(salePrice)}
             </span>
           </>
         ) : (
-          <>{formatPrice(price)}</>
+          <>
+            {currency}
+            {convertPrice(price)}
+          </>
         )}
       </p>
     </Link>

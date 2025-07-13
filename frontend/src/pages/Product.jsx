@@ -13,6 +13,7 @@ const Product = () => {
     wishlist,
     addToWishlist,
     formatPrice,
+    convertPrice,
   } = useContext(shopContext);
 
   // Find product after products are loaded
@@ -163,10 +164,12 @@ const Product = () => {
               {productData.onSale ? (
                 <>
                   <span className="flex items-center line-through text-gray-400 mr-3">
-                    {formatPrice(productData.price)}
+                    {currency}
+                    {convertPrice(productData.price)}
                   </span>
                   <span className="flex items-center text-red-600">
-                    {formatPrice(productData.salePrice)}
+                    {currency}
+                    {convertPrice(productData.salePrice)}
                   </span>
                   <span className="ml-2 bg-red-500 text-white px-2 py-1 rounded text-xs font-bold">
                     Sale
@@ -174,7 +177,8 @@ const Product = () => {
                 </>
               ) : (
                 <div className="flex items-center">
-                  {formatPrice(productData.price)}
+                  {currency}
+                  {convertPrice(productData.price)}
                 </div>
               )}
             </div>

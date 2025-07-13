@@ -6,12 +6,26 @@ import axios from "axios";
 
 export const shopContext = createContext();
 
+const currencySymbols = {
+  NGN: "₦",
+  USD: "$",
+  GBP: "£",
+  EUR: "€",
+};
+
+const supportedCurrencies = ["NGN", "USD", "GBP", "EUR"];
+
 const deliveryFees = {
   "Lagos Mainland": 1000,
   "Lagos Island": 1500,
   Abuja: 2500,
   Other: 3000,
 };
+
+// Caching constants
+const RATES_CACHE_KEY = "exchangeRates";
+const RATES_CACHE_TIME_KEY = "exchangeRatesTimestamp";
+const CACHE_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 // const formatNumberWithCommas = (number) => {
 //   return number.toLocaleString("en-NG");
@@ -46,9 +60,78 @@ const ShopContextProvider = (props) => {
   //   return getCartAmount() * VAT_RATE;
   // };
 
+  // Currency state
+  const [currencyCode, setCurrencyCode] = useState("NGN");
+  const [currencyRates, setCurrencyRates] = useState({ NGN: 1 });
+
+  // Fetch live rates on mount and when currency changes
+  useEffect(() => {
+    const loadRates = async () => {
+      // 1. Try to load from cache
+      const cachedRates = localStorage.getItem(RATES_CACHE_KEY);
+      const cachedTime = localStorage.getItem(RATES_CACHE_TIME_KEY);
+      const now = Date.now();
+
+      if (
+        cachedRates &&
+        cachedTime &&
+        now - Number(cachedTime) < CACHE_DURATION_MS
+      ) {
+        setCurrencyRates(JSON.parse(cachedRates));
+        return;
+      }
+
+      // 2. Fetch from API if not cached or cache expired
+      try {
+        const symbols = supportedCurrencies.join(",");
+        const res = await fetch(
+          // `http://data.fixer.io/api/latest?access_key=8c1642632da8d81c67684ebeaec5dc9d&symbols=${symbols}`
+          `https://api.currencyapi.com/v3/latest?apikey=cur_live_dTEc4h83P8JtkzIQhFlxOUfTVJvsClgaUNhqQx0e&symbols=${symbols}`
+        );
+        const data = await res.json();
+        if (data && data.data) {
+          const rates = { NGN: 1 };
+          for (const [code, obj] of Object.entries(data.data)) {
+            rates[code] = obj.value;
+          }
+          setCurrencyRates(rates);
+          // Save to cache
+          localStorage.setItem(RATES_CACHE_KEY, JSON.stringify(rates));
+          localStorage.setItem(RATES_CACHE_TIME_KEY, now.toString());
+        }
+      } catch (err) {
+        toast.error("Failed to fetch currency rates. Using default rates.");
+        setCurrencyRates({ NGN: 1, USD: 0.0011, GBP: 0.00087, EUR: 0.001 });
+      }
+    };
+    loadRates();
+  }, [currencyCode]);
+
   // Helper to create a unique key for measurements
   const getMeasurementsKey = (measurements) => {
     return JSON.stringify(measurements || {});
+  };
+
+  const convertPrice = (amount) => {
+    if (currencyCode === "NGN") {
+      return Number(amount).toLocaleString("en-NG", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    }
+    const rates = currencyRates;
+    if (!rates || !rates.NGN || !rates[currencyCode])
+      return Number(amount).toLocaleString("en-NG", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    // Convert NGN -> EUR, then EUR -> target
+    const amountInEUR = Number(amount) / rates.NGN;
+    const converted = amountInEUR * rates[currencyCode];
+    return converted.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
 
   const addToCart = async (itemId, size, color, measurements, quantity = 1) => {
@@ -271,7 +354,11 @@ const ShopContextProvider = (props) => {
 
   const value = {
     products,
-    currency,
+    // currency,
+    currency: currencySymbols[currencyCode],
+    currencyCode,
+    setCurrencyCode,
+    convertPrice,
     delivery_fee,
     setDeliveryFee,
     deliveryFees,
@@ -300,6 +387,7 @@ const ShopContextProvider = (props) => {
     // getVAT,
     // formatNumberWithCommas,
     formatPrice,
+    supportedCurrencies,
   };
 
   return (

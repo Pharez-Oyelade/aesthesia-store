@@ -29,6 +29,9 @@ const Navbar = () => {
     setToken,
     setCartItems,
     setWishlist,
+    currencyCode,
+    setCurrencyCode,
+    supportedCurrencies,
   } = useContext(shopContext);
 
   const logout = () => {
@@ -81,7 +84,7 @@ const Navbar = () => {
               ? assets.aesthesia_logo_dark
               : assets.aesthesia_logo_light
           }
-          className="w-36 sm:w-60"
+          className="w-30 sm:w-60"
           alt="Aesthesia Logo"
         />
       </Link>
@@ -121,7 +124,9 @@ const Navbar = () => {
         </NavLink>
       </ul>
 
-      <div className={`flex items-center gap-6 text-[1.2rem] ${textColor}`}>
+      <div
+        className={`flex items-center gap-4 sm:gap-6 text-md sm:text-[1.2rem] ${textColor}`}
+      >
         <div
           onClick={() => {
             setShowSearch(true);
@@ -191,6 +196,20 @@ const Navbar = () => {
               {getCartCount()}
             </p>
           </Link>
+        </div>
+
+        <div className="text-sm  sm:text-base">
+          <select
+            value={currencyCode}
+            onChange={(e) => setCurrencyCode(e.target.value)}
+            className="border rounded px-1 sm:px-2 py-1 text-xs sm:text-base"
+          >
+            {supportedCurrencies.map((cur) => (
+              <option key={cur} value={cur}>
+                {cur}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div
