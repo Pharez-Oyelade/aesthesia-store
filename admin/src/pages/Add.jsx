@@ -91,10 +91,10 @@ const Add = ({ token }) => {
     >
       <div>
         <p className="mb-2 font-semibold text-gray-700">Upload Image</p>
-        <div className="flex flex-wrap gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <label htmlFor="image1">
             <img
-              className="w-24 h-24 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
+              className="w-24 sm:w-32 h-24 sm:h-32 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
               src={!image1 ? assets.upload_area : URL.createObjectURL(image1)}
               alt=""
             />
@@ -107,7 +107,7 @@ const Add = ({ token }) => {
           </label>
           <label htmlFor="image2">
             <img
-              className="w-24 h-24 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
+              className="w-24 sm:w-32 h-24 sm:h-32 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
               src={!image2 ? assets.upload_area : URL.createObjectURL(image2)}
               alt=""
             />
@@ -120,7 +120,7 @@ const Add = ({ token }) => {
           </label>
           <label htmlFor="image3">
             <img
-              className="w-24 h-24 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
+              className="w-24 sm:w-32 h-24 sm:h-32 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
               src={!image3 ? assets.upload_area : URL.createObjectURL(image3)}
               alt=""
             />
@@ -133,7 +133,7 @@ const Add = ({ token }) => {
           </label>
           <label htmlFor="image4">
             <img
-              className="w-24 h-24 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
+              className="w-24 sm:w-32 h-24 sm:h-32 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
               src={!image4 ? assets.upload_area : URL.createObjectURL(image4)}
               alt=""
             />
@@ -230,13 +230,13 @@ const Add = ({ token }) => {
         <label className="mb-2 font-semibold text-gray-700 block">
           Product Colors (Optional)
         </label>
-        <div className="flex gap-2 mb-3">
+        <div className="flex flex-wrap gap-2 mb-3">
           <input
             type="text"
             value={newColor}
             onChange={(e) => setNewColor(e.target.value)}
             placeholder="Add a color (e.g., Red, Blue, Black)"
-            className="flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-200 outline-none transition"
+            className="w-full sm:flex-1 px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-200 outline-none transition"
           />
           <button
             type="button"
