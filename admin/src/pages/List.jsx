@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { backendUrl, currency } from "../App";
 import { toast } from "react-toastify";
+import { FaSearch } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 
 const List = ({ token }) => {
   const [list, setList] = useState([]);
@@ -20,6 +22,8 @@ const List = ({ token }) => {
     preorder: false,
     soldOut: false,
   });
+  const [search, setSearch] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
 
   const FEATURE_EDIT_PRODUCTS = true;
 
@@ -74,12 +78,39 @@ const List = ({ token }) => {
     fetchList();
   }, []);
 
+  // Filtered list based on search
+  const filteredList = list.filter((item) => {
+    const q = search.toLowerCase();
+    return (
+      item.name.toLowerCase().includes(q) ||
+      (item.section && item.section.toLowerCase().includes(q))
+    );
+  });
+
   return (
     <>
       <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100 mx-[30%] w-full">
-        <p className="mb-4 text-2xl font-bold text-red-700">
-          All Products List
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="mb-4 text-2xl font-bold text-red-700">
+            All Products List
+          </p>
+          <button
+            onClick={() => setShowSearch(!showSearch)}
+            className="bg-red-700 hover:bg-red-800 transition text-white px-6 py-2 rounded-full text-base font-semibold shadow"
+          >
+            {showSearch ? <IoClose /> : <FaSearch />}
+          </button>
+        </div>
+
+        {showSearch && (
+          <input
+            type="text"
+            placeholder="Search by name or section..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="mb-4 px-4 py-2 border rounded-lg w-full focus:ring-2 focus:ring-red-200 outline-none transition"
+          />
+        )}
         <div className="flex flex-col gap-2">
           <div className="hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center py-2 px-4 border-b border-gray-200 bg-gray-50 text-base font-semibold text-gray-700 rounded-t-xl">
             <b>Image</b>
@@ -88,7 +119,7 @@ const List = ({ token }) => {
             <b>Price</b>
             <b className="text-center">Action</b>
           </div>
-          {list.map((item, index) => (
+          {filteredList.map((item, index) => (
             <div
               className="grid grid-cols-[1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-3 px-4 border-b border-gray-100 text-base bg-white hover:bg-gray-50 transition rounded-xl border-2"
               key={index}

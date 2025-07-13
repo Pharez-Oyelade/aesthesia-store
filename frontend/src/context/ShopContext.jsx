@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { toast } from "react-toastify";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -55,6 +56,9 @@ const ShopContextProvider = (props) => {
 
   const [selectedLocation, setSelectedLocation] = useState("");
   const [delivery_fee, setDeliveryFee] = useState(0);
+
+  const [userOrders, setUserOrders] = useState([]);
+  const prevOrderStatus = useRef({});
 
   // const getVAT = () => {
   //   return getCartAmount() * VAT_RATE;
@@ -344,6 +348,61 @@ const ShopContextProvider = (props) => {
     getProductsData();
   }, []);
 
+  // Polling for order status changes
+  useEffect(() => {
+    if (!token) return;
+
+    const fetchOrdersAndNotify = async (showNotification = false) => {
+      try {
+        const response = await axios.post(
+          backendUrl + "/api/order/userorders",
+          {},
+          { headers: { token } }
+        );
+        if (response.data.success) {
+          let allOrdersItem = [];
+          response.data.orders.forEach((order) => {
+            order.items.forEach((item) => {
+              item["status"] = order.status || "pending";
+              item["orderId"] = order._id;
+              allOrdersItem.push(item);
+            });
+          });
+
+          // Notification logic
+          if (showNotification) {
+            allOrdersItem.forEach((item) => {
+              const prevStatus = prevOrderStatus.current[item.orderId];
+              if (prevStatus && prevStatus !== item.status) {
+                toast.info(`Order for ${item.name} is now "${item.status}"`);
+              }
+            });
+          }
+
+          // Update previous status map
+          prevOrderStatus.current = {};
+          allOrdersItem.forEach((item) => {
+            prevOrderStatus.current[item.orderId] = item.status;
+          });
+
+          setUserOrders(allOrdersItem);
+        }
+      } catch (error) {
+        // handle error
+      }
+    };
+
+    // Initial fetch (no notification)
+    fetchOrdersAndNotify(false);
+
+    // Polling interval
+    const interval = setInterval(() => {
+      fetchOrdersAndNotify(true);
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [token, backendUrl]);
+
   useEffect(() => {
     if (!token && localStorage.getItem("token")) {
       setToken(localStorage.getItem("token"));
@@ -388,6 +447,7 @@ const ShopContextProvider = (props) => {
     // formatNumberWithCommas,
     formatPrice,
     supportedCurrencies,
+    userOrders,
   };
 
   return (
