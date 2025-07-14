@@ -14,6 +14,8 @@ const Login = () => {
     backendUrl,
     getUserCart,
     getUserWishlist,
+    getUserDetails,
+    subscribeToMailchimp,
   } = useContext(shopContext);
 
   const [name, setName] = useState("");
@@ -22,17 +24,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [marketingConsent, setMarketingConsent] = useState(false);
-
-  const subscribeToMailchimp = async (user) => {
-    try {
-      await axios.post(backendUrl + "/api/mailchimp/subscribe", {
-        email: user.email,
-        name: user.name,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,8 +39,9 @@ const Login = () => {
           localStorage.setItem("token", response.data.token);
           getUserCart(response.data.token);
           getUserWishlist(response.data.token);
+          getUserDetails(response.data.token);
           if (marketingConsent) {
-            subscribeToMailchimp({ email, name });
+            subscribeToMailchimp(email, name);
           }
         } else {
           toast.error(response.data.message);
@@ -64,6 +56,7 @@ const Login = () => {
           localStorage.setItem("token", response.data.token);
           getUserCart(response.data.token);
           getUserWishlist(response.data.token);
+          getUserDetails(response.data.token);
         } else {
           toast.error(response.data.message);
         }

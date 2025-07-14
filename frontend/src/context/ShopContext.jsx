@@ -52,6 +52,7 @@ const ShopContextProvider = (props) => {
   const [wishlist, setWishlist] = useState([]);
   const [products, setProducts] = useState([]);
   const [token, setToken] = useState("");
+  const [userData, setUserData] = useState({ name: "", email: "" });
   const navigate = useNavigate();
 
   const [selectedLocation, setSelectedLocation] = useState("");
@@ -336,6 +337,64 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  const getUserDetails = async (token) => {
+    try {
+      const response = await axios.post(
+        backendUrl + "/api/user/details",
+        {},
+        { headers: { token } }
+      );
+      if (response.data.success && response.data.user) {
+        setUserData(response.data.user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const subscribeToMailchimp = async (email, name = "") => {
+    try {
+      const response = await axios.post(
+        backendUrl + "/api/mailchimp/subscribe",
+        {
+          email,
+          name,
+        }
+      );
+      if (response.status === 200) {
+        toast.success(
+          response.data.message || "Successfully subscribed to newsletter!"
+        );
+        return true;
+      }
+    } catch (error) {
+      console.log("Mailchimp subscription error:", error);
+
+      // Handle specific error cases
+      if (error.response?.data?.message) {
+        toast.info(error.response.data.message);
+        return true; // Treat "Already subscribed" as success
+      } else if (error.response?.data?.error) {
+        // Check if it's the permanently deleted email error
+        if (error.response.data.error.includes("previously unsubscribed")) {
+          toast.error(
+            "This email was previously unsubscribed. Please use a different email address or contact support.",
+            { autoClose: 6000 }
+          );
+        } else {
+          toast.error(error.response.data.error);
+        }
+      } else if (error.response?.status === 500) {
+        toast.error(
+          "Newsletter service is temporarily unavailable. Please try again later."
+        );
+      } else {
+        toast.error("Failed to subscribe to newsletter. Please try again.");
+      }
+      return false;
+    }
+  };
+
   useEffect(() => {
     if (selectedLocation && deliveryFees[selectedLocation] !== undefined) {
       setDeliveryFee(deliveryFees[selectedLocation]);
@@ -405,9 +464,11 @@ const ShopContextProvider = (props) => {
 
   useEffect(() => {
     if (!token && localStorage.getItem("token")) {
-      setToken(localStorage.getItem("token"));
-      getUserCart(localStorage.getItem("token"));
-      getUserWishlist(localStorage.getItem("token"));
+      const storedToken = localStorage.getItem("token");
+      setToken(storedToken);
+      getUserCart(storedToken);
+      getUserWishlist(storedToken);
+      getUserDetails(storedToken);
     }
   }, []);
 
@@ -442,6 +503,9 @@ const ShopContextProvider = (props) => {
     setToken,
     getUserCart,
     getUserWishlist,
+    getUserDetails,
+    userData,
+    subscribeToMailchimp,
     // VAT_RATE,
     // getVAT,
     // formatNumberWithCommas,
