@@ -33,6 +33,7 @@ const productSchema = new mongoose.Schema({
   },
   bestseller: {
     type: Boolean,
+    default: false,
   },
 
   // Testing Sale flow
@@ -46,6 +47,7 @@ const productSchema = new mongoose.Schema({
   },
   preorder: {
     type: Boolean,
+    default: false,
   },
   soldOut: {
     type: Boolean,

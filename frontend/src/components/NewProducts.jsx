@@ -11,7 +11,8 @@ const NewProducts = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLatestProducts(products.slice(0, 10).reverse());
+    // setLatestProducts(products.reverse().slice(0, 10));
+    setLatestProducts([...products].reverse().slice(0, 10));
     setLoading(false);
   }, [products]);
 
