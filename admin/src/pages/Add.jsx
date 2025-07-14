@@ -27,6 +27,18 @@ const Add = ({ token }) => {
     e.preventDefault();
     setLoading(true);
 
+    // Validation for price and image1
+    if (!price || isNaN(price) || Number(price) <= 0) {
+      toast.error("Please enter a valid price greater than 0");
+      setLoading(false);
+      return;
+    }
+    if (!image1) {
+      toast.error("Please upload at least the first product image");
+      setLoading(false);
+      return;
+    }
+
     try {
       const formData = new FormData();
 
@@ -197,6 +209,7 @@ const Add = ({ token }) => {
             className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-200 outline-none transition"
             type="number"
             placeholder="20,000"
+            required
           />
         </div>
       </div>

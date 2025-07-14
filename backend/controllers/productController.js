@@ -18,6 +18,21 @@ const addProduct = async (req, res) => {
       preorder,
     } = req.body;
 
+    // Validate price
+    if (!price || isNaN(Number(price)) || Number(price) <= 0) {
+      return res.json({
+        success: false,
+        message: "Price is required and must be greater than 0",
+      });
+    }
+    // Validate image1
+    if (!req.files.image1 || !req.files.image1[0]) {
+      return res.json({
+        success: false,
+        message: "At least one product image is required",
+      });
+    }
+
     const image1 = req.files.image1 && req.files.image1[0];
     const image2 = req.files.image2 && req.files.image2[0];
     const image3 = req.files.image3 && req.files.image3[0];
