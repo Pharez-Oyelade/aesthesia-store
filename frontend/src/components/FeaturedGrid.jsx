@@ -1,6 +1,7 @@
 import React from "react";
 import Title from "./Title";
 import { assets } from "../assets/assets";
+import { Link } from "react-router-dom";
 
 const FeaturedGrid = () => {
   const images = [
@@ -44,28 +45,27 @@ const FeaturedGrid = () => {
             key={idx}
             className="group overflow-hidden relative h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] cursor-pointer rounded-2xl"
           >
-            <img
-              src={img}
-              alt="Featured"
-              className="absolute top-0 left-0 w-full h-full object-cover object-right group-hover:scale-120 transition-transform duration-700 ease-in-out"
-            />
-            <div className="absolute inset-0 bg-white/40 background-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0" />
-            <div className="absolute inset-0 flex flex-col justify-center pl-12 text-black max-w-md  pointer-events-none z-10">
-              {/* <p>AESTHESIA</p> */}
-              <h2 className="text-black text-xl sm:text-2xl md:text-3xl font-bold mb-2">
-                {overlays[idx].title}
-                <p className="text-black text-xs sm:text-sm md:text-base mb-4">
-                  {overlays[idx].desc}
-                </p>
-              </h2>
+            <Link to={overlays[idx].link}>
+              <img
+                src={img}
+                alt="Featured"
+                className="absolute top-0 left-0 w-full h-full object-cover object-right group-hover:scale-120 transition-transform duration-700 ease-in-out"
+              />
+              <div className="absolute inset-0 bg-black/40 background-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0" />
+              <div className="absolute inset-0 flex flex-col justify-center pl-12 max-w-md  pointer-events-none z-10">
+                {/* <p>AESTHESIA</p> */}
+                <h2 className="text-white text-xl sm:text-2xl md:text-3xl font-bold mb-2">
+                  {overlays[idx].title}
+                  <p className="text-white text-xs sm:text-sm md:text-base mb-4">
+                    {overlays[idx].desc}
+                  </p>
+                </h2>
 
-              <a
-                href={overlays[idx].link}
-                className="inline-block w-[120px] text-black font-semibold px-5 py-2 hover:underline underline-offset-4 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 pointer-events-auto"
-              >
-                Shop Now
-              </a>
-            </div>
+                <p className="inline-block w-[120px] text-white font-semibold py-2 hover:underline underline-offset-4 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300 pointer-events-auto">
+                  Shop Now
+                </p>
+              </div>
+            </Link>
           </div>
         ))}
       </div>
