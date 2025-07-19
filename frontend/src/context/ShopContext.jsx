@@ -23,6 +23,13 @@ const deliveryFees = {
   Other: 3000,
 };
 
+const locationToState = {
+  "Lagos Mainland": "Lagos",
+  "Lagos Island": "Lagos",
+  Abuja: "Abuja",
+  Other: "",
+};
+
 // Caching constants
 const RATES_CACHE_KEY = "exchangeRates";
 const RATES_CACHE_TIME_KEY = "exchangeRatesTimestamp";
@@ -512,6 +519,7 @@ const ShopContextProvider = (props) => {
     formatPrice,
     supportedCurrencies,
     userOrders,
+    locationToState,
   };
 
   return (

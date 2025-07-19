@@ -23,6 +23,7 @@ const PlaceOrder = () => {
     selectedLocation,
     deliveryFees,
     delivery_fee,
+    locationToState,
   } = useContext(shopContext);
 
   const [formData, setFormData] = useState({
@@ -36,8 +37,17 @@ const PlaceOrder = () => {
   });
 
   // New: handle location change
+  // const onLocationChange = (e) => {
+  //   setSelectedLocation(e.target.value);
+  // };
+
   const onLocationChange = (e) => {
-    setSelectedLocation(e.target.value);
+    const loc = e.target.value;
+    setSelectedLocation(loc);
+    setFormData((data) => ({
+      ...data,
+      state: locationToState[loc] || "",
+    }));
   };
 
   const onChangeHandler = (event) => {
@@ -265,6 +275,7 @@ const PlaceOrder = () => {
               type="text"
               placeholder="State"
               required
+              disabled={selectedLocation !== "Other" && !!formData.state}
             />
           </div>
           <input
