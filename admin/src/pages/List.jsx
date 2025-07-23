@@ -341,7 +341,10 @@ const List = ({ token }) => {
 
       {/* Confirmation Dialog */}
       {showConfirm && selectedProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+          style={{ backdropFilter: "blur(2px)" }}
+        >
           <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm flex flex-col items-center">
             <img
               src={selectedProduct.image[0]}

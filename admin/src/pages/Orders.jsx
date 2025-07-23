@@ -120,10 +120,15 @@ const Orders = ({ token }) => {
                 Payment:{" "}
                 <span
                   className={
-                    order.payment ? "text-green-600" : "text-yellow-600"
+                    order.payment || order.status === "Delivered"
+                      ? "text-green-600"
+                      : "text-yellow-600"
                   }
                 >
-                  {order.payment ? "Done" : "Pending"}
+                  {/* {order.payment ? "Done" : "Pending"} */}
+                  {order.payment || order.status === "Delivered"
+                    ? "Done"
+                    : "Pending"}
                 </span>
               </p>
               {/* <p>Date: {new Date(order.date).toLocaleDateString()}</p> */}
