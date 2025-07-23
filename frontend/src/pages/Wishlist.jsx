@@ -71,7 +71,7 @@ const Wishlist = () => {
                 </span>
               )}
               <img
-                src={product.image[0]}
+                src={product.image[0].url}
                 alt={product.name}
                 className="w-32 h-32 object-cover rounded mb-2"
               />

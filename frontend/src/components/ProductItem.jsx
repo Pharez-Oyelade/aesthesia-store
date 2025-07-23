@@ -18,7 +18,7 @@ const ProductItem = ({
     useContext(shopContext);
 
   const [isHovered, setIsHovered] = useState(false);
-  const [showImage, setShowImage] = useState(image[0]);
+  const [showImage, setShowImage] = useState(image[0]?.url);
 
   const handleWishlist = (e) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ const ProductItem = ({
   const isWishlisted = wishlist && wishlist.includes(id);
 
   useEffect(() => {
-    setShowImage(image[0]);
+    setShowImage(image[0]?.url);
   }, [image]);
 
   return (
@@ -79,16 +79,16 @@ const ProductItem = ({
         <img
           onMouseEnter={() => {
             setIsHovered(true);
-            if (image[1]) setShowImage(image[1]);
+            if (image[1]?.url) setShowImage(image[1].url);
           }}
           onMouseLeave={() => {
             setIsHovered(false);
-            setShowImage(image[0]);
+            setShowImage(image[0]?.url);
           }}
           src={showImage}
           alt=""
           className={`${
-            image[1] ? "" : "hover:scale-115 transition ease-in-out"
+            image[1]?.url ? "" : "hover:scale-115 transition ease-in-out"
           }`}
         />
         <div className="absolute right-2 top-2 opacity-100 md:opacity-0 group-hover:opacity-100 transition">

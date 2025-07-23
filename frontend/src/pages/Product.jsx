@@ -37,7 +37,9 @@ const Product = () => {
     if (products && products.length > 0) {
       const prod = products.find((item) => item._id === (productId || id));
       setProductData(prod || null);
-      setImage(prod && prod.image && prod.image[0] ? prod.image[0] : "");
+      setImage(
+        prod && prod.image && prod.image[0].url ? prod.image[0].url : ""
+      );
     }
   }, [products, productId, id]);
 
@@ -106,7 +108,7 @@ const Product = () => {
               <img
                 onClick={() => setImage(item)}
                 loading="lazy"
-                src={item}
+                src={item.url}
                 key={index}
                 className={`w-16 h-16 object-cover rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                   image === item

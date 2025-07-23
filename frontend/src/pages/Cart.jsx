@@ -71,7 +71,7 @@ const Cart = () => {
           const product = products.find((p) => p._id === item._id);
           if (!product) return null;
           const cartKey = item._id + item.size + item.mKey;
-          const mainImage = selectedImages[cartKey] || product.image[0];
+          const mainImage = selectedImages[cartKey] || product.image[0].url;
           return (
             <div
               key={cartKey}

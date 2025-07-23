@@ -126,7 +126,7 @@ const List = ({ token }) => {
             >
               <img
                 className="w-14 h-14 object-cover rounded-lg border"
-                src={item.image[0]}
+                src={item.image[0]?.url}
                 alt=""
               />
               <p className="font-medium">{item.name}</p>
@@ -347,7 +347,7 @@ const List = ({ token }) => {
         >
           <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm flex flex-col items-center">
             <img
-              src={selectedProduct.image[0]}
+              src={selectedProduct.image[0]?.url}
               alt={selectedProduct.name}
               className="w-20 h-20 object-cover rounded-xl mb-4 border"
             />
