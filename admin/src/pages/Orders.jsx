@@ -99,8 +99,12 @@ const Orders = ({ token }) => {
                   </div>
                 ))}
               </div>
-              <p className="mt-3 mb-2 font-medium text-lg text-gray-700">
+              <p className="mt-3 font-medium text-lg text-gray-700">
                 {order.address.firstName + " " + order.address.lastName}
+                <br />
+                <span className="mb-2 text-sm text-gray-500">
+                  {order.address.email}
+                </span>
               </p>
               <div className="text-gray-500">
                 <p>{order.address.street + ","}</p>
@@ -141,6 +145,7 @@ const Orders = ({ token }) => {
               onChange={(event) => statusHandler(event, order._id)}
               value={order.status}
               className="p-2 font-semibold rounded-lg border border-gray-300 bg-gray-50 focus:ring-2 focus:ring-red-200 transition"
+              disabled={order.status === "Delivered"}
             >
               <option value="Order Received">Order Received</option>
               <option value="Processing">Processing</option>
