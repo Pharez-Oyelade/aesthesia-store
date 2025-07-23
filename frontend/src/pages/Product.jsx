@@ -106,7 +106,7 @@ const Product = () => {
           <div className="flex gap-3 justify-center mt-2">
             {productData.image.map((item, index) => (
               <img
-                onClick={() => setImage(item)}
+                onClick={() => setImage(item?.url)}
                 loading="lazy"
                 src={item.url}
                 key={index}
