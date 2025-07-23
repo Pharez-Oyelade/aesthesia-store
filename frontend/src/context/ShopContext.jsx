@@ -68,6 +68,17 @@ const ShopContextProvider = (props) => {
   const [userOrders, setUserOrders] = useState([]);
   const prevOrderStatus = useRef({});
 
+  // const [sections, setSections] = useState([]);
+
+  // const getSections = async () => {
+  //   try {
+  //     const response = await axios.get(backendUrl + "/api/section/list");
+  //     if (response.data.success) {
+  //       setSections(response.data.sections.map((s) => s.name));
+  //     }
+  //   } catch (err) {}
+  // };
+
   // const getVAT = () => {
   //   return getCartAmount() * VAT_RATE;
   // };
@@ -402,6 +413,10 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  // useEffect(() => {
+  //   getSections();
+  // }, [backendUrl]);
+
   useEffect(() => {
     if (selectedLocation && deliveryFees[selectedLocation] !== undefined) {
       setDeliveryFee(deliveryFees[selectedLocation]);
@@ -414,60 +429,60 @@ const ShopContextProvider = (props) => {
     getProductsData();
   }, []);
 
-  // Polling for order status changes
-  useEffect(() => {
-    if (!token) return;
+  // // Polling for order status changes
+  // useEffect(() => {
+  //   if (!token) return;
 
-    const fetchOrdersAndNotify = async (showNotification = false) => {
-      try {
-        const response = await axios.post(
-          backendUrl + "/api/order/userorders",
-          {},
-          { headers: { token } }
-        );
-        if (response.data.success) {
-          let allOrdersItem = [];
-          response.data.orders.forEach((order) => {
-            order.items.forEach((item) => {
-              item["status"] = order.status || "pending";
-              item["orderId"] = order._id;
-              allOrdersItem.push(item);
-            });
-          });
+  //   const fetchOrdersAndNotify = async (showNotification = false) => {
+  //     try {
+  //       const response = await axios.post(
+  //         backendUrl + "/api/order/userorders",
+  //         {},
+  //         { headers: { token } }
+  //       );
+  //       if (response.data.success) {
+  //         let allOrdersItem = [];
+  //         response.data.orders.forEach((order) => {
+  //           order.items.forEach((item) => {
+  //             item["status"] = order.status || "pending";
+  //             item["orderId"] = order._id;
+  //             allOrdersItem.push(item);
+  //           });
+  //         });
 
-          // Notification logic
-          if (showNotification) {
-            allOrdersItem.forEach((item) => {
-              const prevStatus = prevOrderStatus.current[item.orderId];
-              if (prevStatus && prevStatus !== item.status) {
-                toast.info(`Order for ${item.name} is now "${item.status}"`);
-              }
-            });
-          }
+  //         // Notification logic
+  //         if (showNotification) {
+  //           allOrdersItem.forEach((item) => {
+  //             const prevStatus = prevOrderStatus.current[item.orderId];
+  //             if (prevStatus && prevStatus !== item.status) {
+  //               toast.info(`Order for ${item.name} is now "${item.status}"`);
+  //             }
+  //           });
+  //         }
 
-          // Update previous status map
-          prevOrderStatus.current = {};
-          allOrdersItem.forEach((item) => {
-            prevOrderStatus.current[item.orderId] = item.status;
-          });
+  //         // Update previous status map
+  //         prevOrderStatus.current = {};
+  //         allOrdersItem.forEach((item) => {
+  //           prevOrderStatus.current[item.orderId] = item.status;
+  //         });
 
-          setUserOrders(allOrdersItem);
-        }
-      } catch (error) {
-        // handle error
-      }
-    };
+  //         setUserOrders(allOrdersItem);
+  //       }
+  //     } catch (error) {
+  //       // handle error
+  //     }
+  //   };
 
-    // Initial fetch (no notification)
-    fetchOrdersAndNotify(false);
+  //   // Initial fetch (no notification)
+  //   fetchOrdersAndNotify(false);
 
-    // Polling interval
-    const interval = setInterval(() => {
-      fetchOrdersAndNotify(true);
-    }, 30000); // 30 seconds
+  //   // Polling interval
+  //   const interval = setInterval(() => {
+  //     fetchOrdersAndNotify(true);
+  //   }, 30000); // 30 seconds
 
-    return () => clearInterval(interval);
-  }, [token, backendUrl]);
+  //   return () => clearInterval(interval);
+  // }, [token, backendUrl]);
 
   useEffect(() => {
     if (!token && localStorage.getItem("token")) {
@@ -520,6 +535,8 @@ const ShopContextProvider = (props) => {
     supportedCurrencies,
     userOrders,
     locationToState,
+    // sections,
+    // getSections,
   };
 
   return (
