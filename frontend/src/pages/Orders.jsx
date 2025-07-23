@@ -74,7 +74,9 @@ const Orders = () => {
           >
             <div className="flex-shrink-0 flex items-center justify-center">
               <img
-                src={Array.isArray(item.image) ? item.image[0] : item.image}
+                src={
+                  Array.isArray(item.image) ? item.image[0]?.url : item.image
+                }
                 alt={item.name}
                 className="w-28 h-28 object-cover rounded-lg border"
               />
