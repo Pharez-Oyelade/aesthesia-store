@@ -111,7 +111,7 @@ const Product = () => {
                 src={item.url}
                 key={index}
                 className={`w-16 h-16 object-cover rounded-lg border-2 cursor-pointer transition-all duration-200 ${
-                  image === item
+                  image === item.url
                     ? "border-red-600 scale-105"
                     : "border-gray-200"
                 }`}
