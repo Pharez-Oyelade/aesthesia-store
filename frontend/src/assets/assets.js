@@ -1,5 +1,5 @@
 import bg_1 from "./bg-1.jpg";
-import bg_main_1 from "./bg-main-1.webp";
+import bg_main_1 from "./bg-main-1.png";
 import bg_1_main from "./bg_1_main.webp";
 import bg_2_main from "./bg_2_main.webp";
 import bg_3_main from "./bg_3_main.webp";
