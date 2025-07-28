@@ -1,8 +1,8 @@
 import bg_1 from "./bg-1.jpg";
-import bg_main_1 from "./bg-main-1.png";
-import bg_1_main from "./bg_1_main.jpg";
-import bg_2_main from "./bg_2_main.jpg";
-import bg_3_main from "./bg_3_main.jpg";
+import bg_main_1 from "./bg-main-1.webp";
+import bg_1_main from "./bg_1_main.webp";
+import bg_2_main from "./bg_2_main.webp";
+import bg_3_main from "./bg_3_main.webp";
 import bg_4 from "./bg-4.jpg";
 import bg_5 from "./bg-5.jpg";
 import the_kali from "./thr_kali.jpg";
@@ -28,7 +28,7 @@ import star_dull_icon from "./star_dull_icon.png";
 import star_icon from "./star_icon.png";
 import support_img from "./support_img.png";
 import menu_icon from "./menu_icon.png";
-import about_img from "./about_img.png";
+import about_img from "./about_img.webp";
 import contact_img from "./contact_img.png";
 import razorpay_logo from "./razorpay_logo.png";
 import stripe_logo from "./stripe_logo.png";
@@ -38,7 +38,7 @@ import hair_bg from "./hair_bg.png";
 import jewelry_bg from "./jewelry_bg.png";
 import time from "./time.png";
 import contact from "./contact.png";
-import contact_2 from "./contact.jpg";
+import contact_2 from "./contact.webp";
 
 export const assets = {
   logo,
