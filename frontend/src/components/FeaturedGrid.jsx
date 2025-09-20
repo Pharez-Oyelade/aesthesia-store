@@ -2,6 +2,7 @@ import React from "react";
 import Title from "./Title";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const FeaturedGrid = () => {
   const images = [
@@ -34,7 +35,13 @@ const FeaturedGrid = () => {
     },
   ];
   return (
-    <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]  pt-10">
+    <motion.div
+      initial={{ opacity: 0, y: 100 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1.5, ease: "easeIn" }}
+      viewport={{ once: true, amount: 0.2 }}
+      className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]  pt-10"
+    >
       {/* <div className="flex items-center justify-center mb-6 text-3xl">
         <Title text1="FEATURED" text2="SECTIONS" />
       </div> */}
@@ -69,7 +76,7 @@ const FeaturedGrid = () => {
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
