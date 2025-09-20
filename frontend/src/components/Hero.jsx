@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
   {
@@ -41,51 +42,82 @@ const Hero = () => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
     }, 4000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [current]);
+    return () => clearInterval(interval);
+  }, []);
 
   const { image, title, subtitle, b_text, link } = slides[current];
 
+  // Variants for staggered text animation
+  const containerVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { staggerChildren: 0.2, duration: 0.6, ease: "easeOut" },
+    },
+    exit: { opacity: 0, y: -30, transition: { duration: 0.4 } },
+  };
+
+  const childVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+  };
+
   return (
-    <div
-      className="relative w-full h-screen flex items-center justify-center overflow-hidden transition-all duration-700 pt-0"
-      style={{
-        backgroundImage: image ? `url(${image})` : undefined,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        transition: "background-image 0.7s cubic-bezier(0.4,0,0.2,1)",
-      }}
-    >
-      <div className="absolute inset-0 bg-black/40 z-10 transition-all duration-700" />
-      <div
-        className="relative z-20 flex flex-col items-center justify-center w-full h-full text-center text-white transition-all duration-700 opacity-100 translate-y-0"
-        style={{ transitionProperty: "opacity, transform" }}
-      >
-        <h1 className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg prata-regular">
-          {title}
-        </h1>
-        <p className="text-md w-[75%] sm:w-[100%] sm:text-lg font-medium drop-shadow-md">
-          {subtitle}
-        </p>
-        <Link to={link}>
-          <button className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-700 hover:from-red-800 hover:to-pink-700 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-300">
-            {b_text}
-          </button>
+    <div className="relative w-full h-screen flex items-center justify-center overflow-hidden pt-0">
+      {/* Background transition */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={image}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${image})` }}
+          initial={{ scale: 1.15 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1, ease: "easeInOut" }}
+        />
+      </AnimatePresence>
 
-          {/* <button className=" group hover:bg-red-600 hover:shadow-xl transition-all duration-300 text-xl relative mt-5 px-10 py-5 text-white group overflow-hidden cursor-pointer">
-            <span className="absolute text-red-600 top-0 left-0 w-3 h-3 border-t-3 border-l-3 transition-all duration-300"></span>
-            <span className="absolute text-red-600 top-0 right-0 w-3 h-3 border-t-3 border-r-3 transition-all duration-300"></span>
-            <span className="absolute text-red-600 bottom-0 left-0 w-3 h-3 border-b-3 border-l-3 transition-all duration-300"></span>
-            <span className="absolute text-red-600 bottom-0 right-0 w-3 h-3 border-b-3 border-r-3 transition-all duration-300"></span>
+      {/* Dark overlay */}
+      <div className="absolute inset-0 bg-black/40 z-10" />
 
-            <span className="absolute inset-0 border-3 border-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></span>
-            {b_text}
-          </button> */}
-        </Link>
+      {/* Slide Content */}
+      <div className="relative z-20 flex items-center justify-center w-full h-full">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current} // re-triggers animation when slide changes
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="flex flex-col items-center text-center text-white px-4"
+          >
+            <motion.h1
+              variants={childVariants}
+              className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg prata-regular"
+            >
+              {title}
+            </motion.h1>
+            <motion.p
+              variants={childVariants}
+              className="text-md w-[75%] sm:w-[100%] sm:text-lg font-medium drop-shadow-md"
+            >
+              {subtitle}
+            </motion.p>
+            <Link to={link}>
+              <motion.button
+                variants={childVariants}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-700 hover:from-red-800 hover:to-pink-700 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
+              >
+                {b_text}
+              </motion.button>
+            </Link>
+          </motion.div>
+        </AnimatePresence>
       </div>
+
+      {/* Dots */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-30">
         {slides.map((_, idx) => (
           <span
