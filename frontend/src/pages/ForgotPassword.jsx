@@ -6,15 +6,18 @@ import { toast } from "react-toastify";
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const { backendUrl } = useContext(shopContext);
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const res = await axios.post(backendUrl + "/api/user/forgot-password", {
         email,
       });
       if (res.data.success) toast.success("Reset link sent to your email.");
       else toast.error(res.data.message);
+      setLoading(false);
     } catch {
       toast.error("Error sending reset email.");
     }
@@ -34,8 +37,13 @@ const ForgotPassword = () => {
         onChange={(e) => setEmail(e.target.value)}
         required
       />
-      <button className="bg-red-600 text-white px-4 py-2 rounded">
-        Send Reset Link
+      <button
+        className={`bg-red-600 text-white px-4 py-2 rounded cursor-pointer ${
+          loading ? "disabled" : ""
+        }`}
+      >
+        {/* Send Reset Link */}
+        {loading ? "Loading..." : "Send Reset Link"}
       </button>
     </form>
   );
