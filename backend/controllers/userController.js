@@ -3,7 +3,8 @@ import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import nodemailer from "nodemailer";
+// import nodemailer from "nodemailer";
+import { sendPasswordResetEmail } from "../services/emailService.js";
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
@@ -111,22 +112,39 @@ const forgotPassword = async (req, res) => {
     await user.save();
 
     // Send email
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+    // const transporter = nodemailer.createTransport({
+    //   service: "gmail",
+    //   auth: {
+    //     user: process.env.EMAIL_USER,
+    //     pass: process.env.EMAIL_PASS,
+    //   },
+    // });
 
+    // const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${email}`;
+    // await transporter.sendMail({
+    //   to: email,
+    //   subject: "Password Reset Request",
+    //   html: `<p>You requested a password reset. Click <a href="${resetUrl}">here</a> to reset your password. This link expires in 1 hour.</p>`,
+    // });
+
+    // sending email with resend
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}&email=${email}`;
-    await transporter.sendMail({
-      to: email,
-      subject: "Password Reset Request",
-      html: `<p>You requested a password reset. Click <a href="${resetUrl}">here</a> to reset your password. This link expires in 1 hour.</p>`,
-    });
 
-    res.json({ success: true, message: "Reset link sent to your email." });
+    try {
+      await sendPasswordResetEmail({
+        to: email,
+        resetUrl,
+      });
+      res.json({ success: true, message: "Reset link sent to your email" });
+    } catch (error) {
+      console.log(error);
+      res.json({
+        success: false,
+        message: "Failed to send reset email. Please try again",
+      });
+    }
+
+    // res.json({ success: true, message: "Reset link sent to your email." });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }

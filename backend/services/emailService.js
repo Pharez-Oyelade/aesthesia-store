@@ -23,12 +23,19 @@ export async function sendOrderStatusEmail({ to, orderId, newStatus }) {
   return sendEmail({ to, subject, html });
 }
 
+//  --- SEND PASSWORD RESET EMAIL ---
+export async function sendPasswordResetEmail({ to, resetUrl }) {
+  const subject = "Password Reset Request";
+  const html = passwordResetTemplate(resetUrl);
+  return sendEmail({ to, subject, html });
+}
+
 async function sendEmail({ to, subject, html }) {
-  //   if (!process.env.RESEND_API_KEY || !FROM_EMAIL) {
-  //     throw new Error(
-  //       "Email not configured (RESEND_API_KEY or FROM_EMAIL missing)."
-  //     );
-  //   }
+  if (!process.env.RESEND_API_KEY || !FROM_EMAIL) {
+    throw new Error(
+      "Email not configured (RESEND_API_KEY or FROM_EMAIL missing)."
+    );
+  }
 
   const { error } = await resend.emails.send({
     from: FROM_EMAIL,
@@ -135,6 +142,48 @@ function orderStatusTemplate(orderId, newStatus) {
     </table>
   </div>
   `;
+}
+
+function passwordResetTemplate(resetUrl) {
+  return `
+    <div style="font-family:Arial, sans-serif; background-color:#f8f9fa; padding:20px;">
+      <table style="max-width:600px; margin:auto; background:#fff; border-radius:8px; overflow:hidden;">
+        <tr>
+          <td style="background-color:#111827; color:white; padding:20px 30px;">
+            <h2 style="margin:0;">Password Reset Request</h2>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:30px;">
+            <p>Hi there,</p>
+            <p>You requested a password reset for your Aesthesia Haven account.</p>
+            
+            <div style="text-align:center; margin:30px 0;">
+              <a href="${resetUrl}" 
+                 style="background-color:#111827; color:white; padding:12px 30px; text-decoration:none; border-radius:6px; display:inline-block; font-weight:bold;">
+                Reset Your Password
+              </a>
+            </div>
+            
+            <p style="color:#666; font-size:14px;">
+              <strong>Important:</strong> This link will expire in 1 hour for security reasons.
+            </p>
+            
+            <p style="color:#666; font-size:14px;">
+              If you didn't request this password reset, please ignore this email. Your password will remain unchanged.
+            </p>
+            
+            <p style="margin-top:40px;">Best regards,<br><strong>Aesthesia Haven Team</strong></p>
+          </td>
+        </tr>
+        <tr>
+          <td style="background:#f3f4f6; text-align:center; padding:15px; font-size:12px; color:#555;">
+            © ${new Date().getFullYear()} Aesthesia Haven — All rights reserved.
+          </td>
+        </tr>
+      </table>
+    </div>
+    `;
 }
 
 function safeJson(obj) {
