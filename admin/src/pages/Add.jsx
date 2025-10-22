@@ -18,6 +18,7 @@ const Add = ({ token }) => {
   const [sizes, setSizes] = useState([]);
   const [colors, setColors] = useState([]);
   const [newColor, setNewColor] = useState("");
+  const [weight, setWeight] = useState("");
 
   const [loading, setLoading] = useState(false);
 
@@ -53,6 +54,7 @@ const Add = ({ token }) => {
         "colors",
         JSON.stringify(colors.length > 0 ? colors : [])
       );
+      formData.append("weight", weight || "0");
 
       image1 && formData.append("image1", image1);
       image2 && formData.append("image2", image2);
@@ -81,6 +83,7 @@ const Add = ({ token }) => {
         setSizes([]);
         setColors([]);
         setNewColor("");
+        setWeight("");
         setImage1(false);
         setImage2(false);
         setImage3(false);
@@ -210,6 +213,21 @@ const Add = ({ token }) => {
             type="number"
             placeholder="20,000"
             required
+          />
+        </div>
+
+        <div className="flex-1">
+          <label className="mb-2 font-semibold text-gray-700 block">
+            Product Weight
+          </label>
+          <input
+            onChange={(e) => setWeight(e.target.value)}
+            value={weight}
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:rung-2 focus:ring-red-200 outline-none transition"
+            type="number"
+            placeholder="500"
+            min="0"
+            step="1"
           />
         </div>
       </div>

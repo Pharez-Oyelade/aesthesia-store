@@ -58,6 +58,14 @@ const productSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+
+  // weight for international orders
+  weight: {
+    type: Number,
+    required: false,
+    default: 0,
+    min: 0,
+  },
   // End flow additions
 
   date: {

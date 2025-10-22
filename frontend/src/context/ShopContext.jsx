@@ -5,6 +5,12 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import {
+  calculateCartWeight,
+  calculateInternationalShipping,
+  isInternationalOrder,
+} from "../services/shippingService";
+
 export const shopContext = createContext();
 
 const currencySymbols = {
@@ -61,6 +67,9 @@ const ShopContextProvider = (props) => {
   const [token, setToken] = useState("");
   const [userData, setUserData] = useState({ name: "", email: "" });
   const navigate = useNavigate();
+  // internation order states
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [isInternational, setIsInternational] = useState(false);
 
   const [selectedLocation, setSelectedLocation] = useState("");
   const [delivery_fee, setDeliveryFee] = useState(0);
@@ -283,6 +292,19 @@ const ShopContextProvider = (props) => {
     return totalAmount;
   };
 
+  // CArt weight
+  const getCartWeight = () => {
+    return calculateCartWeight(cartItems, products);
+  };
+
+  const getShippingCost = () => {
+    if (isInternationalOrder(selectedCountry)) {
+      const weight = getCartWeight();
+      return calculateInternationalShipping(selectedCountry, weight);
+    }
+    return delivery_fee;
+  };
+
   const addToWishlist = async (productId) => {
     if (wishlist.includes(productId)) {
       toast.info("Product already in wishlist");
@@ -420,10 +442,14 @@ const ShopContextProvider = (props) => {
   useEffect(() => {
     if (selectedLocation && deliveryFees[selectedLocation] !== undefined) {
       setDeliveryFee(deliveryFees[selectedLocation]);
+      setIsInternational(false);
+    } else if (selectedCountry && isInternationalOrder(selectedCountry)) {
+      setIsInternational(true);
     } else {
       setDeliveryFee(0);
+      setIsInternational(false);
     }
-  }, [selectedLocation]);
+  }, [selectedLocation, selectedCountry]);
 
   useEffect(() => {
     getProductsData();
@@ -535,6 +561,11 @@ const ShopContextProvider = (props) => {
     supportedCurrencies,
     userOrders,
     locationToState,
+    getCartWeight,
+    getShippingCost,
+    selectedCountry,
+    setSelectedCountry,
+    isInternational,
     // sections,
     // getSections,
   };

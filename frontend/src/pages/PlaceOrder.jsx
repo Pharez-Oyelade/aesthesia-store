@@ -24,6 +24,10 @@ const PlaceOrder = () => {
     deliveryFees,
     delivery_fee,
     locationToState,
+    getShippingCost,
+    selectedCountry,
+    setSelectedCountry,
+    isInternational,
   } = useContext(shopContext);
 
   const [formData, setFormData] = useState({
@@ -34,12 +38,27 @@ const PlaceOrder = () => {
     city: "",
     state: "",
     phone: "",
+    country: "",
   });
 
   // New: handle location change
   // const onLocationChange = (e) => {
   //   setSelectedLocation(e.target.value);
   // };
+
+  const onCountryChange = (e) => {
+    const country = e.target.value;
+    setSelectedCountry(country);
+
+    if (country !== "Nigeria") {
+      setSelectedLocation("");
+    }
+
+    setFormData((data) => ({
+      ...data,
+      country,
+    }));
+  };
 
   const onLocationChange = (e) => {
     const loc = e.target.value;
@@ -91,7 +110,9 @@ const PlaceOrder = () => {
         return false;
       }
     }
-    if (!selectedLocation) return false;
+    if (selectedCountry === "Nigeria" && !selectedLocation) {
+      return false;
+    }
     return true;
   };
 
@@ -112,7 +133,7 @@ const PlaceOrder = () => {
       toast.error("Paystack script not loaded");
       return;
     }
-    const amount = getCartAmount() + delivery_fee;
+    const amount = getCartAmount() + getShippingCost();
     const handler = window.PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
       email: formData.email,
@@ -136,7 +157,8 @@ const PlaceOrder = () => {
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + delivery_fee,
+        // amount: getCartAmount() + delivery_fee,
+        amount: getCartAmount() + getShippingCost(),
         reference: response.reference,
       };
       const res = await axios.post(
@@ -172,7 +194,8 @@ const PlaceOrder = () => {
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + delivery_fee,
+        // amount: getCartAmount() + delivery_fee,
+        amount: getCartAmount() + getShippingCost(),
       };
       const response = await axios.post(
         backendUrl + "/api/order/place",
@@ -230,24 +253,52 @@ const PlaceOrder = () => {
             placeholder="Email Address"
             required
           />
-          {/* ...other inputs... */}
           <select
-            name="location"
-            value={selectedLocation}
-            onChange={onLocationChange}
+            name="country"
+            value={selectedCountry}
+            onChange={onCountryChange}
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
             required
           >
-            <option value="">Select Delivery Location</option>
-            {Object.keys(deliveryFees).map((loc) => (
-              <option key={loc} value={loc}>
-                {loc} ({deliveryFees[loc]})
-              </option>
-            ))}
+            <option value="">Select Country</option>
+            <option value="Nigeria">Nigeria </option>
+            <optgroup label="International">
+              <option value="United States">United States</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Canada">Canada</option>
+              <option value="Australia">Australia</option>
+              <option value="Germany">Germany</option>
+              <option value="France">France</option>
+              <option value="Italy">Italy</option>
+              <option value="Spain">Spain</option>
+              <option value="Netherlands">Netherlands</option>
+              <option value="Belgium">Belgium</option>
+            </optgroup>
           </select>
-          <p className="m-0 p-0 text-xs text-gray-500">
-            *Shipping fees based on delivery location
-          </p>
+          {/* ...other inputs... */}
+
+          {selectedCountry === "Nigeria" && (
+            <>
+              <select
+                name="location"
+                value={selectedLocation}
+                onChange={onLocationChange}
+                className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
+                required
+              >
+                <option value="">Select Delivery Location</option>
+                {Object.keys(deliveryFees).map((loc) => (
+                  <option key={loc} value={loc}>
+                    {loc} ({deliveryFees[loc]})
+                  </option>
+                ))}
+              </select>
+              <p className="m-0 p-0 text-xs text-gray-500">
+                *Shipping fees based on delivery location
+              </p>
+            </>
+          )}
+
           <input
             onChange={onChangeHandler}
             name="street"
@@ -275,7 +326,11 @@ const PlaceOrder = () => {
               type="text"
               placeholder="State"
               required
-              disabled={selectedLocation !== "Other" && !!formData.state}
+              disabled={
+                selectedCountry === "Nigeria" &&
+                selectedLocation !== "Other" &&
+                !!formData.state
+              }
             />
           </div>
           <input

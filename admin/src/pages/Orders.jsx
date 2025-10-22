@@ -109,6 +109,7 @@ const Orders = ({ token }) => {
               <div className="text-gray-500">
                 <p>{order.address.street + ","}</p>
                 <p>{order.address.city + ", " + order.address.state}</p>
+                <p>{order.address.country}</p>
               </div>
               <p className="text-gray-500">{order.address.phone}</p>
             </div>

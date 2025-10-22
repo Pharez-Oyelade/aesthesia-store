@@ -21,6 +21,7 @@ const List = ({ token }) => {
     salePrice: "",
     preorder: false,
     soldOut: false,
+    weight: "",
   });
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -235,6 +236,18 @@ const List = ({ token }) => {
                   min="0"
                   onChange={(e) =>
                     setEditFields((f) => ({ ...f, price: e.target.value }))
+                  }
+                />
+              </label>
+              <label className="font-medium">
+                Weight
+                <input
+                  type="number"
+                  className="w-full px-3 py-2 border rounded-lg mt-1"
+                  value={editFields.weight || ""}
+                  min="0"
+                  onChange={(e) =>
+                    setEditFields((f) => ({ ...f, weight: e.target.value }))
                   }
                 />
               </label>
