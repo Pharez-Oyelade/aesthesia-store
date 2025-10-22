@@ -7,7 +7,42 @@ import crypto from "crypto";
 import { sendPasswordResetEmail } from "../services/emailService.js";
 
 const createToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "24h" });
+};
+
+// refresh token creation
+const createRefreshToken = (id) => {
+  return jwt.sign({ id, type: "refresh" }, process.env.JWT_SECRET, {
+    expiresIn: "7d",
+  });
+};
+
+// token refresh endpoint
+const refreshToken = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.json({ success: false, message: "Refresh token required" });
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+
+    if (decoded.type !== "refresh") {
+      return res.json({ success: false, message: "Invalid refresh token" });
+    }
+
+    const newToken = createToken(decoded.id);
+    const newRefreshToken = createRefreshToken(decoded.id);
+
+    res.json({
+      success: true,
+      token: newToken,
+      refreshToken: newRefreshToken,
+    });
+  } catch (error) {
+    res.json({ success: false, message: "Invalid refresh token" });
+  }
 };
 
 // Route for user Login
@@ -26,9 +61,17 @@ const loginUser = async (req, res) => {
 
     if (isMatch) {
       const token = createToken(user._id);
+      const refreshToken = createRefreshToken(user._id);
+
       res.json({
         success: true,
         token,
+        refreshToken,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+        },
       });
     } else {
       res.json({
@@ -84,10 +127,17 @@ const registerUser = async (req, res) => {
     const user = await newUser.save();
 
     const token = createToken(user._id);
+    const refreshToken = createRefreshToken(user._id);
 
     res.json({
       success: true,
       token,
+      refreshToken,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
     });
   } catch (error) {
     console.log(error);
@@ -95,6 +145,15 @@ const registerUser = async (req, res) => {
       success: false,
       message: error.message,
     });
+  }
+};
+
+//  logout function
+const logoutUser = async (req, res) => {
+  try {
+    res.json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
   }
 };
 
@@ -235,4 +294,6 @@ export {
   resetPassword,
   adminLogin,
   getUserDetails,
+  refreshToken,
+  logoutUser,
 };

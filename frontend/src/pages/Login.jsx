@@ -2,7 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import { shopContext } from "../context/ShopContext";
-import axios from "axios";
+// import axios from "axios";
+import api from "../utils/axiosConfig";
+import authService from "../services/authService";
 import { toast } from "react-toastify";
 
 const Login = () => {
@@ -25,41 +27,66 @@ const Login = () => {
 
   const [marketingConsent, setMarketingConsent] = useState(false);
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     if (currentState === "Sign Up") {
+  //       const response = await axios.post(backendUrl + "/api/user/register", {
+  //         name,
+  //         email,
+  //         password,
+  //       });
+  //       if (response.data.success) {
+  //         setToken(response.data.token);
+  //         localStorage.setItem("token", response.data.token);
+  //         getUserCart(response.data.token);
+  //         getUserWishlist(response.data.token);
+  //         getUserDetails(response.data.token);
+  //         if (marketingConsent) {
+  //           subscribeToMailchimp(email, name);
+  //         }
+  //       } else {
+  //         toast.error(response.data.message);
+  //       }
+  //     } else {
+  //       const response = await axios.post(backendUrl + "/api/user/login", {
+  //         email,
+  //         password,
+  //       });
+  //       if (response.data.success) {
+  //         setToken(response.data.token);
+  //         localStorage.setItem("token", response.data.token);
+  //         getUserCart(response.data.token);
+  //         getUserWishlist(response.data.token);
+  //         getUserDetails(response.data.token);
+  //       } else {
+  //         toast.error(response.data.message);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(error.message);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (currentState === "Sign Up") {
-        const response = await axios.post(backendUrl + "/api/user/register", {
-          name,
-          email,
-          password,
-        });
-        if (response.data.success) {
-          setToken(response.data.token);
-          localStorage.setItem("token", response.data.token);
-          getUserCart(response.data.token);
-          getUserWishlist(response.data.token);
-          getUserDetails(response.data.token);
-          if (marketingConsent) {
-            subscribeToMailchimp(email, name);
-          }
-        } else {
-          toast.error(response.data.message);
+        const response = await authService.register(name, email, password);
+        setToken(response.token);
+        getUserCart(response.token);
+        getUserWishlist(response.token);
+        getUserDetails(response.token);
+        if (marketingConsent) {
+          subscribeToMailchimp(email, name);
         }
       } else {
-        const response = await axios.post(backendUrl + "/api/user/login", {
-          email,
-          password,
-        });
-        if (response.data.success) {
-          setToken(response.data.token);
-          localStorage.setItem("token", response.data.token);
-          getUserCart(response.data.token);
-          getUserWishlist(response.data.token);
-          getUserDetails(response.data.token);
-        } else {
-          toast.error(response.data.message);
-        }
+        const response = await authService.login(email, password);
+        setToken(response.token);
+        getUserCart(response.token);
+        getUserWishlist(response.token);
+        getUserDetails(response.token);
       }
     } catch (error) {
       console.log(error);

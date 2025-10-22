@@ -8,6 +8,7 @@ import { FaRegHeart } from "react-icons/fa6";
 import { NavLink, Link, useLocation, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { shopContext } from "../context/ShopContext";
+import LogoutButton from "./LogoutButton";
 
 const Navbar = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -168,7 +169,7 @@ const Navbar = () => {
                   >
                     Orders
                   </p>
-                  <p
+                  {/* <p
                     onClick={() => {
                       logout();
                       setShowUserDropdown(false);
@@ -176,7 +177,8 @@ const Navbar = () => {
                     className="cursor-pointer hover:text-black"
                   >
                     Logout
-                  </p>
+                  </p> */}
+                  <LogoutButton />
                 </div>
               </div>
             )}

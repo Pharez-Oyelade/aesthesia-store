@@ -6,6 +6,8 @@ import {
   resetPassword,
   adminLogin,
   getUserDetails,
+  refreshToken,
+  logoutUser,
 } from "../controllers/userController.js";
 import authUser from "../middleware/auth.js";
 
@@ -20,6 +22,9 @@ userRouter.post("/admin", adminLogin);
 
 userRouter.post("/forgot-password", forgotPassword);
 userRouter.post("/reset-password", resetPassword);
+
+userRouter.post("/refresh", refreshToken);
+userRouter.post("/logout", authUser, logoutUser);
 
 // Route fetching user details
 userRouter.post("/details", authUser, getUserDetails);

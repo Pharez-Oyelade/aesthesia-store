@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import api from "../utils/axiosConfig";
+import authService from "../services/authService";
 
 import {
   calculateCartWeight,
@@ -76,6 +78,33 @@ const ShopContextProvider = (props) => {
 
   const [userOrders, setUserOrders] = useState([]);
   const prevOrderStatus = useRef({});
+
+  const logout = async () => {
+    try {
+      // Clear tokens first
+      authService.clearTokens();
+
+      // Clear state
+      setToken("");
+      setUserData({ name: "", email: "" });
+      setCartItems({});
+      setWishlist([]);
+
+      // Navigate to login
+      navigate("/login");
+
+      // Optionally call logout API in background (don't await)
+      authService
+        .logout()
+        .catch((err) => console.log("Background logout error:", err));
+    } catch (error) {
+      console.log("Logout error:", error);
+      // Even if there's an error, still clear local state
+      authService.clearTokens();
+      setToken("");
+      navigate("/login");
+    }
+  };
 
   // const [sections, setSections] = useState([]);
 
@@ -346,11 +375,7 @@ const ShopContextProvider = (props) => {
 
   const getUserCart = async (token) => {
     try {
-      const response = await axios.post(
-        backendUrl + "/api/cart/get",
-        {},
-        { headers: { token } }
-      );
+      const response = await api.post("/api/cart/get", {});
       if (response.data.success) {
         setCartItems(response.data.cartData || {});
       } else {
@@ -358,17 +383,15 @@ const ShopContextProvider = (props) => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      if (error.response?.status !== 401) {
+        toast.error(error.message);
+      }
     }
   };
 
   const getUserWishlist = async (token) => {
     try {
-      const response = await axios.post(
-        backendUrl + "/api/wishlist/get",
-        {},
-        { headers: { token } }
-      );
+      const response = await api.post("/api/wishlist/get", {});
       if (response.data.success) {
         setWishlist(response.data.wishData || []);
       }
@@ -379,11 +402,7 @@ const ShopContextProvider = (props) => {
 
   const getUserDetails = async (token) => {
     try {
-      const response = await axios.post(
-        backendUrl + "/api/user/details",
-        {},
-        { headers: { token } }
-      );
+      const response = await api.post("/api/user/details", {});
       if (response.data.success && response.data.user) {
         setUserData(response.data.user);
       }
@@ -510,13 +529,39 @@ const ShopContextProvider = (props) => {
   //   return () => clearInterval(interval);
   // }, [token, backendUrl]);
 
+  // useEffect(() => {
+  //   if (!token && localStorage.getItem("token")) {
+  //     const storedToken = localStorage.getItem("token");
+  //     setToken(storedToken);
+  //     getUserCart(storedToken);
+  //     getUserWishlist(storedToken);
+  //     getUserDetails(storedToken);
+  //   }
+  // }, []);
+
   useEffect(() => {
-    if (!token && localStorage.getItem("token")) {
-      const storedToken = localStorage.getItem("token");
+    const { token: storedToken } = authService.getTokens();
+
+    if (storedToken && !authService.isTokenExpired(storedToken)) {
       setToken(storedToken);
       getUserCart(storedToken);
       getUserWishlist(storedToken);
       getUserDetails(storedToken);
+    } else if (storedToken) {
+      // Token is expired, try to refresh
+      authService
+        .refreshToken()
+        .then((newToken) => {
+          setToken(newToken);
+          getUserCart(newToken);
+          getUserWishlist(newToken);
+          getUserDetails(newToken);
+        })
+        .catch(() => {
+          // Refresh failed, clear tokens
+          authService.clearTokens();
+          setToken("");
+        });
     }
   }, []);
 
@@ -566,6 +611,7 @@ const ShopContextProvider = (props) => {
     selectedCountry,
     setSelectedCountry,
     isInternational,
+    logout,
     // sections,
     // getSections,
   };
