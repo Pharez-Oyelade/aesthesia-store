@@ -1,6 +1,8 @@
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 import axios from "axios";
+import { sendOrderConfirmationEmail } from "../services/emailService.js";
+import { sendOrderStatusEmail } from "../services/emailService.js";
 
 // Placing an order with cash on delivery
 
@@ -23,6 +25,15 @@ const placeOrder = async (req, res) => {
 
     await userModel.findByIdAndUpdate(userId, { cartData: {} });
 
+    // send order confirmation email
+    try {
+      const user = await userModel.findById(userId);
+      if (user?.email) {
+        await sendOrderConfirmationEmail({ to: user.email, order: newOrder });
+      }
+    } catch (error) {
+      console.log(error);
+    }
     res.json({ success: true, message: "Order Placed" });
   } catch (error) {
     console.log(error);
@@ -64,6 +75,16 @@ const placeOrderPaystack = async (req, res) => {
       const newOrder = new orderModel(orderData);
       await newOrder.save();
       await userModel.findByIdAndUpdate(userId, { cartData: {} });
+
+      // send order confirmation email
+      try {
+        const user = await userModel.findById(userId);
+        if (user?.email) {
+          await sendOrderConfirmationEmail({ to: user.email, order: newOrder });
+        }
+      } catch (error) {
+        console.log(error);
+      }
 
       return res.json({ success: true, message: "Order Placed" });
     } else {
@@ -108,6 +129,23 @@ const updateStatus = async (req, res) => {
     const { orderId, status } = req.body;
 
     await orderModel.findByIdAndUpdate(orderId, { status });
+
+    // send order status email
+    try {
+      const order = await orderModel.findById(orderId);
+      if (order?.userId) {
+        const user = await userModel.findById(order.userId);
+        if (user?.email) {
+          await sendOrderStatusEmail({
+            to: user.email,
+            orderId,
+            newStatus: status,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
     res.json({ success: true, message: "Status Updated" });
   } catch (error) {
     console.log(error);
