@@ -1,77 +1,15 @@
-// import { Resend } from "resend";
-
-// const resend = new Resend(process.env.RESEND_API_KEY);
-// const FROM_EMAIL = process.env.FROM_EMAIL;
-
-// export async function sendOrderConfirmationEmail({ to, order }) {
-//   const subject = `Order Confirmation #${order._id}`;
-//   const html = `
-//     <div>
-//       <h2>Thanks for your order!</h2>
-//       <p>Order ID: ${order._id}</p>
-//       <p>Status: ${order.status || "Order Placed"}</p>
-//       <p>Amount: ${order.amount}</p>
-//       <h3>Items</h3>
-//       <ul>
-//         ${(order.items || [])
-//           .map(
-//             (it) =>
-//               `<li>${it.name || it.title || "Item"} x ${it.quantity || 1}${
-//                 it.color ? ` (Color: ${it.color})` : ""
-//               }</li>`
-//           )
-//           .join("")}
-//       </ul>
-//       <h3>Shipping Address</h3>
-//       <pre>${safeJson(order.address)}</pre>
-//     </div>
-//   `;
-//   return sendEmail({ to, subject, html });
-// }
-
-// export async function sendOrderStatusEmail({ to, orderId, newStatus }) {
-//   const subject = `Your order #${orderId} status updated`;
-//   const html = `
-//     <div>
-//       <h2>Order Status Updated</h2>
-//       <p>Order ID: ${orderId}</p>
-//       <p>New status: <strong>${newStatus}</strong></p>
-//     </div>
-//   `;
-//   return sendEmail({ to, subject, html });
-// }
-
-// async function sendEmail({ to, subject, html }) {
-//   if (!process.env.RESEND_API_KEY || !FROM_EMAIL) {
-//     throw new Error(
-//       "Email not configured (RESEND_API_KEY or FROM_EMAIL missing)."
-//     );
-//   }
-//   const { error } = await resend.emails.send({
-//     from: FROM_EMAIL,
-//     to: Array.isArray(to) ? to : [to],
-//     subject,
-//     html,
-//   });
-//   if (error) throw error;
-//   return true;
-// }
-
-// function safeJson(obj) {
-//   try {
-//     return JSON.stringify(obj || {}, null, 2);
-//   } catch {
-//     return "";
-//   }
-// }
-
 import { Resend } from "resend";
+
+function isEmailNotificationsEnabled() {
+  return process.env.EMAIL_NOTIFICATIONS_ENABLED === "true";
+}
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM_EMAIL = process.env.FROM_EMAIL;
 
 // --- ORDER CONFIRMATION ---
 export async function sendOrderConfirmationEmail({ to, order }) {
+  if (!isEmailNotificationsEnabled()) return;
   const subject = `Order Confirmation #${order._id}`;
   const html = orderConfirmationTemplate(order);
   return sendEmail({ to, subject, html });
@@ -79,17 +17,18 @@ export async function sendOrderConfirmationEmail({ to, order }) {
 
 // --- ORDER STATUS UPDATE ---
 export async function sendOrderStatusEmail({ to, orderId, newStatus }) {
+  if (!isEmailNotificationsEnabled()) return;
   const subject = `Your Order #${orderId} Status Has Been Updated`;
   const html = orderStatusTemplate(orderId, newStatus);
   return sendEmail({ to, subject, html });
 }
 
 async function sendEmail({ to, subject, html }) {
-  if (!process.env.RESEND_API_KEY || !FROM_EMAIL) {
-    throw new Error(
-      "Email not configured (RESEND_API_KEY or FROM_EMAIL missing)."
-    );
-  }
+  //   if (!process.env.RESEND_API_KEY || !FROM_EMAIL) {
+  //     throw new Error(
+  //       "Email not configured (RESEND_API_KEY or FROM_EMAIL missing)."
+  //     );
+  //   }
 
   const { error } = await resend.emails.send({
     from: FROM_EMAIL,
