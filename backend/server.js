@@ -9,12 +9,16 @@ import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import wishlistRouter from "./routes/wishRoute.js";
 import mailRouter from "./routes/mailchimpRoute.js";
+import compression from "compression";
 
 // App configuration
 const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
 connectCloudinary();
+
+// Response compression
+app.use(compression());
 
 // Middleware
 app.use(cors());
