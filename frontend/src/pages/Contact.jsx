@@ -33,7 +33,7 @@ const Contact = () => {
                 Contact Details
               </p>
               <p className="text-gray-600 text-lg">
-                Call: 08065370146 <br /> WhatsApp: 09138720141 <br /> Email:{" "}
+                WhatsApp: 09138720141 <br /> Email:{" "}
                 <span className="flex flex-col">
                   aesthesiahaven@gmail.com <span>aesthesiahair@gmail.com</span>
                 </span>
@@ -41,7 +41,7 @@ const Contact = () => {
             </div>
 
             <div>
-              <p>Contact Hours: 9am-5pm</p>
+              <p>Contact Hours: 9am-5pm (Monday - Saturday)</p>
             </div>
             <div>
               <p className="font-semibold text-xl text-green-600 mb-2">
