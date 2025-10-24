@@ -152,6 +152,7 @@ const List = ({ token }) => {
                         description: item.description || "",
                         price: item.price || "",
                         section: item.section || "",
+                        weight: item.weight || "",
                         sizes: item.sizes || [],
                         bestseller: item.bestseller || false,
                         preorder: item.preorder || false,
