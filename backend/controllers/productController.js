@@ -7,8 +7,11 @@ const addProduct = async (req, res) => {
     // edit added for sale flow
     const {
       name,
+      tagline,
       price,
       description,
+      specificDetails,
+      story,
       section,
       sizes,
       colors,
@@ -58,6 +61,11 @@ const addProduct = async (req, res) => {
     const productData = {
       name,
       description,
+      tagline,
+      specificDetails,
+      story,
+      onSale: onSale === true || onSale === "true" ? true : false,
+      salePrice: salePrice ? Number(salePrice) : 0,
       price: Number(price),
       section,
       bestseller: bestseller === true || bestseller === "true" ? true : false,

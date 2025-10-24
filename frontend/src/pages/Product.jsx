@@ -31,7 +31,38 @@ const Product = () => {
     sleeveLength: "",
   });
 
-  const charLimit = 150;
+  const [activeTab, setActiveTab] = useState("description");
+
+  const tabs = [
+    {
+      id: "description",
+      label: "Description",
+    },
+    { id: "story", label: "Story" },
+    { id: "size-guide", label: "Size Guide" },
+  ];
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "description":
+        return (
+          <div>
+            <p className="font-bold">{productData.name}</p>
+            <p>{productData.tagline}</p>
+            <p className="mb-10">{productData.description}</p>
+            <p>{productData.specificDetails}</p>
+          </div>
+        );
+      case "story":
+        return <p>{productData.story}</p>;
+      case "size-guide":
+        return <p>size guide</p>;
+      default:
+        return null;
+    }
+  };
+
+  const charLimit = 250;
 
   // Find product when products or params change
   useEffect(() => {
@@ -164,6 +195,10 @@ const Product = () => {
                 </div>
               )}
 
+              <p className="text-sm w-3/4 italic text-gray-700 pb-2">
+                {productData.tagline}
+              </p>
+
               {/* <p className="text-2xl font-semibold text-red-700 flex items-center mb-4">
               {currency}
               {productData.price}
@@ -191,7 +226,7 @@ const Product = () => {
                   </div>
                 )}
               </div>
-              <p className="text-gray-600 mb-6 leading-relaxed">
+              <p className="text-gray-600 mb-6 leading-relaxed text-xl">
                 {/* {productData.description} */}
                 {productData.description.length > charLimit
                   ? productData.description.substring(0, charLimit) + "..."
@@ -204,6 +239,10 @@ const Product = () => {
                     Full description
                   </a>
                 )}
+              </p>
+
+              <p className="mb-5 font-semibold">
+                {productData.specificDetails}
               </p>
               {productData.sizes && productData.sizes.length > 0 && (
                 <div>
@@ -229,7 +268,7 @@ const Product = () => {
                       <p className="text-sm text-gray-500">
                         *Click to Reference{" "}
                         <span className="text-[#691110] underline">
-                          <a href="#size-guide">Size guide</a>
+                          <a href="#description">Size guide</a>
                         </span>
                       </p>
                     </div>
@@ -435,20 +474,25 @@ const Product = () => {
           id="description"
           className="max-w-6xl mx-auto mt-12 bg-white rounded-2xl shadow-lg p-8"
         >
-          <div className="flex gap-4 border-b pb-4 mb-6">
-            <b className="text-lg border-b-2 border-red-600 pb-2">
-              Description
-            </b>
+          <div></div>
+          <div className="flex gap-10 border-b pb-4 mb-6">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`text-lg font-medium cursor-pointer ${
+                  tab.id === activeTab ? "text-red-600" : "text-gray-600"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
           </div>
           <div
-            className="flex flex-col gap-4 text-gray-600 text-base leading-relaxed"
+            className="gap-4 text-gray-600 text-lg leading-relaxed"
             id="size-guide"
           >
-            <p>{productData.description}</p>
-            <p>Size Guide</p>
-            {/* <div>
-            <img src={assets.size_chart_demo} className="w-100" alt="" />
-          </div> */}
+            <div>{renderTabContent()}</div>
           </div>
         </div>
         {/* Related Products */}

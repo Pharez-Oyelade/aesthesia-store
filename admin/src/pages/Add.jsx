@@ -10,6 +10,9 @@ const Add = ({ token }) => {
   const [image4, setImage4] = useState(false);
 
   const [name, setName] = useState("");
+  const [tagline, setTagline] = useState("");
+  const [story, setStory] = useState("");
+  const [specificDetails, setSpecificDetails] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [section, setSection] = useState("clothes");
@@ -44,6 +47,9 @@ const Add = ({ token }) => {
       const formData = new FormData();
 
       formData.append("name", name);
+      formData.append("tagline", tagline);
+      formData.append("story", story);
+      formData.append("specificDetails", specificDetails);
       formData.append("description", description);
       formData.append("price", price);
       formData.append("section", section);
@@ -75,6 +81,9 @@ const Add = ({ token }) => {
       if (response.data.success) {
         toast.success("Product added successfully");
         setName("");
+        setTagline("");
+        setSpecificDetails("");
+        setStory("");
         setDescription("");
         setPrice("");
         setSection("clothes");
@@ -163,7 +172,7 @@ const Add = ({ token }) => {
       </div>
       <div>
         <label className="mb-2 font-semibold text-gray-700 block">
-          Product name
+          Product name*
         </label>
         <input
           onChange={(e) => setName(e.target.value)}
@@ -176,7 +185,19 @@ const Add = ({ token }) => {
       </div>
       <div>
         <label className="mb-2 font-semibold text-gray-700 block">
-          Product description
+          Product tagline
+        </label>
+        <input
+          onChange={(e) => setTagline(e.target.value)}
+          value={tagline}
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-200 outline-none transition"
+          type="text"
+          placeholder="Enter product tagline"
+        />
+      </div>
+      <div>
+        <label className="mb-2 font-semibold text-gray-700 block">
+          Product description*
         </label>
         <textarea
           onChange={(e) => setDescription(e.target.value)}
@@ -184,6 +205,28 @@ const Add = ({ token }) => {
           className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-200 outline-none transition"
           placeholder="Describe your product here"
           required
+        />
+      </div>
+      <div>
+        <label className="mb-2 font-semibold text-gray-700 block">
+          Specific Details
+        </label>
+        <textarea
+          onChange={(e) => setSpecificDetails(e.target.value)}
+          value={specificDetails}
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-200 outline-none transition"
+          placeholder="Specific Details"
+        />
+      </div>
+      <div>
+        <label className="mb-2 font-semibold text-gray-700 block">
+          Product story
+        </label>
+        <textarea
+          onChange={(e) => setStory(e.target.value)}
+          value={story}
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-200 outline-none transition"
+          placeholder="Product Story"
         />
       </div>
       <div className="flex flex-col sm:flex-row gap-4">
@@ -236,7 +279,7 @@ const Add = ({ token }) => {
           Product Sizes
         </label>
         <div className="flex gap-3 flex-wrap">
-          {["8", "10", "12", "14", "16", "18"].map((sz) => (
+          {["6", "8", "10", "12", "14", "16", "18", "20", "22"].map((sz) => (
             <div
               key={sz}
               onClick={() =>

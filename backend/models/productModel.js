@@ -5,9 +5,21 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tagline: {
+    type: String,
+    required: false,
+  },
   description: {
     type: String,
     required: true,
+  },
+  specificDetails: {
+    type: String,
+    required: false,
+  },
+  story: {
+    type: String,
+    required: false,
   },
   price: {
     type: Number,
