@@ -22,6 +22,7 @@ const List = ({ token }) => {
     preorder: false,
     soldOut: false,
     weight: "",
+    colors: [],
   });
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -153,6 +154,8 @@ const List = ({ token }) => {
                         price: item.price || "",
                         section: item.section || "",
                         weight: item.weight || "",
+                        // store colors as a comma-separated string for the text input
+                        colors: item.colors ? item.colors.join(",") : "",
                         sizes: item.sizes || [],
                         bestseller: item.bestseller || false,
                         preorder: item.preorder || false,
@@ -195,12 +198,23 @@ const List = ({ token }) => {
               onSubmit={async (e) => {
                 e.preventDefault();
                 try {
+                  // ensure colors and sizes are sent as JSON strings (backend expects JSON strings)
+                  const colorsPayload = Array.isArray(editFields.colors)
+                    ? editFields.colors
+                    : typeof editFields.colors === "string"
+                    ? editFields.colors
+                        .split(",")
+                        .map((c) => c.trim())
+                        .filter(Boolean)
+                    : [];
+
                   const response = await axios.post(
                     backendUrl + "/api/product/update",
                     {
                       id: editProduct._id,
                       ...editFields,
                       sizes: JSON.stringify(editFields.sizes),
+                      colors: JSON.stringify(colorsPayload),
                     },
                     { headers: { token } }
                   );
@@ -249,6 +263,17 @@ const List = ({ token }) => {
                   min="0"
                   onChange={(e) =>
                     setEditFields((f) => ({ ...f, weight: e.target.value }))
+                  }
+                />
+              </label>
+              <label htmlFor="">
+                Colors (comma separated)
+                <input
+                  type="text"
+                  className="w-full px-3 py-2 border rounded-lg mt-1"
+                  value={editFields.colors || ""}
+                  onChange={(e) =>
+                    setEditFields((f) => ({ ...f, colors: e.target.value }))
                   }
                 />
               </label>
