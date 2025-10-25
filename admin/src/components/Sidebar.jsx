@@ -1,6 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
+import { BsCollection } from "react-icons/bs";
 
 const Sidebar = () => {
   return (
@@ -47,6 +48,20 @@ const Sidebar = () => {
         >
           <img className="w-6 h-6" src={assets.order_icon} alt="" />
           <span className="hidden sm:block">Orders</span>
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            `flex items-center w-full gap-4 px-4 py-3 rounded-xl transition-all duration-200 ${
+              isActive
+                ? "bg-red-100 text-red-700 shadow"
+                : "hover:bg-gray-100 text-gray-700"
+            }`
+          }
+          to="/collections"
+        >
+          {/* <img className="w-6 h-6" src={assets.order_icon} alt="" /> */}
+          <BsCollection className="w-6 h-6" />
+          <span className="hidden sm:block">Collections</span>
         </NavLink>
       </div>
     </div>

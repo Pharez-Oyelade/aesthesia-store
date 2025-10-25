@@ -11,6 +11,7 @@ import { useState } from "react";
 import Login from "./components/Login";
 import { ToastContainer } from "react-toastify";
 import { useEffect } from "react";
+import Section from "./pages/Section";
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 export const currency = <TbCurrencyNaira />;
@@ -40,6 +41,10 @@ const App = () => {
                 <Route path="/add" element={<Add token={token} />} />
                 <Route path="/list" element={<List token={token} />} />
                 <Route path="/orders" element={<Orders token={token} />} />
+                <Route
+                  path="/collections"
+                  element={<Section token={token} />}
+                />
               </Routes>
             </div>
           </div>

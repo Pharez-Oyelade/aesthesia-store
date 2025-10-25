@@ -10,6 +10,7 @@ import orderRouter from "./routes/orderRoute.js";
 import wishlistRouter from "./routes/wishRoute.js";
 import mailRouter from "./routes/mailchimpRoute.js";
 import compression from "compression";
+import sectionRouter from "./routes/sectionRoute.js";
 
 // App configuration
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 app.use("/api/wishlist", wishlistRouter);
 app.use("/api/mailchimp", mailRouter);
+app.use("/api/section", sectionRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the API!");

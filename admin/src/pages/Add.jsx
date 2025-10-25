@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -25,7 +25,23 @@ const Add = ({ token }) => {
 
   const [loading, setLoading] = useState(false);
 
+  const [availableSections, setAvailableSections] = useState([]);
+
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  const fetchSections = async () => {
+    try {
+      const response = await axios.get(backendUrl + "/api/section/list");
+      if (response.data.success) {
+        setAvailableSections(response.data.sections);
+      } else {
+        toast.error("Error fetching sections");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error fetching sections");
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -107,6 +123,10 @@ const Add = ({ token }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchSections();
+  }, []);
 
   return (
     <form
@@ -239,10 +259,12 @@ const Add = ({ token }) => {
             value={section}
             className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-200 outline-none transition"
           >
-            <option value="clothing">Clothes</option>
-            <option value="rere-collection">Rere Collection</option>
-            <option value="jewelry">Jewelry</option>
-            <option value="wigs">Wig</option>
+            <option value="">Select a section</option>
+            {availableSections.map((section) => (
+              <option key={section._id} value={section._id}>
+                {section.name}
+              </option>
+            ))}
           </select>
         </div>
         <div className="flex-1">
