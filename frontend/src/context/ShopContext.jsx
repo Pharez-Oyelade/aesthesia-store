@@ -66,6 +66,7 @@ const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [wishlist, setWishlist] = useState([]);
   const [products, setProducts] = useState([]);
+  const [collection, setCollection] = useState([]);
   const [token, setToken] = useState("");
   const [userData, setUserData] = useState({ name: "", email: "" });
   const navigate = useNavigate();
@@ -373,6 +374,24 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  const getCollectionData = async () => {
+    try {
+      const response = await axios.get(backendUrl + "/api/section/list");
+      if (response.data.success) {
+        // backend may return the sections under different keys depending on API version
+        const sectionsData =
+          response.data.categories ?? response.data.sections ?? [];
+        // ensure we always set an array to avoid runtime errors in consumers
+        setCollection(Array.isArray(sectionsData) ? sectionsData : []);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
   const getUserCart = async (token) => {
     try {
       const response = await api.post("/api/cart/get", {});
@@ -454,9 +473,9 @@ const ShopContextProvider = (props) => {
     }
   };
 
-  // useEffect(() => {
-  //   getSections();
-  // }, [backendUrl]);
+  useEffect(() => {
+    getCollectionData();
+  }, [backendUrl]);
 
   useEffect(() => {
     if (selectedLocation && deliveryFees[selectedLocation] !== undefined) {
@@ -567,6 +586,7 @@ const ShopContextProvider = (props) => {
 
   const value = {
     products,
+    collection,
     // currency,
     currency: currencySymbols[currencyCode],
     currencyCode,

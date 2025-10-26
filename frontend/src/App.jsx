@@ -22,6 +22,8 @@ import Orders from "./pages/Orders";
 import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import PreNav from "./components/Prenav";
+import CollectionPage from "./pages/CollectionPage";
 
 const App = () => {
   const navigate = useNavigate();
@@ -35,6 +37,7 @@ const App = () => {
     <div>
       <ToastContainer />
       <ScrollToTop />
+      <PreNav />
       <Navbar />
       <SearchBar />
       {isHome || isClothing || isWig || isRere || isJewelry ? (
@@ -52,6 +55,10 @@ const App = () => {
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/product/:productId" element={<Product />} />
+            <Route
+              path="/collection/:sectionName"
+              element={<CollectionPage />}
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/wishlist" element={<Wishlist />} />

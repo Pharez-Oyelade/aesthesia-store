@@ -1,45 +1,93 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { assets } from "../assets/assets";
 
-const Banner = () => {
+const Banner = ({
+  image,
+  bannerText,
+  overlayStyle = "dark", // dark, gradient-1, gradient-2, gradient-3
+  textSize = "default", // small, default, large
+  textStyle = "default", // default, elegant, bold, minimal
+  verticalPosition = "25%", // Control image vertical position
+}) => {
+  const [isLoaded, setIsLoaded] = useState(false);
   const location = useLocation();
 
-  let background, text;
+  useEffect(() => {
+    setIsLoaded(false);
+    const img = new Image();
+    img.src = image;
+    img.onload = () => setIsLoaded(true);
+  }, [image]);
 
-  if (location.pathname === "/clothing") {
-    background = assets.bg_3_main;
-    text = "CLOTHINGS";
-  } else if (location.pathname === "/wigs") {
-    background = assets.hair_bg;
-    text = "WIGS";
-  } else if (location.pathname === "/jewelry") {
-    background = assets.jewelry_bg;
-    text = "JEWELRY";
-  } else if (location.pathname === "/rere-collection") {
-    background = assets.bg_1_main;
-    text = "RERE COLLECTION";
-  } else if (location.pathname === "/about") {
-    background = assets.bg_main_1;
-    text = "ABOUT US";
-  }
+  // Overlay styles
+  const overlayStyles = {
+    dark: "bg-black/30",
+    "gradient-1": "bg-gradient-to-b from-black/50 to-transparent",
+    "gradient-2": "bg-gradient-to-b from-black/40 via-black/20 to-black/40",
+    "gradient-3": "bg-gradient-to-r from-black/40 via-transparent to-black/40",
+  };
+
+  // Text size styles
+  const textSizes = {
+    small: "text-3xl md:text-4xl",
+    default: "text-4xl md:text-5xl lg:text-6xl",
+    large: "text-5xl md:text-6xl lg:text-7xl",
+  };
+
+  // Text style variants
+  const textStyles = {
+    default: "font-bold text-white drop-shadow-lg",
+    elegant: "font-light text-white tracking-wider drop-shadow-md",
+    bold: "font-extrabold text-white uppercase tracking-tight drop-shadow-xl",
+    minimal: "font-medium text-white/90 tracking-normal",
+  };
 
   return (
     <div
+      className="relative min-h-[400px] h-[50vh] md:h-[60vh] lg:h-[60vh] overflow-hidden"
       style={{
-        backgroundImage: `url(${background})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        height: "300px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "#fff",
-        marginTop: "0",
-        paddingTop: "0",
+        width: "100vw",
+        position: "relative",
+        left: "50%",
+        right: "50%",
+        marginLeft: "-50vw",
+        marginRight: "-50vw",
+        zIndex: 0,
       }}
     >
-      <h1 className="text-5xl">{text}</h1>
+      {/* Image container with overlay (full-bleed) */}
+      <div
+        className={`absolute inset-0 transition-opacity duration-1000 ${
+          isLoaded ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <img
+          src={image}
+          alt={bannerText}
+          className="w-full h-full object-cover object-center transition-transform duration-[2s] hover:scale-105"
+          style={{
+            objectPosition: `50% ${verticalPosition}`,
+          }}
+          onLoad={() => setIsLoaded(true)}
+        />
+        {/* Gradient/Dark overlay */}
+        <div
+          className={`absolute inset-0 ${overlayStyles[overlayStyle]}`}
+        ></div>
+      </div>
+
+      {/* Text container with animation */}
+      <div
+        className={`relative h-full flex items-center justify-center px-4 transition-all duration-1000 transform ${
+          isLoaded ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+        }`}
+      >
+        <h1
+          className={`${textSizes[textSize]} ${textStyles[textStyle]} text-center max-w-4xl`}
+        >
+          {bannerText}
+        </h1>
+      </div>
     </div>
   );
 };
