@@ -7,32 +7,32 @@ import { motion } from "framer-motion";
 const FeaturedGrid = () => {
   const images = [
     assets.bg_1_main,
-    assets.jewelry_bg,
-    assets.hair_bg,
     assets.bg_3_main,
+    // assets.jewelry_bg,
+    // assets.hair_bg,
   ];
 
   const overlays = [
     {
-      title: "PLATINUM COLLECTION",
-      desc: "Elevate Your Everyday, Modern Classics Reimagined",
-      link: "/rere-collection",
+      title: "THE RERE COLLECTION",
+      desc: "Where new life meets timeless grace",
+      link: "/collection/the rere collection",
     },
     {
-      title: "Jewelry",
-      desc: "Explore our latest jewelry collection.",
-      link: "/jewelry",
+      title: "THE COLOR CODE COLLECTION",
+      desc: "Where Color becomes emotion- and emotion becomes you",
+      link: "/collection/the color code collection",
     },
-    {
-      title: "Hair Wigs",
-      desc: "Transform your look with our premium hair wigs.",
-      link: "/wigs",
-    },
-    {
-      title: "Clothings",
-      desc: "Discover our exclusive clothing line.",
-      link: "/clothing",
-    },
+    // {
+    //   title: "Hair Wigs",
+    //   desc: "Transform your look with our premium hair wigs.",
+    //   link: "/jewelry",
+    // },
+    // {
+    //   title: "Clothings",
+    //   desc: "Discover our exclusive clothing line.",
+    //   link: "/wigs",
+    // },
   ];
   return (
     <motion.div

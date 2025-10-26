@@ -34,7 +34,7 @@ const App = () => {
   const isJewelry = location.pathname === "/jewelry";
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <ToastContainer />
       <ScrollToTop />
       <PreNav />

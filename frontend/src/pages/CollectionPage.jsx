@@ -7,7 +7,8 @@ import Title from "../components/Title";
 
 const CollectionPage = () => {
   const { sectionName } = useParams();
-  const { collection, products } = useContext(shopContext);
+  const { collection, products, convertPrice, currency } =
+    useContext(shopContext);
   const [loading, setLoading] = useState(true);
   const [collectionData, setCollectionData] = useState(null);
   const [sectionProducts, setSectionProducts] = useState([]);
@@ -110,7 +111,8 @@ const CollectionPage = () => {
                   </p>
                 </div>
                 <p className="text-sm font-medium text-gray-900">
-                  ₦{product.price.toLocaleString()}
+                  {currency}
+                  {convertPrice(product.price)}
                 </p>
               </div>
             </div>

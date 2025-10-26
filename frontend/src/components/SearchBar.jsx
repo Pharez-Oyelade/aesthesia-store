@@ -19,7 +19,7 @@ const SearchBar = () => {
   }, [location]);
 
   return showSearch && isVisible ? (
-    <div className="px-4 mt-20 pt-5">
+    <div className="px-4 mt-35 pt-5">
       <div className="w-full text-center">
         <div className="inline-flex items-center justify-center border border-gray-400 bg-white px-5 py-2 mx-3 rounded-full w-3/4 sm:w-1/2">
           <input

@@ -264,13 +264,39 @@ const Navbar = () => {
             >
               HOME
             </NavLink>
-            <NavLink
-              onClick={() => setIsVisible(false)}
-              className="py-2 pl-6"
-              to="/collection"
-            >
-              COLLECTION
-            </NavLink>
+            <div className="py-2">
+              <NavLink
+                onClick={() => setIsVisible(false)}
+                className="py-2 pl-6 flex items-center justify-between"
+                to="/collection"
+              >
+                <span>COLLECTION</span>
+              </NavLink>
+
+              {/* Mobile: show subsections under COLLECTION */}
+              {collection && collection.length > 0 && (
+                <div className="pl-10 pt-2 pb-2 flex flex-col gap-2 border-l border-gray-100">
+                  {collection.map((col, idx) => {
+                    const name =
+                      typeof col === "string" ? col : col?.name || "";
+                    if (!name) return null;
+                    const key = col?._id || col?.id || `${name}-${idx}`;
+                    return (
+                      <Link
+                        key={key}
+                        to={`/collection/${encodeURIComponent(
+                          name.toLowerCase()
+                        )}`}
+                        onClick={() => setIsVisible(false)}
+                        className="text-sm text-gray-700 py-1 pl-1 hover:underline"
+                      >
+                        {name}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
             <NavLink
               onClick={() => setIsVisible(false)}
               className="py-2 pl-6"

@@ -10,7 +10,7 @@ import SortSelect from "../components/SortSelect";
 const PRODUCTS_PER_PAGE = 20;
 
 const Collection = () => {
-  const { products, search, showSearch } = useContext(shopContext);
+  const { products, search, showSearch, collection } = useContext(shopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
   const [sectionFilter, setSectionFilter] = useState([]); // was category
@@ -145,46 +145,30 @@ const Collection = () => {
           >
             <p className="mb-3 text-sm font-medium text-gray-700">SECTIONS</p>
             <div className="flex flex-col gap-3 text-sm font-light text-gray-700">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  className="w-4 h-4 accent-red-600"
-                  type="checkbox"
-                  value={"clothes"}
-                  onChange={toggleSection}
-                  checked={sectionFilter.includes("clothes")}
-                />
-                Clothing
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  className="w-4 h-4 accent-red-600"
-                  type="checkbox"
-                  value={"wigs"}
-                  onChange={toggleSection}
-                  checked={sectionFilter.includes("wigs")}
-                />
-                Wigs
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  className="w-4 h-4 accent-red-600"
-                  type="checkbox"
-                  value={"jewelry"}
-                  onChange={toggleSection}
-                  checked={sectionFilter.includes("jewelry")}
-                />
-                Jewelry
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  className="w-4 h-4 accent-red-600"
-                  type="checkbox"
-                  value={"rere-collection"}
-                  onChange={toggleSection}
-                  checked={sectionFilter.includes("rere-collection")}
-                />
-                Rere Collection
-              </label>
+              {collection.map((section, index) => {
+                // support both string and object section representations
+                const displayName =
+                  typeof section === "string" ? section : section?.name || "";
+                const inputId = `section-${index}-${String(displayName).replace(
+                  /\s+/g,
+                  "-"
+                )}`;
+                return (
+                  <div
+                    key={section?._id ?? index}
+                    className="flex items-center gap-2"
+                  >
+                    <input
+                      type="checkbox"
+                      id={inputId}
+                      value={displayName}
+                      checked={sectionFilter.includes(displayName)}
+                      onChange={toggleSection}
+                    />
+                    <label htmlFor={inputId}>{displayName}</label>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </aside>
