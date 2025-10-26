@@ -168,6 +168,8 @@ const PlaceOrder = () => {
       );
       if (res.data.success) {
         setCartItems({});
+        setSelectedCountry("");
+        setSelectedLocation("");
         navigate("/orders");
       } else {
         toast.error(res.data.message);
