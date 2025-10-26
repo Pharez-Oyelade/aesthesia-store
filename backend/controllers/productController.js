@@ -1,5 +1,8 @@
 import { v2 as cloudinary } from "cloudinary";
+
 import productModel from "../models/productModel.js";
+import sectionModel from "../models/sectionModel.js";
+import mongoose from "mongoose";
 
 // add a new product
 const addProduct = async (req, res) => {
@@ -58,6 +61,15 @@ const addProduct = async (req, res) => {
       })
     );
 
+    // If section is an ObjectId, look up the section name
+    let sectionName = section;
+    if (section && mongoose.Types.ObjectId.isValid(section)) {
+      const sectionDoc = await sectionModel.findById(section);
+      if (sectionDoc && sectionDoc.name) {
+        sectionName = sectionDoc.name;
+      }
+    }
+
     const productData = {
       name,
       description,
@@ -67,7 +79,7 @@ const addProduct = async (req, res) => {
       onSale: onSale === true || onSale === "true" ? true : false,
       salePrice: salePrice ? Number(salePrice) : 0,
       price: Number(price),
-      section,
+      section: sectionName,
       bestseller: bestseller === true || bestseller === "true" ? true : false,
       preorder: preorder === true || preorder === "true" ? true : false,
       sizes: JSON.parse(sizes),
