@@ -475,7 +475,7 @@ const Product = () => {
           className="max-w-6xl mx-auto mt-12 bg-white rounded-2xl shadow-lg p-8"
         >
           <div></div>
-          <div className="flex gap-10 border-b pb-4 mb-6">
+          <div className="flex gap-5 border-b pb-4 mb-6">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
