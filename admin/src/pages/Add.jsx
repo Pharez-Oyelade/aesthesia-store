@@ -15,7 +15,7 @@ const Add = ({ token }) => {
   const [specificDetails, setSpecificDetails] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [section, setSection] = useState("clothes");
+  const [section, setSection] = useState("");
   const [bestseller, setBestseller] = useState(false);
   const [preorder, setPreorder] = useState(false);
   const [sizes, setSizes] = useState([]);
