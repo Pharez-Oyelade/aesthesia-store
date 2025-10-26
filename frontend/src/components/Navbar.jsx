@@ -241,9 +241,9 @@ const Navbar = () => {
         </div>
 
         <div
-          className={`absolute top-0 right-0 bottom-0 h-screen overflow-hidden text-gray-700 bg-white transition-all ${
-            isVisible ? "w-full" : "w-0"
-          } `}
+          className={`fixed inset-0 z-50 overflow-auto text-gray-700 bg-white transition-transform transform ${
+            isVisible ? "translate-x-0" : "translate-x-full"
+          }`}
         >
           <div className="flex flex-col">
             <div
@@ -275,7 +275,7 @@ const Navbar = () => {
 
               {/* Mobile: show subsections under COLLECTION */}
               {collection && collection.length > 0 && (
-                <div className="pl-10 pt-2 pb-2 flex flex-col gap-2 border-l border-gray-100">
+                <div className="pl-4 pt-2 pb-2 flex flex-col gap-2 border-l border-gray-100">
                   {collection.map((col, idx) => {
                     const name =
                       typeof col === "string" ? col : col?.name || "";
