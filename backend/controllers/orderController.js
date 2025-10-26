@@ -3,10 +3,12 @@ import userModel from "../models/userModel.js";
 import axios from "axios";
 import { sendOrderConfirmationEmail } from "../services/emailService.js";
 import { sendOrderStatusEmail } from "../services/emailService.js";
+import { sendNewOrderAdminNotification } from "../services/emailService.js";
 
 // Placing an order with cash on delivery
 
 const placeOrder = async (req, res) => {
+  let newOrder = null;
   try {
     const { userId, items, amount, address } = req.body;
 
@@ -20,7 +22,7 @@ const placeOrder = async (req, res) => {
       date: Date.now(),
     };
 
-    const newOrder = new orderModel(orderData);
+    newOrder = new orderModel(orderData);
     await newOrder.save();
 
     await userModel.findByIdAndUpdate(userId, { cartData: {} });
@@ -38,6 +40,12 @@ const placeOrder = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
+  }
+
+  try {
+    await sendNewOrderAdminNotification({ order: newOrder });
+  } catch (error) {
+    console.log("Failed to send admin notification:", error.message);
   }
 };
 
@@ -84,6 +92,12 @@ const placeOrderPaystack = async (req, res) => {
         }
       } catch (error) {
         console.log(error);
+      }
+
+      try {
+        await sendNewOrderAdminNotification({ order: newOrder });
+      } catch (error) {
+        console.log("Failed to send admin notification:", error.message);
       }
 
       return res.json({ success: true, message: "Order Placed" });

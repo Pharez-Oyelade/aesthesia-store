@@ -15,6 +15,8 @@ const Product = () => {
     addToWishlist,
     formatPrice,
     convertPrice,
+    token,
+    navigate,
   } = useContext(shopContext);
 
   // Find product after products are loaded
@@ -113,6 +115,7 @@ const Product = () => {
       requiresMeasurements ? measurements : {},
       quantity
     );
+    navigate("/cart");
   };
 
   // Loading state
@@ -437,15 +440,26 @@ const Product = () => {
                     </button>
                   </div>
                   <button
-                    onClick={handleAddToCart}
+                    onClick={
+                      !token ? () => navigate("/login") : handleAddToCart
+                    }
                     className="w-full md:w-auto bg-gradient-to-r from-red-700 to-red-500 hover:from-red-800 hover:to-red-600 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95 mt-4"
                     disabled={productData.soldOut}
                   >
-                    {productData.soldOut
+                    {!token
+                      ? "Login to Add to Cart"
+                      : `${
+                          productData.soldOut
+                            ? "Sold Out"
+                            : productData.preorder
+                            ? "Preorder Now"
+                            : "Add to Cart"
+                        }`}
+                    {/* {productData.soldOut
                       ? "Sold Out"
                       : productData.preorder
                       ? "Preorder Now"
-                      : "Add to Cart"}
+                      : "Add to Cart"} */}
                   </button>
                 </div>
               )}
