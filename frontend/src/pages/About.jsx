@@ -24,12 +24,12 @@ const About = () => {
 
   return (
     <div className="bg-gradient-to-br from-white to-gray-100 min-h-screen">
-      <Banner />
+      {/* <Banner image={assets.about_banner} bannerText="About Us" /> */}
 
       <div className="max-w-5xl mx-auto px-4">
-        {/* <div className="text-3xl text-center pt-12 pb-4">
+        <div className="text-3xl text-center pt-12 pb-4">
           <Title text1={"ABOUT"} text2={"US"} />
-        </div> */}
+        </div>
 
         <div className="my-12 flex flex-col md:flex-row gap-12 items-center bg-white rounded-3xl shadow-xl p-8">
           <img
