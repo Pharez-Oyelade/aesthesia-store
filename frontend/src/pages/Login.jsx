@@ -24,6 +24,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [returnUrl, setReturnUrl] = useState("/");
 
   const [marketingConsent, setMarketingConsent] = useState(false);
 
@@ -95,10 +96,19 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (token) {
-      navigate("/");
+    // Get return URL if it exists
+    const savedReturnUrl = localStorage.getItem("returnUrl");
+    if (savedReturnUrl) {
+      setReturnUrl(savedReturnUrl);
+      localStorage.removeItem("returnUrl"); // Clear it after getting it
     }
-  }, [token]);
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      navigate(returnUrl || "/");
+    }
+  }, [token, navigate, returnUrl]);
 
   return (
     <div className="">
