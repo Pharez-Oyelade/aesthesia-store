@@ -96,6 +96,10 @@ const Product = () => {
   // Add to cart handler
   const handleAddToCart = (e) => {
     e.preventDefault();
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     if (availableSizes.length > 0 && !size) {
       alert("Please select a size");
       return;
