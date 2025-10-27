@@ -10,7 +10,14 @@
     />
     <meta name="robots" content="index, follow" />
     <title>Aesthesia Haven</title>
-    <script src="https://js.paystack.co/v1/inline.js"></script>
+
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://js.paystack.co" />
+    <link rel="dns-prefetch" href="https://js.paystack.co" />
+    <link rel="preload" as="image" href="./src/assets/bg-main-1.webp" />
+
+    <!-- Load critical script asynchronously -->
+    <script src="https://js.paystack.co/v1/inline.js" async defer></script>
   </head>
   <body>
     <div id="root"></div>

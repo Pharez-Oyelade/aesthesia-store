@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -45,6 +45,12 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const nextIndex = (current + 1) % slides.length;
+    const nextImg = new Image();
+    nextImg.src = slides[nextIndex].image;
+  }, [current]);
+
   const { image, title, subtitle, b_text, link } = slides[current];
 
   // Variants for staggered text animation
@@ -70,8 +76,11 @@ const Hero = () => {
         <motion.div
           key={image}
           className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${image})` }}
-          initial={{ scale: 1.15 }}
+          style={{
+            backgroundImage: `url(${image})`,
+            willChange: "transform, opacity",
+          }}
+          initial={{ scale: 1.05 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1, ease: "easeInOut" }}
         />
