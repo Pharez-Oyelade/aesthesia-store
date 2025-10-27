@@ -17,7 +17,7 @@ const app = express();
 const port = process.env.PORT || 4000;
 const allowedOrigins = [
   "https://aesthesia-haven.vercel.app",
-  "https://aesthesia-admin.vercel.app",
+  "https://aesthesia-admin-panel.vercel.app",
 ];
 connectDB();
 connectCloudinary();
