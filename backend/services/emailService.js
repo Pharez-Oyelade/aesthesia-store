@@ -1,212 +1,3 @@
-// import { Resend } from "resend";
-
-// function isEmailNotificationsEnabled() {
-//   return process.env.EMAIL_NOTIFICATIONS_ENABLED === "true";
-// }
-
-// const resend = new Resend(process.env.RESEND_API_KEY);
-// const FROM_EMAIL = process.env.FROM_EMAIL;
-
-// // --- ORDER CONFIRMATION ---
-// export async function sendOrderConfirmationEmail({ to, order }) {
-//   if (!isEmailNotificationsEnabled()) return;
-//   const subject = `Order Confirmation #${order._id}`;
-//   const html = orderConfirmationTemplate(order);
-//   return sendEmail({ to, subject, html });
-// }
-
-// // --- ORDER STATUS UPDATE ---
-// export async function sendOrderStatusEmail({ to, orderId, newStatus }) {
-//   if (!isEmailNotificationsEnabled()) return;
-//   const subject = `Your Order #${orderId} Status Has Been Updated`;
-//   const html = orderStatusTemplate(orderId, newStatus);
-//   return sendEmail({ to, subject, html });
-// }
-
-// // ADMIN NOTIFICATION FOR NEW ORDER
-// export async function sendNewOrderAdminNotification({ order }) {
-//   if (!isEmailNotificationsEnabled()) return;
-//   const to = process.env.ADMIN_EMAIL_ADDRESS;
-//   const subject = `New Order Received #${order._id}`;
-//   const html = adminOrderConfirmationTemplate(order);
-//   return sendEmail({ to, subject, html });
-// }
-
-// //  --- SEND PASSWORD RESET EMAIL ---
-// export async function sendPasswordResetEmail({ to, resetUrl }) {
-//   const subject = "Password Reset Request";
-//   const html = passwordResetTemplate(resetUrl);
-//   return sendEmail({ to, subject, html });
-// }
-
-// async function sendEmail({ to, subject, html }) {
-//   if (!process.env.RESEND_API_KEY || !FROM_EMAIL) {
-//     throw new Error(
-//       "Email not configured (RESEND_API_KEY or FROM_EMAIL missing)."
-//     );
-//   }
-
-//   const { error } = await resend.emails.send({
-//     from: FROM_EMAIL,
-//     to: Array.isArray(to) ? to : [to],
-//     subject,
-//     html,
-//   });
-
-//   if (error) throw error;
-//   return true;
-// }
-
-// // --- EMAIL TEMPLATES ---
-// function orderConfirmationTemplate(order) {
-//   const itemsList = (order.items || [])
-//     .map(
-//       (it) => `
-//       <tr>
-//         <td style="padding: 8px 0;">${it.name || it.title}</td>
-//         <td style="padding: 8px 0; text-align:center;">${it.quantity || 1}</td>
-//         <td style="padding: 8px 0; text-align:right;">${
-//           it.price ? `₦${it.price}` : ""
-//         }</td>
-//       </tr>`
-//     )
-//     .join("");
-
-//   return `
-//   <div style="font-family:Arial, sans-serif; background-color:#f8f9fa; padding:20px;">
-//     <table style="max-width:600px; margin:auto; background:#fff; border-radius:8px; overflow:hidden;">
-//       <tr>
-//         <td style="background-color:#111827; color:white; padding:20px 30px;">
-//           <h2 style="margin:0;">Thank You for Your Order!</h2>
-//           <p style="margin:4px 0 0;">Order #${order._id}</p>
-//         </td>
-//       </tr>
-//       <tr>
-//         <td style="padding:30px;">
-//           <p>Hi there,</p>
-//           <p>Your order has been successfully placed. Below are your order details:</p>
-
-//           <h3 style="margin-top:30px;">Order Summary</h3>
-//           <table style="width:100%; border-collapse:collapse;">
-//             <thead>
-//               <tr style="border-bottom:1px solid #ddd;">
-//                 <th style="text-align:left;">Item</th>
-//                 <th style="text-align:center;">Qty</th>
-//                 <th style="text-align:right;">Price</th>
-//               </tr>
-//             </thead>
-//             <tbody>${itemsList}</tbody>
-//           </table>
-
-//           <p style="margin-top:20px; font-size:16px;">
-//             <strong>Total:</strong> ₦${order.amount}
-//           </p>
-
-//           <h3 style="margin-top:30px;">Shipping Details</h3>
-//           <pre style="background:#f1f1f1; padding:10px; border-radius:6px; font-size:14px;">
-// ${safeJson(order.address)}
-//           </pre>
-
-//           <p style="margin-top:30px;">We'll send another email once your order is shipped.</p>
-//         <p style="margin-top:40px;">Cheers,<br><strong>Aesthesia Haven Team</strong></p>
-//         </td>
-//       </tr>
-//       <tr>
-//         <td style="background:#f3f4f6; text-align:center; padding:15px; font-size:12px; color:#555;">
-//           © ${new Date().getFullYear()} Aesthesia Haven — All rights reserved.
-//         </td>
-//       </tr>
-//     </table>
-//   </div>
-//   `;
-// }
-
-// function orderStatusTemplate(orderId, newStatus) {
-//   return `
-//   <div style="font-family:Arial, sans-serif; background-color:#f8f9fa; padding:20px;">
-//     <table style="max-width:600px; margin:auto; background:#fff; border-radius:8px; overflow:hidden;">
-//       <tr>
-//         <td style="background-color:#111827; color:white; padding:20px 30px;">
-//           <h2 style="margin:0;">Order Update</h2>
-//         </td>
-//       </tr>
-//       <tr>
-//         <td style="padding:30px;">
-//           <p>Hi there,</p>
-//           <p>Your order <strong>#${orderId}</strong> has been updated.</p>
-//           <p>The new status is:</p>
-//           <div style="background:#e0f2fe; color:#0369a1; padding:10px 15px; border-radius:5px; display:inline-block;">
-//             <strong>${newStatus}</strong>
-//           </div>
-
-//           <p style="margin-top:30px;">You can view your order status on your account dashboard.</p>
-//           <p style="margin-top:40px;">Best regards,<br><strong>Aesthesia Haven Team</strong></p>
-//         </td>
-//       </tr>
-//       <tr>
-//         <td style="background:#f3f4f6; text-align:center; padding:15px; font-size:12px; color:#555;">
-//           © ${new Date().getFullYear()} Aesthesia Haven — All rights reserved.
-//         </td>
-//       </tr>
-//     </table>
-//   </div>
-//   `;
-// }
-
-// function passwordResetTemplate(resetUrl) {
-//   return `
-//     <div style="font-family:Arial, sans-serif; background-color:#f8f9fa; padding:20px;">
-//       <table style="max-width:600px; margin:auto; background:#fff; border-radius:8px; overflow:hidden;">
-//         <tr>
-//           <td style="background-color:#111827; color:white; padding:20px 30px;">
-//             <h2 style="margin:0;">Password Reset Request</h2>
-//           </td>
-//         </tr>
-//         <tr>
-//           <td style="padding:30px;">
-//             <p>Hi there,</p>
-//             <p>You requested a password reset for your Aesthesia Haven account.</p>
-
-//             <div style="text-align:center; margin:30px 0;">
-//               <a href="${resetUrl}"
-//                  style="background-color:#111827; color:white; padding:12px 30px; text-decoration:none; border-radius:6px; display:inline-block; font-weight:bold;">
-//                 Reset Your Password
-//               </a>
-//             </div>
-
-//             <p style="color:#666; font-size:14px;">
-//               <strong>Important:</strong> This link will expire in 1 hour for security reasons.
-//             </p>
-
-//             <p style="color:#666; font-size:14px;">
-//               If you didn't request this password reset, please ignore this email. Your password will remain unchanged.
-//             </p>
-
-//             <p style="margin-top:40px;">Best regards,<br><strong>Aesthesia Haven Team</strong></p>
-//           </td>
-//         </tr>
-//         <tr>
-//           <td style="background:#f3f4f6; text-align:center; padding:15px; font-size:12px; color:#555;">
-//             © ${new Date().getFullYear()} Aesthesia Haven — All rights reserved.
-//           </td>
-//         </tr>
-//       </table>
-//     </div>
-//     `;
-// }
-
-// // function adminOrderConfirmationTemplate(order) {
-
-// // }
-
-// function safeJson(obj) {
-//   try {
-//     return JSON.stringify(obj || {}, null, 2);
-//   } catch {
-//     return "";
-//   }
-// }
-
 import { Resend } from "resend";
 
 function isEmailNotificationsEnabled() {
@@ -523,7 +314,7 @@ function orderConfirmationTemplate(order) {
             <tr>
               <td style="background: #f9fafb; padding: 30px; text-align: center; border-top: 1px solid #e5e7eb;">
                 <p style="margin: 0 0 8px; color: #111827; font-size: 16px; font-weight: 600;">Aesthesia Haven</p>
-                <p style="margin: 0 0 16px; color: #6b7280; font-size: 13px;">Curating beauty, delivering excellence</p>
+                <p style="margin: 0 0 16px; color: #6b7280; font-size: 13px;">Embrace Your Beautiful</p>
                 <p style="margin: 0; color: #9ca3af; font-size: 12px;">
                   © ${new Date().getFullYear()} Aesthesia Haven. All rights reserved.
                 </p>
@@ -547,6 +338,12 @@ function orderStatusTemplate(orderId, newStatus) {
       icon: "⏳",
       message: "Your order is being processed",
     },
+    processed: {
+      color: "#3b82f6",
+      bg: "#dbeafe",
+      icon: "📦",
+      message: "Your order has been processed",
+    },
     shipped: {
       color: "#8b5cf6",
       bg: "#ede9fe",
@@ -556,7 +353,7 @@ function orderStatusTemplate(orderId, newStatus) {
     delivered: {
       color: "#10b981",
       bg: "#d1fae5",
-      icon: "✅",
+      icon: "📦✅",
       message: "Your order has been delivered",
     },
     cancelled: {
