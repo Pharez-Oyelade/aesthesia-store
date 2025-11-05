@@ -56,11 +56,7 @@ const Banner = ({
       }}
     >
       {/* Image container with overlay (full-bleed) */}
-      <div
-        className={`absolute inset-0 transition-opacity duration-1000 ${
-          isLoaded ? "opacity-100" : "opacity-0"
-        }`}
-      >
+      <div className={`absolute inset-0`}>
         <img
           src={image}
           alt={bannerText}
