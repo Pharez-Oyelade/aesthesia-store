@@ -12,23 +12,25 @@ import mailRouter from "./routes/mailchimpRoute.js";
 import compression from "compression";
 import sectionRouter from "./routes/sectionRoute.js";
 
-// App configuration
-const app = express();
+const app = express(); // ✅ MUST be first before using middleware
 const port = process.env.PORT || 4000;
+
 const allowedOrigins = [
   "https://aesthesia-haven.vercel.app",
   "https://aesthesia-admin-panel.vercel.app",
+  "http://localhost:5173",
 ];
+
 connectDB();
 connectCloudinary();
 
-// Response compression
+// ✅ Compression first
 app.use(compression());
 
-// Middleware
+// ✅ CORS next
 app.use(
   cors({
-    origin: function (origin, callback) {
+    origin: (origin, callback) => {
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
@@ -40,41 +42,31 @@ app.use(
   })
 );
 
-// Add caching headers middleware
+// ✅ JSON body parser
+app.use(express.json());
+
+// ✅ Caching after JSON parsing
 app.use((req, res, next) => {
-  // Cache static assets for 1 year
   if (
     req.path.match(
       /\.(jpg|jpeg|png|gif|webp|svg|ico|css|js|woff|woff2|ttf|eot)$/
     )
   ) {
     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-  }
-  // Cache API responses for shorter periods
-  else if (req.path.startsWith("/api/product")) {
-    // Product data cached for 1 hour
+  } else if (req.path.startsWith("/api/product")) {
     res.setHeader("Cache-Control", "public, max-age=3600");
   } else if (req.path.startsWith("/api/section")) {
-    // Section data cached for 12 hours
     res.setHeader("Cache-Control", "public, max-age=43200");
-  }
-  // No cache for user-specific data
-  else {
+  } else {
     res.setHeader(
       "Cache-Control",
       "no-store, no-cache, must-revalidate, private"
     );
   }
-
-  // Add ETag support
-  res.setHeader("ETag", `"${Date.now()}"`);
-
   next();
 });
 
-app.use(express.json());
-
-// api endpoints
+// ✅ Routes
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 app.use("/api/cart", cartRouter);
@@ -83,17 +75,12 @@ app.use("/api/wishlist", wishlistRouter);
 app.use("/api/mailchimp", mailRouter);
 app.use("/api/section", sectionRouter);
 
+// ✅ Root route
 app.get("/", (req, res) => {
   res.send("Welcome to the API!");
 });
 
+// ✅ Start server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
-// Preventing Render from sleeping by pinging the server every 14 minutes
-setInterval(() => {
-  fetch("https://aesthesia-store-backend.onrender.com/")
-    .then(() => console.log("Self-ping to prevent sleep"))
-    .catch((err) => console.log("Self-ping failed:", err));
-}, 14 * 60 * 1000); //14 minutes in milliseconds
