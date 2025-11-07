@@ -31,33 +31,41 @@ const About = () => {
           <Title text1={"ABOUT"} text2={"US"} />
         </div>
 
-        <div className="my-12 flex flex-col md:flex-row gap-12 items-center bg-white rounded-3xl shadow-xl p-8">
-          <img
-            src={assets.about_img}
+        <div className="my-12 flex justify-center flex-col md:flex-row gap-12 items-center bg-white rounded-3xl shadow-xl p-8">
+          {/* <img
+            src={assets.bg_1_main}
             className="w-full md:max-w-[400px] rounded-2xl shadow-md object-cover"
             alt="About"
-          />
+          /> */}
           <div className="flex flex-col justify-center gap-6 md:w-2/3 text-gray-700">
             <p className="text-lg leading-relaxed">
-              We are super excited for you to meet us! <br /> Welcome to{" "}
-              <span className="text-[#691110]">Aesthesia,</span>
-              where beauty finds definition for what it truly is, taking on the
-              form and style of different individuals, and with every unique
-              signature, leaving a breathtaking trail. <br /> Here your style is
-              your expression, your statement to the world of the beauty you
-              express and exude, and when you do, you inspire the confidence in
-              others to embrace their beautiful. Aesthesia has been a proud
-              purveyor of premium beauty and fashion products for the past three
-              years (mainly clothing, hairs and accessories) and we are curating
-              a diversity of fashion products and styles in order to further
-              inspire your beauty.
+              There comes a point in every woman’s journey when she realizes
+              she’s been living through expectations that were never truly hers.
+              Trying to be enough. To look right. To belong. And somewhere along
+              the way, she forgets what it feels like to simply be. That’s the
+              ache <span className="text-red-800">Aesthesia</span> was born to
+              heal. We understand what it’s like to lose sight of your own
+              reflection — to wake up one day and realize you’ve been dimming to
+              fit into a world that was made brighter by your light. Aesthesia
+              is a gentle return — a space where every woman can see herself
+              again, in her color, in her confidence, in her truth.
             </p>
 
             <p className="text-lg">
-              We invite you to join us in our mission to redefine, amplify, and
-              simplify the essence of beauty. With our newly expanded range of
-              offerings, we promise to bring you not just products but a
-              lifestyle that lets you embrace your beautiful. your way
+              We design with feeling — pieces and products that carry softness
+              and strength, elegance and ease. Each one made to remind you of
+              who you’ve always been beneath the noise. Because beauty isn’t
+              about becoming someone new — it’s about coming home to yourself.
+            </p>
+
+            <p className="text-lg">
+              We began with a simple invitation: Embrace Your Beautiful. And as
+              we’ve grown, that truth has deepened — helping women see
+              themselves again, in color, in confidence, in becoming.
+            </p>
+
+            <p className="italic">
+              Aesthesia….Where women see themselves again.
             </p>
           </div>
         </div>
@@ -116,15 +124,15 @@ const About = () => {
             <p className="text-gray-600 text-base text-center">
               We are committed to delivering only the finest products, crafted
               with care and attention to detail. Every item is carefully
-              inspected to ensure it meets our high standards.
+              produced to ensure it meets our high standards.
             </p>
           </div>
           <div className="flex-1 bg-white rounded-2xl shadow-md px-8 py-10 flex flex-col gap-4 items-center border-t-4 border-pink-600">
             <b className="text-lg text-pink-600">Convenience</b>
             <p className="text-gray-600 text-base text-center">
-              Enjoy a seamless shopping experience with fast shipping, easy
-              returns, and responsive support. Shop from anywhere, anytime, and
-              let us handle the rest.
+              Enjoy a seamless shopping experience with fast shipping, and
+              responsive support. Shop from anywhere, anytime, and let us handle
+              the rest.
             </p>
           </div>
           <div className="flex-1 bg-white rounded-2xl shadow-md px-8 py-10 flex flex-col gap-4 items-center border-t-4 border-green-600">
@@ -159,8 +167,7 @@ const About = () => {
               </h4>
               <p className="text-gray-600">
                 Standard shipping typically takes 3-7 business days, depending
-                on your location. Express options are available at checkout for
-                faster delivery.
+                on your location.
               </p>
             </div>
             <div className="bg-white rounded-xl shadow-md p-6">
@@ -188,8 +195,8 @@ const About = () => {
               </h4>
               <p className="text-gray-600">
                 You can reach us via our contact form, email
-                (support@aesthesia.com), or by phone. Our team is available
-                Monday to Friday, 9am-6pm.
+                (aesthesiahaven@gmail.com), or by phone. Our team is available
+                Monday to Saturday, 9am-6pm.
               </p>
             </div>
           </div>

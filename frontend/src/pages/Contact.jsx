@@ -51,6 +51,7 @@ const Contact = () => {
                 <p className="flex gap-2 items-center mb-2">
                   <FaFacebookF />
                   <a
+                    target="_blank"
                     href="https://www.facebook.com/profile.php?id=61569345876696"
                     className="text-gray-600 text-md"
                   >
@@ -64,6 +65,7 @@ const Contact = () => {
                   <FaInstagram />
                   <div className="">
                     <a
+                      target="_blank"
                       href="https://www.instagram.com/aesthesia_haven"
                       className="underline"
                     >
@@ -72,6 +74,7 @@ const Contact = () => {
                     <br />
                     <a
                       href="https://www.instagram.com/aesthesia_hair"
+                      target="_blank"
                       className="underline"
                     >
                       aesthesia_hair

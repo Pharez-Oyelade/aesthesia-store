@@ -14,8 +14,11 @@ const Footer = () => {
             className="mb-5 w-20"
           />
           <p className="w-full md:w-2/3 text-gray-600">
-            Your Wardrobe deserves more than ordinary. At Aesthesia, we deliver
-            bold styles and soft elegance for women who know what they want.
+            Aesthesia…Where women see themselves again.
+          </p>
+          <p className="w-full md:w-2/3 text-gray-600">
+            a space where every woman can see herself again, in her color, in
+            her confidence, in her truth.
           </p>
         </div>
 
@@ -38,19 +41,15 @@ const Footer = () => {
         <div>
           <p className="text-xl font-medium mb-5">SHOP</p>
           <ul className="flex flex-col gap-1 text-color-gray-600">
-            <Link to="/clothing">
-              <li className="cursor-pointer">Clothings</li>
+            <Link to="/collection">
+              <li className="cursor-pointer">Collection</li>
             </Link>
-            <Link to="/jewelry">
-              <li className="cursor-pointer">Jewelry</li>
+            <Link to="/collection/the rere collection">
+              <li className="cursor-pointer">RERE Collection</li>
             </Link>
-            <Link to="/wigs">
-              <li className="cursor-pointer">Hair Wigs</li>
+            <Link to="/collection/the color code collection">
+              <li className="cursor-pointer">Color Code Collection</li>
             </Link>
-            <Link to="/rere-collection">
-              <li className="cursor-pointer">Rere Collection</li>
-            </Link>
-            <li className="cursor-pointer">Size Guide</li>
           </ul>
         </div>
 
@@ -58,17 +57,28 @@ const Footer = () => {
           <p className="text-xl font-medium mb-5">FOLLOW US</p>
           <ul className="flex flex-col gap-1 text-color-gray-600">
             <li className="cursor-pointer">
-              <a href="https://www.facebook.com/profile.php?id=61569345876696">
+              <a
+                href="https://www.facebook.com/profile.php?id=61569345876696"
+                target="_blank"
+              >
                 Facebook
               </a>
             </li>
 
             <li className="cursor-pointer">
-              <a href="https://www.instagram.com/aesthesia_haven">Instagram</a>
+              <a
+                href="https://www.instagram.com/aesthesia_haven"
+                target="_blank"
+              >
+                Instagram
+              </a>
             </li>
 
             <li className="cursor-pointer">
-              <a href="https://www.instagram.com/aesthesia_hair">
+              <a
+                href="https://www.instagram.com/aesthesia_hair"
+                target="_blank"
+              >
                 Aesthesia Hair
               </a>
             </li>
@@ -79,9 +89,11 @@ const Footer = () => {
       <div className="">
         <hr />
         <p className="py-5 text-sm text-center">
-          &copy; 2025 Aesthesia Haven - All Rights Reserved | website by{" "}
+          &copy; 2025{" "}
+          {new Date().getFullYear() > 2025 && `-${new Date().getFullYear()}`}
+          Aesthesia Haven - All Rights Reserved | website by{" "}
           <a
-            className="text-red-600"
+            className="text-red-600 font-bold underline"
             href="https://pharez-oyelade.github.io/my-portfolio/"
           >
             Pharez
