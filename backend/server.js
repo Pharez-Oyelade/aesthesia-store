@@ -19,6 +19,7 @@ const allowedOrigins = [
   "https://aesthesia-haven.vercel.app",
   "https://aesthesia-admin-panel.vercel.app",
   "http://localhost:5173",
+  "http://localhost:5174",
 ];
 
 connectDB();
@@ -54,7 +55,10 @@ app.use((req, res, next) => {
   ) {
     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
   } else if (req.path.startsWith("/api/product")) {
-    res.setHeader("Cache-Control", "public, max-age=3600");
+    res.setHeader(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, private"
+    );
   } else if (req.path.startsWith("/api/section")) {
     res.setHeader("Cache-Control", "public, max-age=43200");
   } else {
