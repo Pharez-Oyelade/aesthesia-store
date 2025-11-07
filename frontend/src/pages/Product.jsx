@@ -5,6 +5,10 @@ import { shopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
 
+// import { RxCaretLeft } from "react-icons/rx";
+// import { RxCaretRight } from "react-icons/rx";
+// import { IoMdClose } from "react-icons/io";
+
 const Product = () => {
   const { productId, id } = useParams();
   const {
@@ -34,6 +38,14 @@ const Product = () => {
   });
 
   const [activeTab, setActiveTab] = useState("description");
+  // const [isImageModal, setIsImageModal] = useState(false);
+  // const [modalIndex, setModalIndex] = useState(0);
+
+  // useEffect(() => {
+  //   const handleEsc = (e) => e.key === "Escape" && setIsImageModal(false);
+  //   window.addEventListener("keydown", handleEsc);
+  //   return () => window.removeEventListener("keydown", handleEsc);
+  // }, []);
 
   const tabs = [
     {
@@ -58,7 +70,7 @@ const Product = () => {
       case "story":
         return <p>{productData.story}</p>;
       case "size-guide":
-        return <p>size guide</p>;
+        return <img src={assets.size_chart} className="w-150 mx-auto" alt="" />;
       default:
         return null;
     }
@@ -275,7 +287,12 @@ const Product = () => {
                       <p className="text-sm text-gray-500">
                         *Click to Reference{" "}
                         <span className="text-[#691110] underline">
-                          <a href="#description">Size guide</a>
+                          <a
+                            onClick={() => setActiveTab("size-guide")}
+                            href="#description"
+                          >
+                            Size guide
+                          </a>
                         </span>
                       </p>
                     </div>
@@ -325,6 +342,7 @@ const Product = () => {
                 <p>
                   Need help choosing a size?{" "}
                   <a
+                    onClick={() => setActiveTab("size-guide")}
                     href="#size-guide"
                     className="underline font-medium text-blue-600 hover:text-blue-800"
                   >
@@ -524,6 +542,45 @@ const Product = () => {
           <RelatedProducts section={productData.section} />
         </div>
       </motion.div>
+      {/* {isImageModal && (
+        <div className="absolute w-full h-[100vh] top-0 left-0 bg-black/50 flex items-center justify-center">
+          <div className="relative flex items-center justify-center">
+            <button
+              onClick={() =>
+                setModalIndex((prev) =>
+                  prev === 0 ? productData.image.length - 1 : prev - 1
+                )
+              }
+              className="px-4 py-2 text-7xl font-bold cursor-pointer text-white"
+            >
+              <RxCaretLeft />
+            </button>
+            <img
+              src={productData.image[modalIndex]?.url}
+              alt="Product"
+              className="max-w-4xl mt-20 h-[60%] w-[50%] object-contain"
+              onClick={() => setIsImageModal(false)}
+            />
+            <button
+              onClick={() =>
+                setModalIndex((prev) =>
+                  prev === productData.image.length - 1 ? 0 : prev + 1
+                )
+              }
+              className=" px-4 py-2 text-7xl font-bold cursor-pointer text-white"
+            >
+              <RxCaretRight />
+            </button>
+
+            <button
+              onClick={() => setIsImageModal(false)}
+              className="absolute top-40 right-0 text-4xl cursor-pointer text-white"
+            >
+              <IoMdClose />
+            </button>
+          </div>
+        </div>
+      )} */}
     </AnimatePresence>
   );
 };
