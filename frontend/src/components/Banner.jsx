@@ -29,9 +29,9 @@ const Banner = ({
 
   // Text size styles
   const textSizes = {
-    small: "text-3xl md:text-4xl",
-    default: "text-4xl md:text-5xl lg:text-6xl",
-    large: "text-5xl md:text-6xl lg:text-7xl",
+    small: "text-2xl md:text-3xl",
+    default: "text-2xl md:text-3xl lg:text-4xl",
+    large: "text-2xl md:text-4xl lg:text-4xl",
   };
 
   // Text style variants
