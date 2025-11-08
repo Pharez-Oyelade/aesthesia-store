@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 const PAYSTACK_PUBLIC_KEY = "pk_test_c4b2eb84f0a0f617c83c345b25ba357a5169a821"; // replacing with live key
 
 const PlaceOrder = () => {
-  const [method, setMethod] = useState("cod");
+  const [method, setMethod] = useState("paystack");
 
   const {
     navigate,
@@ -376,7 +376,7 @@ const PlaceOrder = () => {
                   PAYSTACK
                 </span>
               </div>
-              <div
+              {/* <div
                 onClick={() => setMethod("cod")}
                 className={`flex items-center gap-3 border p-2 px-3 cursor-pointer ${
                   method === "cod" ? "border-green-400" : ""
@@ -390,7 +390,7 @@ const PlaceOrder = () => {
                 <p className="text-gray-500 text-sm font-medium mx-4">
                   CASH ON DELIVERY
                 </p>
-              </div>
+              </div> */}
             </div>
 
             <div className="w-full text-end mt-8">
@@ -404,17 +404,17 @@ const PlaceOrder = () => {
                   Pay with Paystack
                 </button>
               ) : (
-                <button
-                  type="submit"
-                  className="bg-black text-white px-16 py-3 text-sm"
-                >
-                  PLACE ORDER
-                </button>
+                // <button
+                //   type="submit"
+                //   className="bg-black text-white px-16 py-3 text-sm"
+                // >
+                //   PLACE ORDER
+                // </button>
+                <p className="text-sm text-right text-gray-700 pt-3">
+                  *select paystack for online payment
+                </p>
               )}
             </div>
-            <p className="text-sm text-right text-gray-700 pt-3">
-              *select paystack for online payment
-            </p>
           </div>
         </div>
       </form>
