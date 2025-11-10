@@ -151,6 +151,7 @@ const List = ({ token }) => {
                       setEditFields({
                         name: item.name || "",
                         description: item.description || "",
+                        specificDetails: item.specificDetails || "",
                         price: item.price || "",
                         section: item.section || "",
                         weight: item.weight || "",
@@ -182,7 +183,7 @@ const List = ({ token }) => {
       {/* Edit Product Modal */}
       {editProduct && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-transparent bg-opacity-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-transparent bg-opacity-50 overflow-scroll"
           style={{ backdropFilter: "blur(2px)" }}
         >
           <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative">
@@ -254,6 +255,32 @@ const List = ({ token }) => {
                   }
                 />
               </label>
+              {/* <label className="font-medium">
+                Description
+                <textarea
+                  className="w-full px-3 py-2 border rounded-lg mt-1"
+                  value={editFields.description || ""}
+                  onChange={(e) =>
+                    setEditFields((f) => ({
+                      ...f,
+                      description: e.target.value,
+                    }))
+                  }
+                />
+              </label> */}
+              <label className="font-medium">
+                Specific Details
+                <textarea
+                  className="w-full px-3 py-2 border rounded-lg mt-1"
+                  value={editFields.specificDetails || ""}
+                  onChange={(e) =>
+                    setEditFields((f) => ({
+                      ...f,
+                      specificDetails: e.target.value,
+                    }))
+                  }
+                />
+              </label>
               <label className="font-medium">
                 Weight
                 <input
@@ -278,20 +305,52 @@ const List = ({ token }) => {
                 />
               </label>
 
-              <label className="font-medium">
-                Bestseller
-                <input
-                  type="checkbox"
-                  className="ml-2 accent-red-600"
-                  checked={editFields.bestseller}
-                  onChange={(e) =>
-                    setEditFields((f) => ({
-                      ...f,
-                      bestseller: e.target.checked,
-                    }))
-                  }
-                />
-              </label>
+              <div className="grid grid-cols-2">
+                <label className="font-medium">
+                  Bestseller
+                  <input
+                    type="checkbox"
+                    className="ml-2 accent-red-600"
+                    checked={editFields.bestseller}
+                    onChange={(e) =>
+                      setEditFields((f) => ({
+                        ...f,
+                        bestseller: e.target.checked,
+                      }))
+                    }
+                  />
+                </label>
+                <label className="font-medium">
+                  Preorder
+                  <input
+                    type="checkbox"
+                    className="ml-2 accent-red-600"
+                    checked={editFields.preorder}
+                    onChange={(e) =>
+                      setEditFields((f) => ({
+                        ...f,
+                        preorder: e.target.checked,
+                      }))
+                    }
+                  />
+                </label>
+
+                <label htmlFor="" className="font-medium">
+                  Sold Out
+                  <input
+                    type="checkbox"
+                    className="ml-2 accent-red-600"
+                    checked={editFields.soldOut}
+                    onChange={(e) =>
+                      setEditFields((f) => ({
+                        ...f,
+                        soldOut: e.target.checked,
+                      }))
+                    }
+                  />
+                </label>
+              </div>
+
               <label className="font-medium">
                 On Sale
                 <input
@@ -326,36 +385,6 @@ const List = ({ token }) => {
                   />
                 </label>
               )}
-
-              <label className="font-medium">
-                Preorder
-                <input
-                  type="checkbox"
-                  className="ml-2 accent-red-600"
-                  checked={editFields.preorder}
-                  onChange={(e) =>
-                    setEditFields((f) => ({
-                      ...f,
-                      preorder: e.target.checked,
-                    }))
-                  }
-                />
-              </label>
-
-              <label htmlFor="" className="font-medium">
-                Sold Out
-                <input
-                  type="checkbox"
-                  className="ml-2 accent-red-600"
-                  checked={editFields.soldOut}
-                  onChange={(e) =>
-                    setEditFields((f) => ({
-                      ...f,
-                      soldOut: e.target.checked,
-                    }))
-                  }
-                />
-              </label>
 
               {/* more fields?*/}
               <div className="flex gap-2 mt-4">

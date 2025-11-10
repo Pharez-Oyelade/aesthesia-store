@@ -109,6 +109,8 @@ const updateProduct = async (req, res) => {
       id,
       name,
       description,
+      tagline,
+      specificDetails,
       price,
       section,
       sizes,
@@ -124,6 +126,7 @@ const updateProduct = async (req, res) => {
     const updateFields = {
       ...(name && { name }),
       ...(description && { description }),
+      ...(specificDetails && { specificDetails }),
       ...(price && { price: Number(price) }),
       ...(section && { section }),
       ...(sizes && { sizes: JSON.parse(sizes) }),
