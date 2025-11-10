@@ -143,13 +143,8 @@ const Product = () => {
   }
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className="bg-gradient-to-br from-white to-gray-100 min-h-screen py-10"
-      >
+    <div>
+      <div className="bg-gradient-to-br from-white to-gray-100 min-h-screen py-10">
         <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl p-8 md:p-12">
           <div className=" flex flex-col md:flex-row gap-12">
             {/* Product Images */}
@@ -547,7 +542,7 @@ const Product = () => {
         <div className="max-w-6xl mx-auto mt-12">
           <RelatedProducts section={productData.section} />
         </div>
-      </motion.div>
+      </div>
       {/* {isImageModal && (
         <div className="absolute w-full h-[100vh] top-0 left-0 bg-black/50 flex items-center justify-center">
           <div className="relative flex items-center justify-center">
@@ -587,7 +582,7 @@ const Product = () => {
           </div>
         </div>
       )} */}
-    </AnimatePresence>
+    </div>
   );
 };
 

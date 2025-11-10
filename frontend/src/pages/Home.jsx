@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Hero from "../components/Hero";
 import FeaturedGrid from "../components/FeaturedGrid";
@@ -16,12 +15,7 @@ const Home = () => {
       <div>
         <PromotionBanner />
       </div>
-      <motion.section
-        initial={{ opacity: 0, y: 100 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        viewport={{ once: true, amount: 0.3 }}
-      >
+      <div>
         <div className="text-center mt-20 border-y-2 w-[75%] m-auto py-10">
           <div className="text-2xl sm:text-3xl">
             <Title text1={"Modern Elegance"} text2={"Meets Timeless Style"} />
@@ -36,7 +30,7 @@ const Home = () => {
             <p className="text-red-700 pt-5 cursor-pointer">About Us</p>
           </Link>
         </div>
-      </motion.section>
+      </div>
 
       <NewProducts />
       <Policy />

@@ -347,6 +347,9 @@ const PlaceOrder = () => {
           <p className="text-sm text-gray-700">
             *Enter a valid email address to receive payment receipt
           </p>
+          <p className="text-md font-bold">
+            NOTE: This outfit requires 7 working days for production.
+          </p>
         </div>
 
         {/* .........RIGHT SIDE........ */}
