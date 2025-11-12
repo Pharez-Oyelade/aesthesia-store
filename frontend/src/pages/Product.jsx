@@ -539,7 +539,7 @@ const Product = () => {
           </div>
         </div>
         {/* Related Products */}
-        <div className="max-w-6xl mx-auto mt-12">
+        <div className="max-w-6xl mx-auto px-4 mt-12">
           <RelatedProducts section={productData.section} />
         </div>
       </div>
