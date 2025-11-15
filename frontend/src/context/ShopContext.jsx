@@ -25,16 +25,92 @@ const currencySymbols = {
 const supportedCurrencies = ["NGN", "USD", "GBP", "EUR"];
 
 const deliveryFees = {
-  "Lagos Mainland": 1000,
-  "Lagos Island": 1500,
-  Abuja: 2500,
-  Other: 3000,
+  "Lagos Island 1": 5000,
+  "Lagos Island 2": 7000,
+  "Lagos Island 3": 8000,
+  "Lagos Mainland 1": 4000,
+  "Lagos Mainland 2": 5000,
+  "Lagos Mainland 3": 6000,
 };
 
+const localDelivery = [
+  {
+    location: "Oyo",
+    price: 5000,
+    areas: ["Ojoo", "Ibadan", "Oke-Ado", "Ogbomosho"],
+  },
+  {
+    location: "Lagos Island 1",
+    price: 5000,
+    areas: ["Oniru", "Oriental", "Freedom Way", "Lekki Phase 1"],
+  },
+  {
+    location: "Lagos Island 2",
+    price: 7000,
+    areas: [
+      "Chevron",
+      "Agungi",
+      "Jakande",
+      "Ikate",
+      "Elegushi",
+      "Osapa London",
+      "Ogombo",
+      "Abraham Adesanya",
+      "LBS",
+      "Sangotedo",
+    ],
+  },
+  {
+    location: "Lagos Mainland 1",
+    price: 4000,
+    areas: [
+      "Gbagada",
+      "Palmgroove",
+      "Onipan",
+      "Anthony",
+      "Maryland",
+      "Ikeja",
+      "Oshodi",
+    ],
+  },
+  {
+    location: "Lagos Mainland 2",
+    price: 5000,
+    areas: ["Yaba", "Surulere", "Costain", "Mushin", "Ilupeju", "Ojota"],
+  },
+  {
+    location: "Lagos Island 3",
+    price: 8000,
+    areas: ["Epe", "Lakowe", "Awoyaya"],
+  },
+  {
+    location: "Lagos Mainland 3",
+    price: 5000,
+    areas: [
+      "Berger",
+      "Iju",
+      "Ishaga",
+      "Ikorodu",
+      "Ojo",
+      "Ayobo",
+      "Alaba",
+      "Agbado",
+      "satellite",
+      "trade fair",
+      "UBA",
+    ],
+  },
+];
+
 const locationToState = {
-  "Lagos Mainland": "Lagos",
-  "Lagos Island": "Lagos",
+  "Lagos Mainland 1": "Lagos",
+  "Lagos Mainland 2": "Lagos",
+  "Lagos Mainland 3": "Lagos",
+  "Lagos Island 1": "Lagos",
+  "Lagos Island 2": "Lagos",
+  "Lagos Island 3": "Lagos",
   Abuja: "Abuja",
+  Oyo: "Oyo",
   Other: "",
 };
 
@@ -473,21 +549,51 @@ const ShopContextProvider = (props) => {
     }
   };
 
+  // const getLocalDeliveryFee = (area) => {
+  //   const match = localDelivery.find((loc) => loc.areas.includes(area));
+  //   return match ? match.price : 0;
+  // };
+
   useEffect(() => {
     getCollectionData();
   }, [backendUrl]);
 
+  // useEffect(() => {
+  //   if (selectedLocation && deliveryFees[selectedLocation] !== undefined) {
+  //     setDeliveryFee(localDelivery.price[selectedLocation]);
+  //     setIsInternational(false);
+  //   } else if (selectedCountry && isInternationalOrder(selectedCountry)) {
+  //     setIsInternational(true);
+  //   } else {
+  //     setDeliveryFee(0);
+  //     setIsInternational(false);
+  //   }
+  // }, [selectedLocation, selectedCountry]);
+
   useEffect(() => {
-    if (selectedLocation && deliveryFees[selectedLocation] !== undefined) {
-      setDeliveryFee(deliveryFees[selectedLocation]);
-      setIsInternational(false);
-    } else if (selectedCountry && isInternationalOrder(selectedCountry)) {
+    if (selectedLocation) {
+      // Find which location contains the selected area
+      const match = localDelivery.find((loc) =>
+        loc.areas.includes(selectedLocation)
+      );
+      if (match) {
+        setDeliveryFee(match.price);
+        setIsInternational(false);
+        return; // stop further checks
+      }
+    }
+
+    // If selected country is not Nigeria (international order)
+    if (selectedCountry && isInternationalOrder(selectedCountry)) {
       setIsInternational(true);
+      const cost = getShippingCost(selectedCountry);
+      setDeliveryFee(cost || 0);
     } else {
+      // Default reset if no valid location/country
       setDeliveryFee(0);
       setIsInternational(false);
     }
-  }, [selectedLocation, selectedCountry]);
+  }, [selectedLocation, selectedCountry, localDelivery]);
 
   useEffect(() => {
     getProductsData();
@@ -632,6 +738,7 @@ const ShopContextProvider = (props) => {
     setSelectedCountry,
     isInternational,
     logout,
+    localDelivery,
     // sections,
     // getSections,
   };

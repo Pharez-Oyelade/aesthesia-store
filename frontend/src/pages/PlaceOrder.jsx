@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
 import { assets } from "../assets/assets";
@@ -6,13 +6,15 @@ import { shopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const PAYSTACK_PUBLIC_KEY = "pk_test_c4b2eb84f0a0f617c83c345b25ba357a5169a821"; // replacing with live key
+const PAYSTACK_PUBLIC_KEY = "pk_test_c4b2eb84f0a0f617c83c345b25ba357a5169a821";
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("paystack");
+  const [filteredLocations, setFilteredLocations] = useState([]);
 
   const {
     navigate,
+    currency,
     token,
     backendUrl,
     cartItems,
@@ -21,13 +23,12 @@ const PlaceOrder = () => {
     products,
     setSelectedLocation,
     selectedLocation,
-    deliveryFees,
+    localDelivery,
     delivery_fee,
     locationToState,
     getShippingCost,
     selectedCountry,
     setSelectedCountry,
-    isInternational,
   } = useContext(shopContext);
 
   const [formData, setFormData] = useState({
@@ -39,34 +40,81 @@ const PlaceOrder = () => {
     state: "",
     phone: "",
     country: "",
+    deliveryLocation: "",
   });
 
-  // New: handle location change
-  // const onLocationChange = (e) => {
-  //   setSelectedLocation(e.target.value);
-  // };
+  // Filter locations whenever state changes
+  useEffect(() => {
+    if (formData.state) {
+      const filtered = localDelivery.filter((loc) => {
+        // Extract state from location name (e.g., "Lagos Island 1" -> "Lagos")
+        const locState = locationToState[loc.location];
+        return locState === formData.state;
+      });
+      setFilteredLocations(filtered);
 
+      // Reset selected location if it doesn't match the new state
+      if (selectedLocation) {
+        const isValidLocation = filtered.some((loc) =>
+          loc.areas.includes(selectedLocation)
+        );
+        if (!isValidLocation) {
+          setSelectedLocation("");
+        }
+      }
+    } else {
+      setFilteredLocations([]);
+      setSelectedLocation("");
+    }
+  }, [formData.state, localDelivery, locationToState]);
+
+  // Handle country change
   const onCountryChange = (e) => {
     const country = e.target.value;
     setSelectedCountry(country);
 
     if (country !== "Nigeria") {
       setSelectedLocation("");
+      setFormData((data) => ({
+        ...data,
+        country,
+        state: "", // Reset state for international orders
+        deliveryLocation: "", // Reset delivery location for international orders
+      }));
+    } else {
+      setFormData((data) => ({
+        ...data,
+        country,
+      }));
     }
+  };
 
+  // Handle state change
+  const handleStateChange = (e) => {
+    const state = e.target.value;
     setFormData((data) => ({
       ...data,
-      country,
+      state,
+      deliveryLocation: "", // Reset delivery location when state changes
     }));
   };
 
+  // Handle location/area change
   const onLocationChange = (e) => {
-    const loc = e.target.value;
-    setSelectedLocation(loc);
-    setFormData((data) => ({
-      ...data,
-      state: locationToState[loc] || "",
-    }));
+    const area = e.target.value;
+    setSelectedLocation(area);
+
+    // Find the location group this area belongs to
+    const locationGroup = localDelivery.find((loc) => loc.areas.includes(area));
+
+    if (locationGroup) {
+      const state = locationToState[locationGroup.location];
+      setFormData((data) => ({
+        ...data,
+        state: state || data.state,
+        deliveryLocation: area,
+      }));
+    }
   };
 
   const onChangeHandler = (event) => {
@@ -103,16 +151,25 @@ const PlaceOrder = () => {
     return orderItems;
   };
 
-  //Validate delivery info fields
+  // Validate delivery info fields
   const validateForm = () => {
     for (const key in formData) {
+      // Skip deliveryLocation validation for non-Nigerian orders
+      if (key === "deliveryLocation" && selectedCountry !== "Nigeria") {
+        continue;
+      }
+
       if (!formData[key] || formData[key].toString().trim() === "") {
+        console.log("Missing field:", key, formData[key]); // Debug log
         return false;
       }
     }
+
     if (selectedCountry === "Nigeria" && !selectedLocation) {
+      console.log("Missing delivery location"); // Debug log
       return false;
     }
+
     return true;
   };
 
@@ -133,11 +190,12 @@ const PlaceOrder = () => {
       toast.error("Paystack script not loaded");
       return;
     }
+
     const amount = getCartAmount() + getShippingCost();
     const handler = window.PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
       email: formData.email,
-      amount: Math.round(amount * 100), // to kobo forpaystack
+      amount: Math.round(amount * 100),
       firstname: formData.firstName,
       lastname: formData.lastName,
       callback: function (response) {
@@ -152,30 +210,68 @@ const PlaceOrder = () => {
 
   // On Paystack Success
   const handlePaystackSuccess = async (response) => {
+    // Show processing message
+    toast.info("Processing your order... Please wait.");
+
     try {
       const orderItems = buildOrderItems();
       let orderData = {
         address: formData,
         items: orderItems,
-        // amount: getCartAmount() + delivery_fee,
         amount: getCartAmount() + getShippingCost(),
         reference: response.reference,
       };
+
       const res = await axios.post(
         backendUrl + "/api/order/paystack",
         orderData,
-        { headers: { token } }
+        {
+          headers: { token },
+          timeout: 30000, // 30 second timeout
+        }
       );
+
       if (res.data.success) {
+        // Clear cart and navigation
         setCartItems({});
         setSelectedCountry("");
         setSelectedLocation("");
+
+        if (res.data.isDuplicate) {
+          toast.info("Order already processed successfully");
+        } else {
+          toast.success("Order placed successfully!");
+        }
+
         navigate("/orders");
       } else {
-        toast.error(res.data.message);
+        // Payment succeeded but order creation failed
+        const errorMsg = res.data.message || "Order processing failed";
+
+        if (res.data.reference) {
+          toast.error(
+            `${errorMsg}. Your payment reference: ${res.data.reference}. Please contact support.`,
+            { autoClose: false }
+          );
+        } else {
+          toast.error(errorMsg);
+        }
       }
     } catch (error) {
-      toast.error(error.message);
+      console.error("Order processing error:", error);
+
+      // Handle network errors
+      if (error.code === "ECONNABORTED" || !error.response) {
+        toast.error(
+          `Network error. Your payment was successful (Ref: ${response.reference}). Please contact support to confirm your order.`,
+          { autoClose: false }
+        );
+      } else {
+        toast.error(
+          error.response?.data?.message ||
+            "An error occurred. Please contact support if payment was deducted."
+        );
+      }
     }
   };
 
@@ -196,7 +292,6 @@ const PlaceOrder = () => {
       let orderData = {
         address: formData,
         items: orderItems,
-        // amount: getCartAmount() + delivery_fee,
         amount: getCartAmount() + getShippingCost(),
       };
       const response = await axios.post(
@@ -206,6 +301,8 @@ const PlaceOrder = () => {
       );
       if (response.data.success) {
         setCartItems({});
+        setSelectedLocation("");
+        setSelectedCountry("");
         navigate("/orders");
       } else {
         toast.error(response.data.message);
@@ -221,11 +318,12 @@ const PlaceOrder = () => {
         onSubmit={onSubmitHandler}
         className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t"
       >
-        {/* .......LEFT SIDE........... */}
+        {/* LEFT SIDE */}
         <div className="flex flex-col gap-4 w-full sm:max-w-[480px]">
           <div className="text-xl sm:text-2xl my-3">
             <Title text1={"DELIVERY"} text2={"INFORMATION"} />
           </div>
+
           <div className="flex gap-3">
             <input
               onChange={onChangeHandler}
@@ -246,6 +344,7 @@ const PlaceOrder = () => {
               required
             />
           </div>
+
           <input
             onChange={onChangeHandler}
             name="email"
@@ -255,6 +354,7 @@ const PlaceOrder = () => {
             placeholder="Email Address"
             required
           />
+
           <select
             name="country"
             value={selectedCountry}
@@ -263,23 +363,30 @@ const PlaceOrder = () => {
             required
           >
             <option value="">Select Country</option>
-            <option value="Nigeria">Nigeria </option>
+            <option value="Nigeria">Nigeria</option>
             <optgroup label="International">
               <option value="United States">United States</option>
               <option value="United Kingdom">United Kingdom</option>
-              <option value="Canada">Canada</option>
-              <option value="Australia">Australia</option>
-              <option value="Germany">Germany</option>
-              <option value="France">France</option>
-              <option value="Italy">Italy</option>
-              <option value="Spain">Spain</option>
-              <option value="Netherlands">Netherlands</option>
-              <option value="Belgium">Belgium</option>
             </optgroup>
           </select>
-          {/* ...other inputs... */}
 
+          {/* State Selection - Only for Nigeria */}
           {selectedCountry === "Nigeria" && (
+            <select
+              name="state"
+              value={formData.state}
+              onChange={handleStateChange}
+              className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
+              required
+            >
+              <option value="">Select State</option>
+              <option value="Lagos">Lagos</option>
+              <option value="Oyo">Oyo</option>
+            </select>
+          )}
+
+          {/* Delivery Location - Only shown after state is selected */}
+          {selectedCountry === "Nigeria" && formData.state && (
             <>
               <select
                 name="location"
@@ -288,11 +395,20 @@ const PlaceOrder = () => {
                 className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
                 required
               >
-                <option value="">Select Delivery Location</option>
-                {Object.keys(deliveryFees).map((loc) => (
-                  <option key={loc} value={loc}>
-                    {loc} ({deliveryFees[loc]})
-                  </option>
+                <option value="">Select Delivery Area</option>
+                {filteredLocations.map((loc) => (
+                  <optgroup
+                    key={loc.location}
+                    label={`${
+                      loc.location
+                    } (${currency}${loc.price.toLocaleString()})`}
+                  >
+                    {loc.areas.map((area) => (
+                      <option key={area} value={area}>
+                        {area}
+                      </option>
+                    ))}
+                  </optgroup>
                 ))}
               </select>
               <p className="m-0 p-0 text-xs text-gray-500">
@@ -310,6 +426,7 @@ const PlaceOrder = () => {
             placeholder="Street"
             required
           />
+
           <div className="flex gap-3">
             <input
               onChange={onChangeHandler}
@@ -320,21 +437,8 @@ const PlaceOrder = () => {
               placeholder="City"
               required
             />
-            <input
-              onChange={onChangeHandler}
-              name="state"
-              value={formData.state}
-              className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-              type="text"
-              placeholder="State"
-              required
-              disabled={
-                selectedCountry === "Nigeria" &&
-                selectedLocation !== "Other" &&
-                !!formData.state
-              }
-            />
           </div>
+
           <input
             onChange={onChangeHandler}
             name="phone"
@@ -344,6 +448,7 @@ const PlaceOrder = () => {
             placeholder="Phone"
             required
           />
+
           <p className="text-sm text-gray-700">
             *Enter a valid email address to receive payment receipt
           </p>
@@ -352,7 +457,7 @@ const PlaceOrder = () => {
           </p>
         </div>
 
-        {/* .........RIGHT SIDE........ */}
+        {/* RIGHT SIDE */}
         <div className="mt-8">
           <div className="mt-8 min-w-80">
             <CartTotal />
@@ -360,9 +465,8 @@ const PlaceOrder = () => {
 
           <div className="mt-12">
             <Title text1={"PAYMENT"} text2={"METHOD"} />
-            {/* .......PAYMENT METHOD........... */}
+
             <div className="flex gap-3 flex-col lg:flex:row">
-              {/* ...other payment methods... */}
               <div
                 onClick={() => setMethod("paystack")}
                 className={`flex items-center gap-3 border p-2 px-3 cursor-pointer ${
@@ -379,21 +483,6 @@ const PlaceOrder = () => {
                   PAYSTACK
                 </span>
               </div>
-              {/* <div
-                onClick={() => setMethod("cod")}
-                className={`flex items-center gap-3 border p-2 px-3 cursor-pointer ${
-                  method === "cod" ? "border-green-400" : ""
-                }`}
-              >
-                <p
-                  className={`min-w-3.5 h-3.5 border rounded-full ${
-                    method === "cod" ? "bg-green-400" : ""
-                  }`}
-                ></p>
-                <p className="text-gray-500 text-sm font-medium mx-4">
-                  CASH ON DELIVERY
-                </p>
-              </div> */}
             </div>
 
             <div className="w-full text-end mt-8">
@@ -407,12 +496,6 @@ const PlaceOrder = () => {
                   Pay with Paystack
                 </button>
               ) : (
-                // <button
-                //   type="submit"
-                //   className="bg-black text-white px-16 py-3 text-sm"
-                // >
-                //   PLACE ORDER
-                // </button>
                 <p className="text-sm text-right text-gray-700 pt-3">
                   *select paystack for online payment
                 </p>

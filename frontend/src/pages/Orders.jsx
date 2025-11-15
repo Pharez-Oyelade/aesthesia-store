@@ -67,7 +67,7 @@ const Orders = () => {
     <div className="max-w-3xl mx-auto mt-2 sm:mt-8 px-4">
       <h2 className="text-2xl font-bold mb-8 text-center">My Orders</h2>
       <div className="space-y-8">
-        {[...orderData].reverse().map((item, idx) => (
+        {[...orderData].map((item, idx) => (
           <div
             key={idx}
             className="flex flex-col md:flex-row gap-6 bg-white rounded-xl shadow p-5 border border-gray-100"

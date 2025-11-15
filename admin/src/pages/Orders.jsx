@@ -29,7 +29,7 @@ const Orders = ({ token }) => {
         { headers: { token } }
       );
       if (response.data.success) {
-        setOrders(response.data.orders.reverse());
+        setOrders(response.data.orders);
       } else {
         toast.error(response.data.message);
       }
@@ -106,6 +106,11 @@ const Orders = ({ token }) => {
                   {order.address.email}
                 </span>
               </p>
+              <div>
+                <p className="text-gray-500">
+                  {order.address.deliveryLocation}
+                </p>
+              </div>
               <div className="text-gray-500">
                 <p>{order.address.street + ","}</p>
                 <p>{order.address.city + ", " + order.address.state}</p>
