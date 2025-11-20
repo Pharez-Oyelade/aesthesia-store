@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -6,14 +6,15 @@ import { motion, AnimatePresence } from "framer-motion";
 const slides = [
   {
     image: assets.bg_main_1,
-    title: "MODERN, CLASSIC, ELEGANT",
-    subtitle:
-      "Where confidence meets fashion - discover wigs, jewelry, and outfits for your everyday slay",
+    image_mobile: assets.bg_main_1_mobile,
+    title: "UNFOLD -  A Celebration of Quiet Evolution",
+    subtitle: "Explore our latest collection",
     b_text: "BROWSE COLLECTION",
-    link: "/collection",
+    link: "/",
   },
   {
     image: assets.bg_1_main,
+    image_mobile: assets.bg_1_main_mobile,
     title: "REDEFINING BEAUTY",
     subtitle: "Learn more about our story",
     b_text: "ABOUT US",
@@ -21,6 +22,7 @@ const slides = [
   },
   {
     image: assets.bg_2_main,
+    image_mobile: assets.bg_2_main_mobile,
     title: "STYLED TO RULE. SLAY BOLD. SHINE LOUD",
     subtitle: "Contact us for more information",
     b_text: "CONTACT",
@@ -28,6 +30,7 @@ const slides = [
   },
   {
     image: assets.bg_3_main,
+    image_mobile: assets.bg_3_main_mobile,
     title: "UNLEASH YOUR EVERYDAY POWER",
     subtitle: "Discover what greatness feels like",
     b_text: "RERE COLLECTION",
@@ -38,6 +41,27 @@ const slides = [
 const Hero = () => {
   const [current, setCurrent] = useState(0);
 
+  const [isMobile, setIsMobile] = useState(
+    typeof window !== "undefined" ? window.innerWidth <= 768 : false
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia("(max-width: 768px)");
+    const handler = (e) => setIsMobile(e.matches);
+    // set initial state
+    try {
+      handler(mql);
+    } catch (e) {
+      // ignore
+    }
+    if (mql.addEventListener) mql.addEventListener("change", handler);
+    else if (mql.addListener) mql.addListener(handler);
+    return () => {
+      if (mql.removeEventListener) mql.removeEventListener("change", handler);
+      else if (mql.removeListener) mql.removeListener(handler);
+    };
+  }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % slides.length);
@@ -45,13 +69,35 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // preload cache to avoid re-creating Image objects repeatedly
+  const preloadCache = useRef(new Map());
+
   useEffect(() => {
     const nextIndex = (current + 1) % slides.length;
-    const nextImg = new Image();
-    nextImg.src = slides[nextIndex].image;
-  }, [current]);
+    const nextSrc = isMobile
+      ? slides[nextIndex].image_mobile
+      : slides[nextIndex].image;
 
-  const { image, title, subtitle, b_text, link } = slides[current];
+    if (!preloadCache.current.has(nextSrc)) {
+      const img = new Image();
+      img.src = nextSrc;
+      // store immediately so we don't create duplicates
+      preloadCache.current.set(nextSrc, img);
+    }
+  }, [current, isMobile]);
+
+  const {
+    image: imageDesktop,
+    image_mobile: imageMobile,
+    title,
+    subtitle,
+    b_text,
+    link,
+  } = slides[current];
+
+  const bgImage = isMobile ? imageMobile : imageDesktop;
+  const srcSet = `${imageMobile} 600w, ${imageDesktop} 1200w`;
+  const sizes = `(max-width: 768px) 100vw, 100vw`;
 
   // Variants for staggered text animation
   const containerVariants = {
@@ -73,13 +119,14 @@ const Hero = () => {
     <div className="relative w-full h-screen flex items-center justify-center overflow-hidden pt-0">
       {/* Background transition */}
       <AnimatePresence mode="wait">
-        <motion.div
-          key={image}
-          className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage: `url(${image})`,
-            willChange: "transform, opacity",
-          }}
+        <motion.img
+          key={bgImage}
+          src={bgImage}
+          srcSet={srcSet}
+          sizes={sizes}
+          alt={title}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ willChange: "transform, opacity" }}
           initial={{ scale: 1.05 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1, ease: "easeInOut" }}
@@ -117,7 +164,7 @@ const Hero = () => {
                 variants={childVariants}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-700 hover:from-red-800 hover:to-pink-700 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
+                className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
               >
                 {b_text}
               </motion.button>

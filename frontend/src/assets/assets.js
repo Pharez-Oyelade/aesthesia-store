@@ -1,8 +1,12 @@
 import bg_1 from "./bg-1.jpg";
 import bg_main_1 from "./bg-main-1.webp";
+import bg_main_1_mobile from "./bg-main-1-mobile.webp";
 import bg_1_main from "./bg_1_main.webp";
+import bg_1_main_mobile from "./bg_1_main_mobile.webp";
 import bg_2_main from "./bg_2_main.webp";
+import bg_2_main_mobile from "./bg_2_main_mobile.webp";
 import bg_3_main from "./bg_3_main.webp";
+import bg_3_main_mobile from "./bg_3_main_mobile.webp";
 import bg_4 from "./bg-4.jpg";
 import bg_5 from "./bg-5.jpg";
 import the_kali from "./thr_kali.jpg";
@@ -71,7 +75,12 @@ export const assets = {
   time,
   bg_1,
   bg_main_1,
+  bg_main_1_mobile,
+  bg_1_main_mobile,
+  bg_2_main_mobile,
+  bg_3_main_mobile,
   bg_1_main,
+
   bg_2_main,
   bg_3_main,
   bg_4,
