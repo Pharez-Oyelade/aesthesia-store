@@ -6,8 +6,8 @@ import { shopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// const PAYSTACK_PUBLIC_KEY = "pk_test_c4b2eb84f0a0f617c83c345b25ba357a5169a821";
-const PAYSTACK_PUBLIC_KEY = "pk_live_65339f2e907214cfc666681ca71100b0c0d4d5ea ";
+const PAYSTACK_PUBLIC_KEY = "pk_test_c4b2eb84f0a0f617c83c345b25ba357a5169a821";
+// const PAYSTACK_PUBLIC_KEY = "pk_live_65339f2e907214cfc666681ca71100b0c0d4d5ea ";
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("paystack");
@@ -155,8 +155,18 @@ const PlaceOrder = () => {
   // Validate delivery info fields
   const validateForm = () => {
     for (const key in formData) {
-      // Skip deliveryLocation validation for non-Nigerian orders
-      if (key === "deliveryLocation" && selectedCountry !== "Nigeria") {
+      // Skip state and deliveryLocation validation for non-Nigerian orders
+      if ((key === "deliveryLocation" || key === "state") && selectedCountry !== "Nigeria") {
+        continue;
+      }
+
+      // For the country field, prefer the context `selectedCountry` value
+      if (key === "country") {
+        const countryValue = selectedCountry || formData.country;
+        if (!countryValue || countryValue.toString().trim() === "") {
+          console.log("Missing field: country", countryValue);
+          return false;
+        }
         continue;
       }
 
@@ -166,6 +176,7 @@ const PlaceOrder = () => {
       }
     }
 
+    // Ensure a delivery area is selected for Nigerian orders
     if (selectedCountry === "Nigeria" && !selectedLocation) {
       console.log("Missing delivery location"); // Debug log
       return false;
