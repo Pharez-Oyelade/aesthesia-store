@@ -12,9 +12,7 @@ const Home = () => {
   return (
     <div className="">
       <Hero />
-      <div>
-        <PromotionBanner />
-      </div>
+      <div>{/* <PromotionBanner /> */}</div>
       <div>
         <div className="text-center mt-20 border-y-2 w-[75%] m-auto py-10">
           <div className="text-2xl sm:text-3xl">
