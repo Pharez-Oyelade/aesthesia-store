@@ -36,7 +36,7 @@ const deliveryFees = {
 const localDelivery = [
   {
     location: "Oyo",
-    price: 5000,
+    price: 500,
     areas: ["Ojoo", "Ibadan", "Oke-Ado", "Ogbomosho"],
   },
   {

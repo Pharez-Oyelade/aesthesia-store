@@ -156,7 +156,10 @@ const PlaceOrder = () => {
   const validateForm = () => {
     for (const key in formData) {
       // Skip state and deliveryLocation validation for non-Nigerian orders
-      if ((key === "deliveryLocation" || key === "state") && selectedCountry !== "Nigeria") {
+      if (
+        (key === "deliveryLocation" || key === "state") &&
+        selectedCountry !== "Nigeria"
+      ) {
         continue;
       }
 
@@ -393,7 +396,7 @@ const PlaceOrder = () => {
             >
               <option value="">Select State</option>
               <option value="Lagos">Lagos</option>
-              {/* <option value="Oyo">Oyo</option> */}
+              <option value="Oyo">Oyo</option>
             </select>
           )}
 
