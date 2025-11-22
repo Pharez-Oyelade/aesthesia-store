@@ -57,31 +57,32 @@ input[type="checkbox"] {
     background-color: black;
     color: white;
   }
+
+  .prenav-marquee {
+    overflow: hidden;
+  }
+  .prenav-marquee-track {
+    display: inline-block;
+    white-space: nowrap;
+    will-change: transform;
+    animation: marquee 14s linear infinite;
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .prenav-marquee-track {
+      animation: none;
+    }
+  }
 }
 
 /* Prenav marquee styles */
-.prenav-marquee {
-  overflow: hidden;
-}
-.prenav-marquee-track {
-  display: inline-block;
-  white-space: nowrap;
-  will-change: transform;
-  animation: marquee 14s linear infinite;
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* Respect users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .prenav-marquee-track {
-    animation: none;
-  }
-}
