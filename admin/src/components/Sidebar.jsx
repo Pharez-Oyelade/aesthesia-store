@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { BsCollection } from "react-icons/bs";
+import { GoTasklist } from "react-icons/go";
 
 const Sidebar = () => {
   return (
@@ -33,7 +34,8 @@ const Sidebar = () => {
           }
           to="/list"
         >
-          <img className="w-6 h-6" src={assets.order_icon} alt="" />
+          {/* <img className="w-6 h-6" src={assets.order_icon} alt="" /> */}
+          <GoTasklist className="w-6 h-6" />
           <span className="hidden sm:block">List Items</span>
         </NavLink>
         <NavLink
