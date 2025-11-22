@@ -257,6 +257,12 @@ const Product = () => {
                   )}
                 </p>
 
+                <p className="mb-5 font-medium">
+                  Petit - 5'5, 5'6, 5'7 <br />
+                  Regular - 5'8, 5'9, 5'10 <br />
+                  Tall - 5'11
+                </p>
+
                 <p className="mb-5 font-semibold">
                   {productData.specificDetails}
                 </p>

@@ -16,7 +16,10 @@ const Home = () => {
       <div>
         <div className="text-center mt-20 border-y-2 w-[75%] m-auto py-10">
           <div className="text-2xl sm:text-3xl">
-            <Title text1={"Modern Elegance"} text2={"Meets Timeless Style"} />
+            <Title
+              text1={"Welcome Home to"}
+              text2={"Confidence, beauty, and You"}
+            />
           </div>
 
           <p className="text-xl w-full">
