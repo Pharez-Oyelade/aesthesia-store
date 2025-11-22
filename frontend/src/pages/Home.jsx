@@ -20,9 +20,11 @@ const Home = () => {
           </div>
 
           <p className="text-xl w-full">
-            At <span className="text-red-800">Aesthesia</span>, we curate
-            fashion that inspires self-expression, confidence, and creativity,{" "}
-            <br /> because your style should speak before you do...{" "}
+            At <span className="text-red-800">Aesthesia</span>, We design with
+            feeling — pieces and products that carry softness and strength,
+            elegance and ease. Each one made to remind you of who you’ve always
+            been beneath the noise. Because beauty isn’t about becoming someone
+            new — it’s about coming home to yourself.{" "}
           </p>
           <Link to="/about">
             <p className="text-red-700 pt-5 cursor-pointer">About Us</p>
