@@ -121,6 +121,7 @@ const port = process.env.PORT || 4000;
 
 const allowedOrigins = [
   "https://aesthesia-haven.vercel.app",
+  "https://www.aesthesiahaven.com/",
   "https://aesthesia-admin-panel.vercel.app",
   ...(process.env.NODE_ENV === "development"
     ? ["http://localhost:5173", "http://localhost:5174"]
