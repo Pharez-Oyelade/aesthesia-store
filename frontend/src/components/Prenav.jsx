@@ -17,14 +17,16 @@ export default function PreNav() {
         <div className="flex-1">
           <div className="prenav-marquee">
             <div className="prenav-marquee-track" aria-hidden="false">
-              <span className="inline-block mr-8">{message}</span>
-              <span className="inline-block mr-8">{message}</span>
+              <span className="inline-block mr-8 sm:block text-center">
+                {message}
+              </span>
+              <span className="inline-block sm:hidden mr-8">{message}</span>
             </div>
           </div>
         </div>
 
         {/* Small currency toggle on the right (optional) */}
-        <div className="ml-4 flex-shrink-0">
+        {/* <div className="ml-4 flex-shrink-0">
           <button
             onClick={toggleCurrency}
             className="bg-transparent border border-gray-600 px-2 py-1 rounded text-sm"
@@ -32,7 +34,7 @@ export default function PreNav() {
           >
             {currency}
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
