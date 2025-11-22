@@ -50,6 +50,9 @@ const Footer = () => {
             <Link to="/collection/the color code collection">
               <li className="cursor-pointer">Color Code Collection</li>
             </Link>
+            <Link to="/collection/unfold">
+              <li className="cursor-pointer">Unfold</li>
+            </Link>
           </ul>
         </div>
 
