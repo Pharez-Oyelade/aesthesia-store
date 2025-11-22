@@ -119,14 +119,23 @@ const app = express();
 app.set("trust proxy", 1);
 const port = process.env.PORT || 4000;
 
-const allowedOrigins = [
+// Normalize allowed origins (strip trailing slash and lowercase) to avoid
+// accidental mismatches like a trailing slash on the incoming Origin header.
+const baseAllowedOrigins = [
   "https://aesthesia-haven.vercel.app",
-  "https://www.aesthesiahaven.com/",
+  "https://aesthesiahaven.com",
+  "https://www.aesthesiahaven.com",
   "https://aesthesia-admin-panel.vercel.app",
-  ...(process.env.NODE_ENV === "development"
-    ? ["http://localhost:5173", "http://localhost:5174"]
-    : []),
 ];
+
+const devOrigins = ["http://localhost:5173", "http://localhost:5174"];
+
+const allowedOrigins = new Set(
+  (process.env.NODE_ENV === "development"
+    ? [...baseAllowedOrigins, ...devOrigins]
+    : baseAllowedOrigins
+  ).map((u) => u.replace(/\/$/, "").toLowerCase())
+);
 
 // Database connections with error handling
 try {
@@ -185,14 +194,14 @@ app.use(compression());
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, Postman, etc.)
+      // Allow requests with no origin (mobile apps, Postman, server-to-server)
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
+      const normalized = origin.replace(/\/$/, "").toLowerCase();
+      if (allowedOrigins.has(normalized)) return callback(null, true);
+
+      // Deny other origins
+      return callback(new Error("Not allowed by CORS"));
     },
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
