@@ -56,8 +56,11 @@ const PlaceOrder = () => {
 
       // Reset selected location if it doesn't match the new state
       if (selectedLocation) {
-        const isValidLocation = filtered.some((loc) =>
-          loc.areas.includes(selectedLocation)
+        const isValidLocation = filtered.some(
+          (loc) =>
+            (Array.isArray(loc.areas) &&
+              loc.areas.includes(selectedLocation)) ||
+            loc.location === selectedLocation
         );
         if (!isValidLocation) {
           setSelectedLocation("");
@@ -98,6 +101,19 @@ const PlaceOrder = () => {
       state,
       deliveryLocation: "", // Reset delivery location when state changes
     }));
+
+    // If this state uses manual entry (no predefined areas), auto-select its delivery group
+    const manualStateToGroup = {
+      North: "Northern States",
+      East: "Eastern States",
+    };
+
+    if (manualStateToGroup[state]) {
+      setSelectedLocation(manualStateToGroup[state]);
+    } else {
+      // clear any previously selected group when switching to normal states
+      setSelectedLocation("");
+    }
   };
 
   // Handle location/area change
@@ -179,10 +195,17 @@ const PlaceOrder = () => {
       }
     }
 
-    // Ensure a delivery area is selected for Nigerian orders
-    if (selectedCountry === "Nigeria" && !selectedLocation) {
-      console.log("Missing delivery location"); // Debug log
-      return false;
+    // Ensure a delivery area or deliveryLocation is provided for Nigerian orders
+    if (selectedCountry === "Nigeria") {
+      const hasTyped =
+        formData.deliveryLocation &&
+        formData.deliveryLocation.toString().trim() !== "";
+      const hasSelected =
+        selectedLocation && selectedLocation.toString().trim() !== "";
+      if (!hasTyped && !hasSelected) {
+        console.log("Missing delivery location"); // Debug log
+        return false;
+      }
     }
 
     return true;
@@ -397,40 +420,79 @@ const PlaceOrder = () => {
               <option value="">Select State</option>
               <option value="Lagos">Lagos</option>
               <option value="Oyo">Oyo</option>
+              <option value="North">Northern States</option>
+              <option value="East">Eastern States</option>
             </select>
           )}
 
           {/* Delivery Location - Only shown after state is selected */}
-          {selectedCountry === "Nigeria" && formData.state && (
-            <>
-              <select
-                name="location"
-                value={selectedLocation}
-                onChange={onLocationChange}
-                className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-                required
-              >
-                <option value="">Select Delivery Area</option>
-                {filteredLocations.map((loc) => (
-                  <optgroup
-                    key={loc.location}
-                    label={`${
-                      loc.location
-                    } (${currency}${loc.price.toLocaleString()})`}
-                  >
-                    {loc.areas.map((area) => (
-                      <option key={area} value={area}>
-                        {area}
-                      </option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-              <p className="m-0 p-0 text-xs text-gray-500">
-                *Shipping fees based on delivery location
-              </p>
-            </>
-          )}
+          {selectedCountry === "Nigeria" &&
+            formData.state &&
+            formData.state !== "North" &&
+            formData.state !== "East" && (
+              <>
+                <select
+                  name="location"
+                  value={selectedLocation}
+                  onChange={onLocationChange}
+                  className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
+                  required
+                >
+                  <option value="">Select Delivery Area</option>
+                  {filteredLocations.map((loc) => (
+                    <optgroup
+                      key={loc.location}
+                      label={`${
+                        loc.location
+                      } (${currency}${loc.price.toLocaleString()})`}
+                    >
+                      {loc.areas.map((area) => (
+                        <option key={area} value={area}>
+                          {area}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+                <p className="m-0 p-0 text-xs text-gray-500">
+                  *Shipping fees based on delivery location
+                </p>
+              </>
+            )}
+
+          {selectedCountry === "Nigeria" &&
+            formData.state &&
+            (formData.state === "North" || formData.state === "East") && (
+              <>
+                <input
+                  type="text"
+                  value={formData.deliveryLocation}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setFormData((d) => ({ ...d, deliveryLocation: val }));
+                    // select a matching free-text delivery group so fee is applied
+                    const matchingGroup = filteredLocations.find(
+                      (loc) =>
+                        !Array.isArray(loc.areas) ||
+                        loc.areas.length === 0 ||
+                        loc.areas.every(
+                          (a) => !a || a.toString().trim() === ""
+                        ) ||
+                        loc.areas.some((a) => a.toLowerCase().includes("other"))
+                    );
+                    if (matchingGroup)
+                      setSelectedLocation(matchingGroup.location);
+                  }}
+                  name="deliveryLocation"
+                  className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
+                  placeholder="Enter state / area"
+                  required
+                />
+                <p className="m-0 p-0 text-xs text-gray-500">
+                  *Shipping fees based on delivery location
+                </p>
+              </>
+            )}
 
           <input
             onChange={onChangeHandler}

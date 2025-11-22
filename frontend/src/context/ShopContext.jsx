@@ -36,8 +36,18 @@ const deliveryFees = {
 const localDelivery = [
   {
     location: "Oyo",
-    price: 500,
-    areas: ["Ojoo", "Ibadan", "Oke-Ado", "Ogbomosho"],
+    price: 15000,
+    areas: ["Ibadan"],
+  },
+  {
+    location: "Northern States",
+    price: 20000,
+    areas: ["Others(Enter state manually)"],
+  },
+  {
+    location: "Eastern States",
+    price: 22000,
+    areas: ["Others(Enter state manually)"],
   },
   {
     location: "Lagos Island 1",
@@ -109,7 +119,8 @@ const locationToState = {
   "Lagos Island 1": "Lagos",
   "Lagos Island 2": "Lagos",
   "Lagos Island 3": "Lagos",
-  Abuja: "Abuja",
+  "Northern States": "North",
+  "Eastern States": "East",
   Oyo: "Oyo",
   Other: "",
 };
@@ -572,14 +583,25 @@ const ShopContextProvider = (props) => {
 
   useEffect(() => {
     if (selectedLocation) {
-      // Find which location contains the selected area
-      const match = localDelivery.find((loc) =>
-        loc.areas.includes(selectedLocation)
+      // Try to match selectedLocation as an area first
+      const matchByArea = localDelivery.find(
+        (loc) =>
+          Array.isArray(loc.areas) && loc.areas.includes(selectedLocation)
       );
-      if (match) {
-        setDeliveryFee(match.price);
+      if (matchByArea) {
+        setDeliveryFee(matchByArea.price);
         setIsInternational(false);
         return; // stop further checks
+      }
+
+      // If no area matched, allow selectedLocation to be the location/group name
+      const matchByGroup = localDelivery.find(
+        (loc) => loc.location === selectedLocation
+      );
+      if (matchByGroup) {
+        setDeliveryFee(matchByGroup.price);
+        setIsInternational(false);
+        return;
       }
     }
 
