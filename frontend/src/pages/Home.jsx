@@ -17,8 +17,8 @@ const Home = () => {
         <div className="text-center mt-20 border-y-2 w-[75%] m-auto py-10">
           <div className="text-2xl sm:text-3xl">
             <Title
-              text1={"Welcome Home to"}
-              text2={"Confidence, beauty, and You"}
+              text1={"Welcome Home -"}
+              text2={"To Confidence, beauty, and You"}
             />
           </div>
 
