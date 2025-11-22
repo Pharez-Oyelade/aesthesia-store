@@ -5,36 +5,36 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
   {
-    image: assets.bg_main_1,
-    image_mobile: assets.bg_main_1_mobile,
+    image: assets.bg_main_4,
+    image_mobile: assets.bg_main_4_mobile,
     title: "UNFOLD -  A Celebration of Quiet Evolution",
-    subtitle: "Explore our latest collection",
-    b_text: "BROWSE COLLECTION",
-    link: "/",
+    subtitle: "Explore our Latest Collection",
+    b_text: "UNFOLD",
+    link: "/collection/unfold",
   },
   {
     image: assets.bg_1_main,
     image_mobile: assets.bg_1_main_mobile,
-    title: "REDEFINING BEAUTY",
-    subtitle: "Learn more about our story",
-    b_text: "ABOUT US",
-    link: "/about",
+    title: "EMBRACE YOUR BEAUTIFUL",
+    subtitle: "Browse our Collection",
+    b_text: "SHOP NOW",
+    link: "/collection",
   },
   {
     image: assets.bg_2_main,
     image_mobile: assets.bg_2_main_mobile,
-    title: "STYLED TO RULE. SLAY BOLD. SHINE LOUD",
-    subtitle: "Contact us for more information",
-    b_text: "CONTACT",
-    link: "/contact",
+    title: "AESTHESIA...",
+    subtitle: "Where women see themselves again",
+    b_text: "ABOUT US",
+    link: "/about",
   },
   {
     image: assets.bg_3_main,
     image_mobile: assets.bg_3_main_mobile,
-    title: "UNLEASH YOUR EVERYDAY POWER",
-    subtitle: "Discover what greatness feels like",
-    b_text: "RERE COLLECTION",
-    link: "/rere-collection",
+    title: "GET IN TOUCH WITH US",
+    subtitle: "We would love to hear from you",
+    b_text: "CONTACT",
+    link: "/contact",
   },
 ];
 
@@ -116,7 +116,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full h-screen flex items-center justify-center overflow-hidden pt-0">
+    <div className="relative w-full h-dvh flex items-center justify-center overflow-hidden pt-0">
       {/* Background transition */}
       <AnimatePresence mode="wait">
         <motion.img
@@ -140,7 +140,7 @@ const Hero = () => {
       <div className="relative z-20 flex items-center justify-center w-full h-full">
         <AnimatePresence mode="wait">
           <motion.div
-            key={current} // re-triggers animation when slide changes
+            key={current}
             variants={containerVariants}
             initial="hidden"
             animate="visible"
