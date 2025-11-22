@@ -33,7 +33,15 @@ const Contact = () => {
                 Contact Details
               </p>
               <p className="text-gray-600 text-lg">
-                WhatsApp: 09138720141 <br /> Email:{" "}
+                WhatsApp:{" "}
+                <a
+                  href="https://wa.me/2349138720141"
+                  target="_blank"
+                  className="hover:underline"
+                >
+                  09138720141{" "}
+                </a>
+                <br /> Email:{" "}
                 <span className="flex flex-col">
                   aesthesiahaven@gmail.com <span>aesthesiahair@gmail.com</span>
                 </span>
