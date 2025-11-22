@@ -97,7 +97,8 @@ const Product = () => {
   // Only require measurements for clothing
   const requiresMeasurements =
     (productData && productData.section === "The RERE Collection") ||
-    (productData && productData.section === "The Color Code Collection");
+    (productData && productData.section === "The Color Code Collection") ||
+    (productData && productData.section === "Unfold");
   const availableSizes =
     productData && productData.sizes
       ? productData.sizes.slice().sort((a, b) => Number(a) - Number(b))
