@@ -7,6 +7,8 @@ import bg_2_main from "./bg_2_main.webp";
 import bg_2_main_mobile from "./bg_2_main_mobile.webp";
 import bg_3_main from "./bg_3_main.webp";
 import bg_3_main_mobile from "./bg_3_main_mobile.webp";
+import bg_main_4 from "./bg-main-4.webp";
+import bg_main_4_mobile from "./bg-main-4-mobile.webp";
 import bg_4 from "./bg-4.jpg";
 import bg_5 from "./bg-5.jpg";
 import the_kali from "./thr_kali.jpg";
@@ -79,6 +81,8 @@ export const assets = {
   bg_1_main_mobile,
   bg_2_main_mobile,
   bg_3_main_mobile,
+  bg_main_4,
+  bg_main_4_mobile,
   bg_1_main,
 
   bg_2_main,
