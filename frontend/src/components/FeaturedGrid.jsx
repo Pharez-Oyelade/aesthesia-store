@@ -6,13 +6,21 @@ import { motion } from "framer-motion";
 
 const FeaturedGrid = () => {
   const images = [
+    assets.bg_main_4_mobile,
     assets.bg_1_main,
     assets.bg_3_main,
+
+    assets.bg_2_main,
     // assets.jewelry_bg,
     // assets.hair_bg,
   ];
 
   const overlays = [
+    {
+      title: "UNFOLD",
+      desc: "A Celebration of Quiet Evolution",
+      link: "/collection/unfold",
+    },
     {
       title: "THE RERE COLLECTION",
       desc: "Where new life meets timeless grace",
@@ -23,16 +31,12 @@ const FeaturedGrid = () => {
       desc: "Where Color becomes emotion- and emotion becomes you",
       link: "/collection/the color code collection",
     },
-    // {
-    //   title: "Hair Wigs",
-    //   desc: "Transform your look with our premium hair wigs.",
-    //   link: "/jewelry",
-    // },
-    // {
-    //   title: "Clothings",
-    //   desc: "Discover our exclusive clothing line.",
-    //   link: "/wigs",
-    // },
+
+    {
+      title: "All Collections",
+      desc: "Explore our diverse range of collections",
+      link: "/collection",
+    },
   ];
   return (
     <motion.div
