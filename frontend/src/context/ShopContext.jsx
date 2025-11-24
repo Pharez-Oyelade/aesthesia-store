@@ -52,7 +52,15 @@ const localDelivery = [
   {
     location: "Lagos Island 1",
     price: 5000,
-    areas: ["Oniru", "Oriental", "Freedom Way", "Lekki Phase 1"],
+    areas: [
+      "Oniru",
+      "Oriental",
+      "Freedom Way",
+      "Lekki Phase 1",
+      "Banana Island",
+      "VI",
+      "Ikoyi",
+    ],
   },
   {
     location: "Lagos Island 2",
@@ -81,17 +89,18 @@ const localDelivery = [
       "Maryland",
       "Ikeja",
       "Oshodi",
+      "Ojota",
     ],
   },
   {
     location: "Lagos Mainland 2",
     price: 5000,
-    areas: ["Yaba", "Surulere", "Costain", "Mushin", "Ilupeju", "Ojota"],
+    areas: ["Yaba", "Surulere", "Costain", "Mushin", "Ilupeju"],
   },
   {
     location: "Lagos Island 3",
     price: 8000,
-    areas: ["Epe", "Lakowe", "Awoyaya"],
+    areas: ["Epe", "Lakowe", "Awoyaya & closest axis"],
   },
   {
     location: "Lagos Mainland 3",
@@ -108,6 +117,7 @@ const localDelivery = [
       "satellite",
       "trade fair",
       "UBA",
+      "Ogba",
     ],
   },
 ];
