@@ -23,7 +23,7 @@ const Collection = () => {
   const totalPages = Math.ceil(filterProducts.length / PRODUCTS_PER_PAGE);
   const startIdx = (currentPage - 1) * PRODUCTS_PER_PAGE;
   const endIdx = startIdx + PRODUCTS_PER_PAGE;
-  const paginatedProducts = filterProducts.slice(startIdx, endIdx);
+  const paginatedProducts = filterProducts.reverse().slice(startIdx, endIdx);
 
   // Handle page change
   const goToPage = (page) => {
