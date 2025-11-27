@@ -403,8 +403,19 @@ const PlaceOrder = () => {
             <option value="">Select Country</option>
             <option value="Nigeria">Nigeria</option>
             <optgroup label="International">
-              <option value="United States">United States</option>
+              <option value="Australia">Australia</option>
+              <option value="Belgium">Belgium</option>
+              <option value="Canada">Canada</option>
+              <option value="France">France</option>
+              <option value="Germany">Germany</option>
+              <option value="Ghana">Ghana</option>
+              <option value="Italy">Italy</option>
+              <option value="Netherlands">Netherlands</option>
+              <option value="South Africa">South Africa</option>
+              <option value="Spain">Spain</option>
+              <option value="United Arab Emirates">UAE</option>
               <option value="United Kingdom">United Kingdom</option>
+              <option value="United States">United States</option>
             </optgroup>
           </select>
 
