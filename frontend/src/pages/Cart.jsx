@@ -161,6 +161,12 @@ const Cart = () => {
         >
           Proceed to Checkout
         </button>
+        <p>
+          Check our{" "}
+          <Link to="/shipping-policy" className="text-red-600 underline">
+            shipping policy
+          </Link>
+        </p>
       </div>
     </div>
   );
