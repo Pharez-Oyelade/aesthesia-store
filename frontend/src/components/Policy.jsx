@@ -2,6 +2,7 @@ import React from "react";
 import { assets } from "../assets/assets";
 import { CiDeliveryTruck } from "react-icons/ci";
 import { GoPackageDependencies } from "react-icons/go";
+import { Link } from "react-router-dom";
 
 const Policy = () => {
   return (
@@ -14,14 +15,19 @@ const Policy = () => {
         </p>
       </div>
 
-      {/* <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center">
         <div className="w-12 text-6xl text-black m-auto mb-2">
           <CiDeliveryTruck />
         </div>
 
-        <p className="font-semibold">Hair Delivery</p>
-        <p className="text-gray-400">3-5 working days to deliver</p>
-      </div> */}
+        <p className="font-semibold">Shipping Policy</p>
+        <p className="text-gray-400">
+          Check our{" "}
+          <Link to="/shipping-policy" className="text-red-800 hover:underline">
+            Shipping Policy
+          </Link>
+        </p>
+      </div>
 
       <div className="flex flex-col items-center justify-center">
         <div className="w-12 text-6xl text-black m-auto mb-2">

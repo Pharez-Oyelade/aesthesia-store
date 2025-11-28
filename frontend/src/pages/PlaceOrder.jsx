@@ -5,6 +5,7 @@ import { assets } from "../assets/assets";
 import { shopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 // const PAYSTACK_PUBLIC_KEY = "pk_test_c4b2eb84f0a0f617c83c345b25ba357a5169a821";
 const PAYSTACK_PUBLIC_KEY = "pk_live_65339f2e907214cfc666681ca71100b0c0d4d5ea ";
@@ -12,6 +13,7 @@ const PAYSTACK_PUBLIC_KEY = "pk_live_65339f2e907214cfc666681ca71100b0c0d4d5ea ";
 const PlaceOrder = () => {
   const [method, setMethod] = useState("paystack");
   const [filteredLocations, setFilteredLocations] = useState([]);
+  const [showModal, setShowModal] = useState(false);
 
   const {
     navigate,
@@ -71,6 +73,10 @@ const PlaceOrder = () => {
       setSelectedLocation("");
     }
   }, [formData.state, localDelivery, locationToState]);
+
+  useEffect(() => {
+    selectedCountry === "United States" && setShowModal(true);
+  }, [selectedCountry]);
 
   // Handle country change
   const onCountryChange = (e) => {
@@ -593,6 +599,28 @@ const PlaceOrder = () => {
           </div>
         </div>
       </form>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+          <div className="bg-white p-10 rounded relative max-w-md mx-4">
+            <div className="flex items-center">
+              <p>
+                PS: Shipping to the US? Check our{" "}
+                <Link to="/shipping-policy" className="text-blue-700 underline">
+                  shipping policy
+                </Link>{" "}
+                for customs and import tax details
+              </p>
+            </div>
+            <button
+              className="absolute top-2 right-2 bg-red-700 hover:bg-red-800 transition text-white px-4 py-2 rounded-full text-base font-semibold shadow cursor-pointer"
+              onClick={() => setShowModal(false)}
+            >
+              X
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

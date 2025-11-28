@@ -26,6 +26,7 @@ const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const PreNav = lazy(() => import("./components/Prenav"));
 const CollectionPage = lazy(() => import("./pages/CollectionPage"));
+const ShippingPolicy = lazy(() => import("./pages/ShippingPolicy"));
 
 // Loading component for fallback
 const LoadingFallback = () => (
@@ -77,6 +78,7 @@ const App = () => {
               <Route path="/profile" element={<Profile />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route path="/shipping-policy" element={<ShippingPolicy />} />
               <Route
                 path="*"
                 element={

@@ -31,7 +31,7 @@ const Footer = () => {
             <HashLink smooth to="/about#faqs">
               <li className="cursor-pointer">FAQs</li>
             </HashLink>
-            <li className="cursor-pointer">Shipping & Returns</li>
+            <Link to="/shipping-policy">Shipping Policy</Link>
             <Link to="/contact">
               <li className="cursor-pointer">Contact Us</li>
             </Link>
