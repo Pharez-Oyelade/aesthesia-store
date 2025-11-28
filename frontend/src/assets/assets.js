@@ -17,6 +17,13 @@ import main_1 from "./main_1.jpg";
 import size_chart_demo from "./size-chart-demo.png";
 import size_chart from "./IMG-20251107-WA0012_1.jpg";
 
+import alaafia_bg from "./alaafia-bg.webp";
+import alaafia_bg_mobile from "./ALAAFIA 2.webp";
+import first_bg from "./FIRST.webp";
+import bloom_bg from "./bloom-main.webp";
+import bloom_bg_mobile from "./bloom-bg-mobile.webp";
+import the_chronicle_bg from "./the-chronicle-mobile.webp";
+
 import logo from "./logo.png";
 import logo_light from "./Logo-Light.png";
 import logo_dark from "./logo_dark.png";
@@ -84,6 +91,13 @@ export const assets = {
   bg_main_4,
   bg_main_4_mobile,
   bg_1_main,
+
+  alaafia_bg,
+  alaafia_bg_mobile,
+  first_bg,
+  bloom_bg,
+  bloom_bg_mobile,
+  the_chronicle_bg,
 
   bg_2_main,
   bg_3_main,

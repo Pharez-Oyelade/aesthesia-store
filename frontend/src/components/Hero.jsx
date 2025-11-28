@@ -13,21 +13,23 @@ const slides = [
     link: "/collection/unfold",
   },
   {
+    image: assets.bloom_bg,
+    image_mobile: assets.bloom_bg_mobile,
+    title: "FIRST BLOOM",
+    subtitle: "The courage to begin - softly, yet surely",
+    b_text: "SHOP NOW",
+    link: "/product/6928eb30d56b7f9f684dd2cf",
+  },
+  {
     image: assets.bg_1_main,
+    // image: assets.alaafia_bg,
     image_mobile: assets.bg_1_main_mobile,
     title: "EMBRACE YOUR BEAUTIFUL",
     subtitle: "Browse our Collection",
     b_text: "SHOP NOW",
     link: "/collection",
   },
-  {
-    image: assets.bg_2_main,
-    image_mobile: assets.bg_2_main_mobile,
-    title: "AESTHESIA...",
-    subtitle: "Where women see themselves again",
-    b_text: "ABOUT US",
-    link: "/about",
-  },
+
   {
     image: assets.bg_3_main,
     image_mobile: assets.bg_3_main_mobile,
@@ -38,6 +40,42 @@ const slides = [
   },
 ];
 
+// Additional slides for mobile only
+const mobileAdditionalSlides = [
+  {
+    image: assets.bg_main_4,
+    image_mobile: assets.bg_main_4_mobile,
+    title: "UNFOLD -  A Celebration of Quiet Evolution",
+    subtitle: "Explore our Latest Collection",
+    b_text: "UNFOLD",
+    link: "/collection/unfold",
+  },
+  {
+    image: assets.alaafia_bg_mobile,
+    image_mobile: assets.alaafia_bg_mobile,
+    title: "Àlàáfíà - Peace",
+    subtitle: "Ease is her new luxury",
+    b_text: "SHOP NOW",
+    link: "/product/6928e4a7d56b7f9f684dd04e",
+  },
+  {
+    image: assets.bloom_bg,
+    image_mobile: assets.bloom_bg,
+    title: "FIRST BLOOM",
+    subtitle: "The courage to begin - softly, yet surely",
+    b_text: "SHOP NOW",
+    link: "/product/6928eb30d56b7f9f684dd2cf",
+  },
+  {
+    image: assets.the_chronicle_bg,
+    image_mobile: assets.the_chronicle_bg,
+    title: "THE CHRONICLE",
+    subtitle: "Every stage tells a story",
+    b_text: "SHOP NOW",
+    link: "/product/6928e6c3d56b7f9f684dd0e6",
+  },
+];
+
 const Hero = () => {
   const [current, setCurrent] = useState(0);
 
@@ -45,9 +83,19 @@ const Hero = () => {
     typeof window !== "undefined" ? window.innerWidth <= 768 : false
   );
 
+  // Get the appropriate slide array based on device type
+  const getSlideArray = (mobile) => {
+    return mobile ? mobileAdditionalSlides : slides;
+  };
+
+  const currentSlides = getSlideArray(isMobile);
+
   useEffect(() => {
     const mql = window.matchMedia("(max-width: 768px)");
-    const handler = (e) => setIsMobile(e.matches);
+    const handler = (e) => {
+      setIsMobile(e.matches);
+      setCurrent(0); // Reset to first slide when switching between mobile/desktop
+    };
     // set initial state
     try {
       handler(mql);
@@ -64,19 +112,32 @@ const Hero = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % slides.length);
+      setCurrent((prev) => (prev + 1) % currentSlides.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [currentSlides.length]);
 
   // preload cache to avoid re-creating Image objects repeatedly
   const preloadCache = useRef(new Map());
 
+  // useEffect(() => {
+  //   // Preload all slide images (desktop + mobile) in background on mount.
+  //   slides.forEach((s) => {
+  //     [s.image, s.image_mobile].forEach((src) => {
+  //       if (!src) return;
+  //       if (preloadCache.current.has(src)) return;
+  //       const img = new Image();
+  //       img.src = src;
+  //       preloadCache.current.set(src, img);
+  //     });
+  //   });
+  // }, []);
+
   useEffect(() => {
-    const nextIndex = (current + 1) % slides.length;
+    const nextIndex = (current + 1) % currentSlides.length;
     const nextSrc = isMobile
-      ? slides[nextIndex].image_mobile
-      : slides[nextIndex].image;
+      ? currentSlides[nextIndex].image_mobile
+      : currentSlides[nextIndex].image;
 
     if (!preloadCache.current.has(nextSrc)) {
       const img = new Image();
@@ -84,7 +145,7 @@ const Hero = () => {
       // store immediately so we don't create duplicates
       preloadCache.current.set(nextSrc, img);
     }
-  }, [current, isMobile]);
+  }, [current, isMobile, currentSlides]);
 
   const {
     image: imageDesktop,
@@ -93,7 +154,7 @@ const Hero = () => {
     subtitle,
     b_text,
     link,
-  } = slides[current];
+  } = currentSlides[current];
 
   const bgImage = isMobile ? imageMobile : imageDesktop;
   const srcSet = `${imageMobile} 600w, ${imageDesktop} 1200w`;
@@ -174,7 +235,7 @@ const Hero = () => {
       </div>
 
       {/* Dots */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-30">
+      {/* <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-30">
         {slides.map((_, idx) => (
           <span
             key={idx}
@@ -183,7 +244,7 @@ const Hero = () => {
             }`}
           />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
