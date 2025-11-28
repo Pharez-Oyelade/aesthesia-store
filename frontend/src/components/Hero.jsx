@@ -15,8 +15,8 @@ const slides = [
   {
     image: assets.size_bg,
     image_mobile: assets.size_bg,
-    title: "EMBRACE YOUR BEAUTIFUL",
-    subtitle: "Browse our Collection",
+    title: "First Bloom: The Beginning and Awakening",
+    subtitle: "The courage to begin — softly, yet surely",
     b_text: "SHOP NOW",
     link: "/collection",
   },
