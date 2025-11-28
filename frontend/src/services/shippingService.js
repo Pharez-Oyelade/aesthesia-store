@@ -36,6 +36,18 @@ const INTERNATIONAL_RATES = {
     { min: 4.5, max: 4.9, price: 252000 },
     { min: 5.0, max: Infinity, price: 279500 },
   ],
+  QA: [
+    { min: 0, max: 0.9, price: 100000 },
+    { min: 1, max: 1.4, price: 104000 },
+    { min: 1.5, max: 1.9, price: 106500 },
+    { min: 2.0, max: 2.4, price: 108000 },
+    { min: 2.5, max: 2.9, price: 134000 },
+    { min: 3.0, max: 3.4, price: 163000 },
+    { min: 3.5, max: 3.9, price: 192000 },
+    { min: 4.0, max: 4.4, price: 221000 },
+    { min: 4.5, max: 4.9, price: 252000 },
+    { min: 5.0, max: Infinity, price: 279500 },
+  ],
   // France & Italy share the same rates
   FR: [
     { min: 0, max: 0.9, price: 90000 },
@@ -102,6 +114,7 @@ const COUNTRY_CODES = {
   Belgium: "BE",
   "United Arab Emirates": "UAE",
   UAE: "UAE",
+  Qatar: "QA",
   Ghana: "GH",
   "South Africa": "ZA",
 };

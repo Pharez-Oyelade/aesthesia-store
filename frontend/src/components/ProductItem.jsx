@@ -96,7 +96,7 @@ const ProductItem = memo(
             <button
               onClick={handleWishlist}
               className={`text-2xl px-3 py-3 rounded-full cursor-pointer ${
-                isWishlisted ? "text-red-600" : "text-white"
+                isWishlisted ? "text-red-900" : "text-white"
               }`}
               title={isWishlisted ? "In Wishlist" : "Add to Wishlist"}
             >
@@ -122,10 +122,10 @@ const ProductItem = memo(
               </span>
             </span>
           ) : (
-            <>
+            <span className="text-red-900">
               {currency}
               {convertPrice(price)}
-            </>
+            </span>
           )}
         </p>
       </Link>
