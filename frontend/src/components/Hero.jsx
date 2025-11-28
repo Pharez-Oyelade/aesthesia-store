@@ -18,7 +18,7 @@ const slides = [
     title: "First Bloom: The Beginning and Awakening",
     subtitle: "The courage to begin — softly, yet surely",
     b_text: "SHOP NOW",
-    link: "/collection",
+    link: "/product/6928eb30d56b7f9f684dd2cf",
   },
   {
     image: assets.bg_2_main,
