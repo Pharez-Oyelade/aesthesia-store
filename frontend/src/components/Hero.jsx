@@ -13,8 +13,8 @@ const slides = [
     link: "/collection/unfold",
   },
   {
-    image: assets.bg_1_main,
-    image_mobile: assets.bg_1_main_mobile,
+    image: assets.size_bg,
+    image_mobile: assets.size_bg,
     title: "EMBRACE YOUR BEAUTIFUL",
     subtitle: "Browse our Collection",
     b_text: "SHOP NOW",
