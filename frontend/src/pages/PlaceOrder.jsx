@@ -615,6 +615,7 @@ const PlaceOrder = () => {
             <button
               className="absolute top-2 right-2 bg-red-700 hover:bg-red-800 transition text-white px-4 py-2 rounded-full text-base font-semibold shadow cursor-pointer"
               onClick={() => setShowModal(false)}
+              title="Close"
             >
               X
             </button>
