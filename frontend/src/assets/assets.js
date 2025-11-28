@@ -17,6 +17,8 @@ import main_1 from "./main_1.jpg";
 import size_chart_demo from "./size-chart-demo.png";
 import size_chart from "./IMG-20251107-WA0012_1.jpg";
 
+import size_bg from "./1764291454452.jpg";
+
 import logo from "./logo.png";
 import logo_light from "./Logo-Light.png";
 import logo_dark from "./logo_dark.png";
@@ -84,6 +86,8 @@ export const assets = {
   bg_main_4,
   bg_main_4_mobile,
   bg_1_main,
+
+  size_bg,
 
   bg_2_main,
   bg_3_main,
