@@ -411,6 +411,7 @@ const PlaceOrder = () => {
               <option value="Ghana">Ghana</option>
               <option value="Italy">Italy</option>
               {/* <option value="Netherlands">Netherlands</option> */}
+              <option value="Qatar">Qatar</option>
               <option value="South Africa">South Africa</option>
               {/* <option value="Spain">Spain</option> */}
               <option value="United Arab Emirates">UAE</option>
