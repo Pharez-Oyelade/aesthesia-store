@@ -12,6 +12,7 @@ const INTERNATIONAL_RATES = {
     { min: 4.5, max: 4.9, price: 160000 },
     { min: 5.0, max: Infinity, price: 180000 },
   ],
+  // US & Canada same rate
   US: [
     { min: 0, max: 0.9, price: 79000 },
     { min: 1, max: 1.4, price: 81000 },
@@ -36,6 +37,7 @@ const INTERNATIONAL_RATES = {
     { min: 4.5, max: 4.9, price: 213000 },
     { min: 5.0, max: Infinity, price: 238000 },
   ],
+  // UAE & Qatar same rate
   UAE: [
     { min: 0, max: 0.9, price: 100000 },
     { min: 1, max: 1.4, price: 104000 },
