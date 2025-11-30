@@ -24,6 +24,18 @@ const INTERNATIONAL_RATES = {
     { min: 4.5, max: 4.9, price: 213000 },
     { min: 5.0, max: Infinity, price: 238000 },
   ],
+  CA: [
+    { min: 0, max: 0.9, price: 79000 },
+    { min: 1, max: 1.4, price: 81000 },
+    { min: 1.5, max: 1.9, price: 83000 },
+    { min: 2.0, max: 2.4, price: 85000 },
+    { min: 2.5, max: 2.9, price: 110000 },
+    { min: 3.0, max: 3.4, price: 135000 },
+    { min: 3.5, max: 3.9, price: 160000 },
+    { min: 4.0, max: 4.4, price: 185000 },
+    { min: 4.5, max: 4.9, price: 213000 },
+    { min: 5.0, max: Infinity, price: 238000 },
+  ],
   UAE: [
     { min: 0, max: 0.9, price: 100000 },
     { min: 1, max: 1.4, price: 104000 },

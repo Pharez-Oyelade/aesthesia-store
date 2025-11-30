@@ -410,8 +410,9 @@ const PlaceOrder = () => {
             <option value="Nigeria">Nigeria</option>
             <optgroup label="International">
               {/* <option value="Australia">Australia</option> */}
-              {/* <option value="Belgium">Belgium</option>
-              <option value="Canada">Canada</option> */}
+              {/* <option value="Belgium">Belgium</option> */}
+              {/* <option value="Cameroon">Cameroon</option> */}
+              <option value="Canada">Canada</option>
               <option value="France">France</option>
               {/* <option value="Germany">Germany</option> */}
               <option value="Ghana">Ghana</option>
@@ -419,6 +420,7 @@ const PlaceOrder = () => {
               {/* <option value="Netherlands">Netherlands</option> */}
               <option value="Qatar">Qatar</option>
               <option value="South Africa">South Africa</option>
+              {/* <option value="Togo">Togo</option> */}
               {/* <option value="Spain">Spain</option> */}
               <option value="United Arab Emirates">UAE</option>
               <option value="United Kingdom">United Kingdom</option>
