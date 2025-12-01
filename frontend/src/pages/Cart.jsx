@@ -15,6 +15,7 @@ const parseMeasurements = (mKey) => {
 
 const Cart = () => {
   const {
+    token,
     cartItems,
     products,
     currency,
@@ -150,6 +151,21 @@ const Cart = () => {
             </div>
           );
         })}
+
+        {/* Card to nudge creating an account */}
+        {!token && (
+          <div className="p-4 border rounded bg-yellow-50 text-center">
+            <p className="mb-2">
+              Create an account to save your cart and access it from any device!
+            </p>
+            <button
+              onClick={() => navigate("/login")}
+              className="bg-red-800 text-white px-4 py-2 rounded hover:bg-red-700"
+            >
+              Login / Sign Up
+            </button>
+          </div>
+        )}
       </div>
       <div className="mt-10 flex flex-col justify-end items-end">
         <div className="text-lg w-2/3 sm:w-1/3 font-semibold">
