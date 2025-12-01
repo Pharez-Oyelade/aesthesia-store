@@ -162,7 +162,14 @@ const Navbar = () => {
               tabIndex={0}
               className={`cursor-pointer ${hoverColor} relative outline-none`}
             >
-              <CgProfile />
+              {/* <CgProfile /> */}
+              {token ? (
+                <CgProfile />
+              ) : (
+                <p className="text-md sm:text-base bg-red-800 px-2 py-1 text-white rounded cursor-pointer">
+                  Sign Up
+                </p>
+              )}
               {token && showUserDropdown && (
                 <div className="absolute dropdown-menu right-0 pt-4 z-50">
                   <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded shadow">
