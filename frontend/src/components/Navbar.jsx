@@ -140,15 +140,17 @@ const Navbar = () => {
         <div
           className={`flex items-center gap-4 sm:gap-6 text-md sm:text-[1.2rem] ${textColor}`}
         >
-          <div
-            onClick={() => {
-              setShowSearch(true);
-              navigate("/collection");
-            }}
-            className={`cursor-pointer ${hoverColor}`}
-          >
-            <MdOutlineSearch />
-          </div>
+          {token && (
+            <div
+              onClick={() => {
+                setShowSearch(true);
+                navigate("/collection");
+              }}
+              className={`cursor-pointer ${hoverColor}`}
+            >
+              <MdOutlineSearch />
+            </div>
+          )}
 
           <div className="group relative" ref={profileRef}>
             <div
@@ -172,7 +174,7 @@ const Navbar = () => {
               )}
               {token && showUserDropdown && (
                 <div className="absolute dropdown-menu right-0 pt-4 z-50">
-                  <div className="flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 rounded shadow">
+                  <div className="flex flex-col gap-2 w-36 py-3 px-2 md:px-5 bg-slate-100 rounded shadow">
                     <p
                       onClick={() => navigate("/profile")}
                       className="cursor-pointer hover:text-black"
@@ -210,17 +212,15 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {token && (
-            <div className="cursor-pointer hover:text-black relative">
-              <Link to="/cart">
-                <MdOutlineShoppingCart />
+          <div className="cursor-pointer hover:text-black relative">
+            <Link to="/cart">
+              <MdOutlineShoppingCart />
 
-                <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-red-500 text-white aspect-square rounded-full text-[8px] ">
-                  {getCartCount()}
-                </p>
-              </Link>
-            </div>
-          )}
+              <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-red-500 text-white aspect-square rounded-full text-[8px] ">
+                {getCartCount()}
+              </p>
+            </Link>
+          </div>
 
           <div className="text-sm  sm:text-base">
             <select
