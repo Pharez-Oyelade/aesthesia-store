@@ -14,6 +14,7 @@ const PlaceOrder = () => {
   const [method, setMethod] = useState("paystack");
   const [filteredLocations, setFilteredLocations] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const {
     navigate,
@@ -33,6 +34,13 @@ const PlaceOrder = () => {
     selectedCountry,
     setSelectedCountry,
   } = useContext(shopContext);
+
+  // Check authentication on component mount
+  useEffect(() => {
+    if (!token) {
+      setShowAuthModal(true);
+    }
+  }, [token]);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -224,12 +232,6 @@ const PlaceOrder = () => {
       return;
     }
 
-    if (!token) {
-      toast.error("You must be logged in to place an order.");
-      navigate("/login");
-      return;
-    }
-
     if (!window.PaystackPop) {
       toast.error("Paystack script not loaded");
       return;
@@ -326,11 +328,6 @@ const PlaceOrder = () => {
       payWithPaystack();
       return;
     }
-    if (!token) {
-      toast.error("You must be logged in to place an order.");
-      navigate("/login");
-      return;
-    }
     try {
       const orderItems = buildOrderItems();
       let orderData = {
@@ -360,7 +357,9 @@ const PlaceOrder = () => {
     <div className="">
       <form
         onSubmit={onSubmitHandler}
-        className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t"
+        className={`flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t ${
+          !token ? "opacity-50 pointer-events-none" : ""
+        }`}
       >
         {/* LEFT SIDE */}
         <div className="flex flex-col gap-4 w-full sm:max-w-[480px]">
@@ -621,6 +620,62 @@ const PlaceOrder = () => {
             >
               X
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Authentication Required Modal */}
+      {showAuthModal && !token && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-2xl max-w-sm w-full mx-4 p-8 text-center">
+            <div className="mb-6">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                Ready to Checkout?
+              </h2>
+              <p className="text-gray-600">
+                Sign in or create an account to place your order
+              </p>
+            </div>
+
+            <div className="space-y-3 mb-8">
+              <p className="text-sm text-gray-600 bg-blue-50 p-4 rounded">
+                ✓ Save your cart for later <br />
+                ✓ Track your orders <br />✓ Faster checkout next time
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <button
+                onClick={() => {
+                  setShowAuthModal(false);
+                  navigate("/login?mode=signup");
+                }}
+                className="w-full bg-red-800 text-white py-3 rounded font-semibold hover:bg-red-700 transition duration-200"
+              >
+                Create New Account
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowAuthModal(false);
+                  navigate("/login?mode=login");
+                }}
+                className="w-full bg-gray-200 text-gray-900 py-3 rounded font-semibold hover:bg-gray-300 transition duration-200"
+              >
+                Sign In
+              </button>
+
+              <button
+                onClick={() => setShowAuthModal(false)}
+                className="w-full text-gray-600 py-3 rounded font-semibold hover:bg-gray-100 transition duration-200"
+              >
+                Continue Shopping
+              </button>
+            </div>
+
+            <p className="text-xs text-gray-500 mt-6">
+              Your cart items are saved locally and will sync when you log in
+            </p>
           </div>
         </div>
       )}

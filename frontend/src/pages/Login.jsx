@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { LuEyeClosed } from "react-icons/lu";
 import { LuEye } from "react-icons/lu";
 import { shopContext } from "../context/ShopContext";
+import { useSearchParams } from "react-router-dom";
 // import axios from "axios";
 import api from "../utils/axiosConfig";
 import authService from "../services/authService";
 import { toast } from "react-toastify";
 
 const Login = () => {
+  const [searchParams] = useSearchParams();
   const [currentState, setCurrentState] = useState("Sign Up");
   const {
     token,
@@ -28,6 +30,16 @@ const Login = () => {
   const [returnUrl, setReturnUrl] = useState("/");
 
   const [marketingConsent, setMarketingConsent] = useState(false);
+
+  // Handle mode parameter from URL (login/signup)
+  useEffect(() => {
+    const mode = searchParams.get("mode");
+    if (mode === "login") {
+      setCurrentState("Login");
+    } else if (mode === "signup") {
+      setCurrentState("Sign Up");
+    }
+  }, [searchParams]);
 
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
