@@ -117,7 +117,7 @@ const List = ({ token }) => {
           <div className="hidden md:grid grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center py-2 px-4 border-b border-gray-200 bg-gray-50 text-base font-semibold text-gray-700 rounded-t-xl">
             <b>Image</b>
             <b>Name</b>
-            <b>Section</b>
+            <b>Collection</b>
             <b>Price</b>
             <b className="text-center">Action</b>
           </div>

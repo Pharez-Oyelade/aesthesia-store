@@ -192,7 +192,7 @@ const Section = ({ token }) => {
                 Loading...
               </>
             ) : (
-              "Create Section"
+              "Create Collection"
             )}
           </button>
         </form>

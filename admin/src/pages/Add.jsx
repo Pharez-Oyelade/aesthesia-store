@@ -252,14 +252,14 @@ const Add = ({ token }) => {
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1">
           <label className="mb-2 font-semibold text-gray-700 block">
-            Product section
+            Collection
           </label>
           <select
             onChange={(e) => setSection(e.target.value)}
             value={section}
             className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-red-200 outline-none transition"
           >
-            <option value="">Select a section</option>
+            <option value="">Select a collection</option>
             {availableSections.map((section) => (
               <option key={section._id} value={section._id}>
                 {section.name}
