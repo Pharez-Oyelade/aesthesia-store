@@ -166,7 +166,7 @@ const Navbar = () => {
               {token ? (
                 <CgProfile />
               ) : (
-                <p className="text-md sm:text-base bg-red-800 px-2 py-1 text-white rounded cursor-pointer">
+                <p className="text-md sm:text-base bg-red-800 px-2 py-1 text-white rounded cursor-pointer animate-pulse">
                   Sign Up
                 </p>
               )}
@@ -210,14 +210,17 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="cursor-pointer hover:text-black relative">
-            <Link to="/cart">
-              <MdOutlineShoppingCart />
-              <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-red-500 text-white aspect-square rounded-full text-[8px] ">
-                {getCartCount()}
-              </p>
-            </Link>
-          </div>
+          {token && (
+            <div className="cursor-pointer hover:text-black relative">
+              <Link to="/cart">
+                <MdOutlineShoppingCart />
+
+                <p className="absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-red-500 text-white aspect-square rounded-full text-[8px] ">
+                  {getCartCount()}
+                </p>
+              </Link>
+            </div>
+          )}
 
           <div className="text-sm  sm:text-base">
             <select

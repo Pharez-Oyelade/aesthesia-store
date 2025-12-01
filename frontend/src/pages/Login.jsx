@@ -8,7 +8,7 @@ import authService from "../services/authService";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const [currentState, setCurrentState] = useState("Login");
+  const [currentState, setCurrentState] = useState("Sign Up");
   const {
     token,
     setToken,
@@ -176,7 +176,7 @@ const Login = () => {
           </div>
         )}
 
-        <div className="w-full flex justify-between text-sm mt-[-8px]">
+        <div className="w-full flex justify-between items-center text-sm mt-[-8px]">
           <p
             className="cursor-pointer"
             onClick={() => navigate("/forgot-password")}
@@ -196,7 +196,7 @@ const Login = () => {
               className="cursor-pointer"
             >
               Already have an account?{" "}
-              <span className="text-red-500">Login</span>
+              <span className="text-red-500 font-bold text-lg">Login</span>
             </p>
           )}
         </div>

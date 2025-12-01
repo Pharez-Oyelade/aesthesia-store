@@ -109,10 +109,10 @@ const Product = () => {
   // Add to cart handler
   const handleAddToCart = (e) => {
     e.preventDefault();
-    if (!token) {
-      navigate("/login");
-      return;
-    }
+    // if (!token) {
+    //   navigate("/login");
+    //   return;
+    // }
     if (availableSizes.length > 0 && !size) {
       alert("Please select a size");
       return;
@@ -429,21 +429,17 @@ const Product = () => {
                       </button>
                     </div>
                     <button
-                      onClick={
-                        !token ? () => navigate("/login") : handleAddToCart
-                      }
+                      onClick={handleAddToCart}
                       className="w-full md:w-auto bg-gradient-to-r from-[#691110] to-red-700 hover:from-red-800 hover:to-red-600 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95 mt-4"
                       disabled={productData.soldOut}
                     >
-                      {!token
-                        ? "Login to Add to Cart"
-                        : `${
-                            productData.soldOut
-                              ? "Sold Out"
-                              : productData.preorder
-                              ? "Preorder Now"
-                              : "Add to Cart"
-                          }`}
+                      {`${
+                        productData.soldOut
+                          ? "Sold Out"
+                          : productData.preorder
+                          ? "Preorder Now"
+                          : "Add to Cart"
+                      }`}
                     </button>
                   </form>
                 )}
