@@ -143,7 +143,9 @@ const Collection = () => {
               showFilter ? "" : "hidden"
             } md:block`}
           >
-            <p className="mb-3 text-sm font-medium text-gray-700">SECTIONS</p>
+            <p className="mb-3 text-sm font-medium text-gray-700">
+              COLLECTIONS
+            </p>
             <div className="flex flex-col gap-3 text-sm font-light text-gray-700">
               {collection.map((section, index) => {
                 // support both string and object section representations
