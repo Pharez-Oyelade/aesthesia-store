@@ -18,6 +18,7 @@ const Login = () => {
     getUserWishlist,
     getUserDetails,
     subscribeToMailchimp,
+    syncLocalStorageCartToDatabase,
   } = useContext(shopContext);
 
   const [name, setName] = useState("");
@@ -79,8 +80,16 @@ const Login = () => {
         getUserCart(response.token);
         getUserWishlist(response.token);
         getUserDetails(response.token);
+        // Sync cart items from localStorage
+        const itemsSynced = await syncLocalStorageCartToDatabase(
+          response.token
+        );
         if (marketingConsent) {
           subscribeToMailchimp(email, name);
+        }
+        // Navigate to cart if items were synced, otherwise to home
+        if (itemsSynced) {
+          navigate("/cart");
         }
       } else {
         const response = await authService.login(email, password);
@@ -88,6 +97,14 @@ const Login = () => {
         getUserCart(response.token);
         getUserWishlist(response.token);
         getUserDetails(response.token);
+        // Sync cart items from localStorage
+        const itemsSynced = await syncLocalStorageCartToDatabase(
+          response.token
+        );
+        // Navigate to cart if items were synced, otherwise to home
+        if (itemsSynced) {
+          navigate("/cart");
+        }
       }
     } catch (error) {
       console.log(error);

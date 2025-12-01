@@ -298,6 +298,92 @@ const ShopContextProvider = (props) => {
     return JSON.stringify(measurements || {});
   };
 
+  // Save cart to localStorage
+  const saveCartToLocalStorage = (cartData) => {
+    try {
+      localStorage.setItem("pendingCart", JSON.stringify(cartData));
+    } catch (error) {
+      console.error("Error saving cart to localStorage:", error);
+    }
+  };
+
+  // Load cart from localStorage
+  const loadCartFromLocalStorage = () => {
+    try {
+      const savedCart = localStorage.getItem("pendingCart");
+      return savedCart ? JSON.parse(savedCart) : {};
+    } catch (error) {
+      console.error("Error loading cart from localStorage:", error);
+      return {};
+    }
+  };
+
+  // Sync localStorage cart to database after login
+  const syncLocalStorageCartToDatabase = async (token) => {
+    try {
+      const pendingCart = loadCartFromLocalStorage();
+
+      if (Object.keys(pendingCart).length === 0) {
+        return false; // No pending cart items
+      }
+
+      // Build array of items to add to cart
+      const itemsToSync = [];
+      for (const itemId in pendingCart) {
+        for (const size in pendingCart[itemId]) {
+          for (const colorKey in pendingCart[itemId][size]) {
+            for (const mKey in pendingCart[itemId][size][colorKey]) {
+              const quantity = pendingCart[itemId][size][colorKey][mKey];
+              if (quantity > 0) {
+                itemsToSync.push({
+                  itemId,
+                  size,
+                  color: colorKey === "no-color" ? "" : colorKey,
+                  measurements: JSON.parse(mKey),
+                  quantity,
+                });
+              }
+            }
+          }
+        }
+      }
+
+      // Sync each item to the database
+      if (itemsToSync.length > 0) {
+        for (const item of itemsToSync) {
+          try {
+            await axios.post(backendUrl + "/api/cart/add", item, {
+              headers: { token },
+            });
+          } catch (error) {
+            console.error("Error syncing cart item:", error);
+          }
+        }
+
+        // Clear localStorage after successful sync
+        localStorage.removeItem("pendingCart");
+
+        // Refresh cart data from database
+        try {
+          const response = await api.post("/api/cart/get", {});
+          if (response.data.success) {
+            setCartItems(response.data.cartData || {});
+          }
+        } catch (error) {
+          console.error("Error refreshing cart after sync:", error);
+        }
+
+        toast.success("Cart items synced successfully!");
+        return true; // Items were synced
+      }
+
+      return false;
+    } catch (error) {
+      console.error("Error syncing cart from localStorage:", error);
+      return false;
+    }
+  };
+
   const convertPrice = (amount) => {
     if (currencyCode === "NGN") {
       return Number(amount).toLocaleString("en-NG", {
@@ -340,6 +426,12 @@ const ShopContextProvider = (props) => {
       } else {
         cartData[itemId][size][colorKey][mKey] = quantity;
       }
+
+      // Save to localStorage if user is not logged in
+      if (!token) {
+        saveCartToLocalStorage(cartData);
+      }
+
       return cartData;
     });
 
@@ -406,6 +498,12 @@ const ShopContextProvider = (props) => {
             delete cartData[itemId];
         }
       }
+
+      // Save to localStorage if user is not logged in
+      if (!token) {
+        saveCartToLocalStorage(cartData);
+      }
+
       return cartData;
     });
 
@@ -731,6 +829,8 @@ const ShopContextProvider = (props) => {
       getUserCart(storedToken);
       getUserWishlist(storedToken);
       getUserDetails(storedToken);
+      // Sync pending cart items from localStorage
+      syncLocalStorageCartToDatabase(storedToken);
     } else if (storedToken) {
       // Token is expired, try to refresh
       authService
@@ -740,12 +840,25 @@ const ShopContextProvider = (props) => {
           getUserCart(newToken);
           getUserWishlist(newToken);
           getUserDetails(newToken);
+          // Sync pending cart items from localStorage
+          syncLocalStorageCartToDatabase(newToken);
         })
         .catch(() => {
           // Refresh failed, clear tokens
           authService.clearTokens();
           setToken("");
+          // Load cart from localStorage if available
+          const savedCart = loadCartFromLocalStorage();
+          if (Object.keys(savedCart).length > 0) {
+            setCartItems(savedCart);
+          }
         });
+    } else {
+      // No token, load cart from localStorage if available
+      const savedCart = loadCartFromLocalStorage();
+      if (Object.keys(savedCart).length > 0) {
+        setCartItems(savedCart);
+      }
     }
   }, []);
 
@@ -784,6 +897,7 @@ const ShopContextProvider = (props) => {
     getUserDetails,
     userData,
     subscribeToMailchimp,
+    syncLocalStorageCartToDatabase,
     // VAT_RATE,
     // getVAT,
     // formatNumberWithCommas,
