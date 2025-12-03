@@ -323,7 +323,7 @@ const Product = () => {
                     </div>
                   </div>
                 )}
-                <div className="mt-4 p-4 border-l-4 border-yellow-500 bg-yellow-800 dark:bg-yellow-900 dark:text-yellow-100 rounded-md text-sm">
+                <div className="mt-4 p-4 border-l-4 border-red-600 bg-red-50 dark:bg-red-900 text-red-800 dark:text-red-100 rounded-md text-sm">
                   <h4 className="font-semibold mb-1">
                     Size Selection and Custom Fit Disclaimer
                   </h4>
