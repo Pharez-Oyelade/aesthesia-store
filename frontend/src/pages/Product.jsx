@@ -323,7 +323,7 @@ const Product = () => {
                     </div>
                   </div>
                 )}
-                <div className="mt-4 p-4 border-l-4 border-yellow-500 bg-yellow-800 dark:bg-yellow-900 dark:text-yellow-100 rounded-md text-sm">
+                <div className="mt-4 p-4 border-l-4 border-red-500 bg-red-800 dark:bg-red-900 rounded-md text-sm">
                   <h4 className="font-semibold mb-1">
                     Size Selection and Custom Fit Disclaimer
                   </h4>
@@ -359,7 +359,7 @@ const Product = () => {
                     onSubmit={handleAddToCart}
                     className="flex flex-col gap-4 mt-4"
                   >
-                    <p>Measurements for fitting</p>
+                    <p classname="font-bold">Measurements for fitting</p>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       <input
                         type="number"
