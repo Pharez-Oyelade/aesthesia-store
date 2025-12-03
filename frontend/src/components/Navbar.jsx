@@ -351,7 +351,7 @@ const Navbar = () => {
                 </Link>
               )}
             </div>
-          ))}
+          )).reverse()}
         </div>
       )}
     </div>
