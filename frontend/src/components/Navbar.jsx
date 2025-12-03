@@ -303,7 +303,7 @@ const Navbar = () => {
                         {name}
                       </Link>
                     );
-                  })}
+                  }).reverse()}
                 </div>
               )}
             </div>
