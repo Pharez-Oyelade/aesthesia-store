@@ -8,6 +8,7 @@ import {
 } from "../controllers/orderController.js";
 import adminAuth from "../middleware/adminAuth.js";
 import authUser from "../middleware/auth.js";
+import optionalAuth from "../middleware/optionalAuth.js";
 
 const orderRouter = express.Router();
 
@@ -15,11 +16,11 @@ const orderRouter = express.Router();
 orderRouter.post("/list", adminAuth, allOrders); // Route for getting all orders for admin
 orderRouter.post("/status", adminAuth, updateStatus);
 
-// Payment Features
-orderRouter.post("/place", authUser, placeOrder);
-orderRouter.post("/paystack", authUser, placeOrderPaystack);
+// Payment Features - Allow both authenticated and guest users
+orderRouter.post("/place", optionalAuth, placeOrder);
+orderRouter.post("/paystack", optionalAuth, placeOrderPaystack);
 
-// User Feature
+// User Feature - Only authenticated users can view their orders
 orderRouter.post("/userorders", authUser, userOrders);
 
 export default orderRouter;

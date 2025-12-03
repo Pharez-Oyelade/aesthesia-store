@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { shopContext } from "../context/ShopContext";
 import axios from "axios";
 
@@ -21,11 +22,24 @@ function formatDate(date) {
 const Orders = () => {
   const { currency, delivery_fee, backendUrl, token, formatPrice } =
     useContext(shopContext);
+  const navigate = useNavigate();
   const [orderData, setOrderData] = useState([]);
+  const [guestOrders, setGuestOrders] = useState([]);
 
   const loadOrderData = async () => {
     try {
-      if (!token) return;
+      if (!token) {
+        // Load guest orders from localStorage if no token
+        const savedGuestOrders = localStorage.getItem("guestOrders");
+        if (savedGuestOrders) {
+          try {
+            setGuestOrders(JSON.parse(savedGuestOrders));
+          } catch (e) {
+            console.error("Error parsing guest orders:", e);
+          }
+        }
+        return;
+      }
       const response = await axios.post(
         backendUrl + "/api/order/userorders",
         {},
@@ -53,6 +67,70 @@ const Orders = () => {
     loadOrderData();
     // eslint-disable-next-line
   }, [token]);
+
+  // Show message for guest users
+  if (!token) {
+    return (
+      <div className="max-w-2xl mx-auto mt-20 text-center text-gray-600 px-4">
+        <h2 className="text-2xl font-bold mb-4">My Orders</h2>
+        {guestOrders.length > 0 ? (
+          <div className="mt-8 space-y-4">
+            <p className="text-gray-700 mb-4">
+              You placed {guestOrders.length} order(s) as a guest:
+            </p>
+            {guestOrders.map((order, idx) => (
+              <div
+                key={idx}
+                className="bg-white rounded-lg shadow p-4 border border-gray-200 text-left"
+              >
+                <p className="font-semibold">Order ID: {order.orderId}</p>
+                <p className="text-sm text-gray-600">
+                  Email: {order.email}
+                </p>
+                <p className="text-sm text-gray-600">
+                  Date: {order.date ? formatDate(order.date) : "Unknown"}
+                </p>
+                <p className="text-xs text-gray-500 mt-2">
+                  Check your email ({order.email}) for order confirmation and
+                  tracking details.
+                </p>
+              </div>
+            ))}
+            <div className="mt-8 p-4 bg-blue-50 rounded-lg">
+              <p className="text-sm text-gray-700 mb-3">
+                Sign in to track all your orders in one place and get faster
+                checkout next time.
+              </p>
+              <button
+                onClick={() => navigate("/login?mode=login")}
+                className="bg-red-800 text-white px-6 py-2 rounded font-semibold hover:bg-red-700 transition"
+              >
+                Sign In
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <p className="mb-6">Sign in to view your orders.</p>
+            <div className="space-x-4">
+              <button
+                onClick={() => navigate("/login?mode=login")}
+                className="bg-red-800 text-white px-6 py-2 rounded font-semibold hover:bg-red-700 transition"
+              >
+                Sign In
+              </button>
+              <button
+                onClick={() => navigate("/login?mode=signup")}
+                className="bg-gray-200 text-gray-900 px-6 py-2 rounded font-semibold hover:bg-gray-300 transition"
+              >
+                Create Account
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    );
+  }
 
   if (orderData.length === 0) {
     return (

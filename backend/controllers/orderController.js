@@ -195,9 +195,10 @@ const placeOrder = async (req, res) => {
   let newOrder = null;
   try {
     const { userId, items, amount, address } = req.body;
+    const isGuest = req.isGuest || false;
 
-    // Basic validation
-    if (!userId || !items || !Array.isArray(items) || items.length === 0) {
+    // Basic validation - items and address are required for both guest and authenticated users
+    if (!items || !Array.isArray(items) || items.length === 0) {
       return res.json({ success: false, message: "Invalid order data" });
     }
 
@@ -205,26 +206,48 @@ const placeOrder = async (req, res) => {
       return res.json({ success: false, message: "Invalid address data" });
     }
 
+    // For authenticated users, userId should be present
+    if (!isGuest && !userId) {
+      return res.json({ success: false, message: "User authentication required" });
+    }
+
     const orderData = {
-      userId,
+      userId: isGuest ? null : userId,
       items,
       address,
       amount,
       paymentMethod: "cod",
       payment: false,
       date: Date.now(),
+      isGuest: isGuest,
+      guestEmail: isGuest ? address.email : null,
     };
 
     newOrder = new orderModel(orderData);
     await newOrder.save();
 
-    await userModel.findByIdAndUpdate(userId, { cartData: {} });
+    // Only clear cart for authenticated users
+    if (!isGuest && userId) {
+      try {
+        await userModel.findByIdAndUpdate(userId, { cartData: {} });
+      } catch (error) {
+        console.error("Error clearing cart:", error.message);
+        // Don't fail the order if cart clearing fails
+      }
+    }
 
     // Send order confirmation email (non-blocking)
     try {
-      const user = await userModel.findById(userId);
-      if (user?.email) {
-        await sendOrderConfirmationEmail({ to: user.email, order: newOrder });
+      const emailTo = isGuest ? address.email : null;
+      if (emailTo) {
+        // For guests, use address email directly
+        await sendOrderConfirmationEmail({ to: emailTo, order: newOrder });
+      } else if (!isGuest && userId) {
+        // For authenticated users, get email from user model
+        const user = await userModel.findById(userId);
+        if (user?.email) {
+          await sendOrderConfirmationEmail({ to: user.email, order: newOrder });
+        }
       }
     } catch (emailError) {
       console.error("Email error:", emailError.message);
@@ -255,18 +278,26 @@ const placeOrderPaystack = async (req, res) => {
 
   try {
     const { userId, items, amount, address, reference } = req.body;
+    const isGuest = req.isGuest || false;
 
     // ===== VALIDATION =====
     if (!reference || typeof reference !== "string") {
       return res.json({ success: false, message: "Invalid payment reference" });
     }
 
-    if (!userId || !items || !Array.isArray(items) || items.length === 0) {
+    // Items validation - required for both guest and authenticated users
+    if (!items || !Array.isArray(items) || items.length === 0) {
       return res.json({ success: false, message: "Invalid order data" });
     }
 
+    // Address validation - required for both
     if (!address || !address.firstName || !address.email) {
       return res.json({ success: false, message: "Invalid address data" });
+    }
+
+    // For authenticated users, userId should be present
+    if (!isGuest && !userId) {
+      return res.json({ success: false, message: "User authentication required" });
     }
 
     // ===== IDEMPOTENCY CHECK =====
@@ -380,7 +411,7 @@ const placeOrderPaystack = async (req, res) => {
 
     // ===== CREATE ORDER =====
     const orderData = {
-      userId,
+      userId: isGuest ? null : userId,
       items,
       address,
       amount,
@@ -395,19 +426,35 @@ const placeOrderPaystack = async (req, res) => {
         channel: paymentData.channel,
       },
       date: Date.now(),
+      isGuest: isGuest,
+      guestEmail: isGuest ? address.email : null,
     };
 
     const newOrder = new orderModel(orderData);
     await newOrder.save();
 
-    // Clear user cart
-    await userModel.findByIdAndUpdate(userId, { cartData: {} });
+    // Only clear cart for authenticated users
+    if (!isGuest && userId) {
+      try {
+        await userModel.findByIdAndUpdate(userId, { cartData: {} });
+      } catch (error) {
+        console.error("Error clearing cart:", error.message);
+        // Don't fail the order if cart clearing fails
+      }
+    }
 
     // Send confirmation email (non-blocking)
     try {
-      const user = await userModel.findById(userId);
-      if (user?.email) {
-        await sendOrderConfirmationEmail({ to: user.email, order: newOrder });
+      const emailTo = isGuest ? address.email : null;
+      if (emailTo) {
+        // For guests, use address email directly
+        await sendOrderConfirmationEmail({ to: emailTo, order: newOrder });
+      } else if (!isGuest && userId) {
+        // For authenticated users, get email from user model
+        const user = await userModel.findById(userId);
+        if (user?.email) {
+          await sendOrderConfirmationEmail({ to: user.email, order: newOrder });
+        }
       }
     } catch (emailError) {
       console.error("Email error:", emailError.message);

@@ -99,13 +99,26 @@ const Orders = ({ token }) => {
                   </div>
                 ))}
               </div>
-              <p className="mt-3 font-medium text-lg text-gray-700">
-                {order.address.firstName + " " + order.address.lastName}
-                <br />
+              <div className="mt-3">
+                <div className="flex items-center gap-2 mb-1">
+                  <p className="font-medium text-lg text-gray-700">
+                    {order.address.firstName + " " + order.address.lastName}
+                  </p>
+                  {order.isGuest && (
+                    <span className="px-2 py-0.5 bg-green-100 text-green-800 text-xs font-semibold rounded-full border border-green-300">
+                      GUEST
+                    </span>
+                  )}
+                </div>
                 <span className="mb-2 text-sm text-gray-500">
                   {order.address.email}
                 </span>
-              </p>
+                {order.isGuest && order.guestEmail && (
+                  <p className="text-xs text-green-700 mt-1">
+                    Guest Email: {order.guestEmail}
+                  </p>
+                )}
+              </div>
               <div>
                 <p className="text-gray-500">
                   {order.address.deliveryLocation}

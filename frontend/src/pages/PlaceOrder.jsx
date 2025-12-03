@@ -15,6 +15,7 @@ const PlaceOrder = () => {
   const [filteredLocations, setFilteredLocations] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isGuestMode, setIsGuestMode] = useState(false);
 
   const {
     navigate,
@@ -35,12 +36,12 @@ const PlaceOrder = () => {
     setSelectedCountry,
   } = useContext(shopContext);
 
-  // Check authentication on component mount
+  // Check authentication on component mount - show modal but don't block
   useEffect(() => {
-    if (!token) {
+    if (!token && !isGuestMode) {
       setShowAuthModal(true);
     }
-  }, [token]);
+  }, [token, isGuestMode]);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -268,20 +269,42 @@ const PlaceOrder = () => {
         reference: response.reference,
       };
 
+      // Only include token header if user is authenticated
+      const headers = token ? { token } : {};
       const res = await axios.post(
         backendUrl + "/api/order/paystack",
         orderData,
         {
-          headers: { token },
+          headers,
           timeout: 30000, // 30 second timeout
         }
       );
 
       if (res.data.success) {
+        // Save guest order to localStorage if guest
+        if ((isGuestMode || !token) && res.data.orderId) {
+          try {
+            const guestOrder = {
+              orderId: res.data.orderId,
+              email: formData.email,
+              date: Date.now(),
+              reference: response.reference,
+            };
+            const existingOrders = JSON.parse(
+              localStorage.getItem("guestOrders") || "[]"
+            );
+            existingOrders.push(guestOrder);
+            localStorage.setItem("guestOrders", JSON.stringify(existingOrders));
+          } catch (e) {
+            console.error("Error saving guest order:", e);
+          }
+        }
+
         // Clear cart and navigation
         setCartItems({});
         setSelectedCountry("");
         setSelectedLocation("");
+        setIsGuestMode(false);
 
         if (res.data.isDuplicate) {
           toast.info("Order already processed successfully");
@@ -289,7 +312,17 @@ const PlaceOrder = () => {
           toast.success("Order placed successfully!");
         }
 
-        navigate("/orders");
+        // For guest orders, show order reference instead of navigating to orders page
+        if (isGuestMode || !token) {
+          toast.info(
+            `Order placed! Check your email (${formData.email}) for confirmation. Order ID: ${res.data.orderId}`,
+            { autoClose: 10000 }
+          );
+          // Optionally navigate to a success page or home
+          navigate("/");
+        } else {
+          navigate("/orders");
+        }
       } else {
         // Payment succeeded but order creation failed
         const errorMsg = res.data.message || "Order processing failed";
@@ -335,16 +368,47 @@ const PlaceOrder = () => {
         items: orderItems,
         amount: getCartAmount() + getShippingCost(),
       };
+      // Only include token header if user is authenticated
+      const headers = token ? { token } : {};
       const response = await axios.post(
         backendUrl + "/api/order/place",
         orderData,
-        { headers: { token } }
+        { headers }
       );
       if (response.data.success) {
+        // Save guest order to localStorage if guest
+        if ((isGuestMode || !token) && response.data.orderId) {
+          try {
+            const guestOrder = {
+              orderId: response.data.orderId,
+              email: formData.email,
+              date: Date.now(),
+            };
+            const existingOrders = JSON.parse(
+              localStorage.getItem("guestOrders") || "[]"
+            );
+            existingOrders.push(guestOrder);
+            localStorage.setItem("guestOrders", JSON.stringify(existingOrders));
+          } catch (e) {
+            console.error("Error saving guest order:", e);
+          }
+        }
+
         setCartItems({});
         setSelectedLocation("");
         setSelectedCountry("");
-        navigate("/orders");
+        setIsGuestMode(false);
+
+        // For guest orders, show order reference instead of navigating to orders page
+        if (isGuestMode || !token) {
+          toast.success(
+            `Order placed! Check your email (${formData.email}) for confirmation. Order ID: ${response.data.orderId}`,
+            { autoClose: 10000 }
+          );
+          navigate("/");
+        } else {
+          navigate("/orders");
+        }
       } else {
         toast.error(response.data.message);
       }
@@ -357,9 +421,7 @@ const PlaceOrder = () => {
     <div className="">
       <form
         onSubmit={onSubmitHandler}
-        className={`flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t ${
-          !token ? "opacity-50 pointer-events-none" : ""
-        }`}
+        className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t"
       >
         {/* LEFT SIDE */}
         <div className="flex flex-col gap-4 w-full sm:max-w-[480px]">
@@ -587,7 +649,6 @@ const PlaceOrder = () => {
                   type="button"
                   onClick={payWithPaystack}
                   className="bg-green-600 text-white px-16 py-3 text-sm rounded"
-                  disabled={!token}
                 >
                   Pay with Paystack
                 </button>
@@ -625,7 +686,7 @@ const PlaceOrder = () => {
       )}
 
       {/* Authentication Required Modal */}
-      {showAuthModal && !token && (
+      {showAuthModal && !token && !isGuestMode && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-2xl max-w-sm w-full mx-4 p-8 text-center">
             <div className="mb-6">
@@ -633,7 +694,7 @@ const PlaceOrder = () => {
                 Ready to Checkout?
               </h2>
               <p className="text-gray-600">
-                Sign in or create an account to place your order
+                Sign in, create an account, or proceed as guest
               </p>
             </div>
 
@@ -666,6 +727,19 @@ const PlaceOrder = () => {
               </button>
 
               <button
+                onClick={() => {
+                  setIsGuestMode(true);
+                  setShowAuthModal(false);
+                  toast.info(
+                    "Proceeding as guest. Please fill in all delivery information."
+                  );
+                }}
+                className="w-full bg-green-600 text-white py-3 rounded font-semibold hover:bg-green-700 transition duration-200"
+              >
+                Proceed as Guest
+              </button>
+
+              <button
                 onClick={() => setShowAuthModal(false)}
                 className="w-full text-gray-600 py-3 rounded font-semibold hover:bg-gray-100 transition duration-200"
               >
@@ -674,7 +748,9 @@ const PlaceOrder = () => {
             </div>
 
             <p className="text-xs text-gray-500 mt-6">
-              Your cart items are saved locally and will sync when you log in
+              {isGuestMode
+                ? "You're checking out as a guest. Sign in to track your orders."
+                : "Your cart items are saved locally and will sync when you log in"}
             </p>
           </div>
         </div>
