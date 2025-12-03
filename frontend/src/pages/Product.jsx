@@ -359,7 +359,7 @@ const Product = () => {
                     onSubmit={handleAddToCart}
                     className="flex flex-col gap-4 mt-4"
                   >
-                    <p>Measurements for fitting</p>
+                    <p className="font-bold">Measurements for fitting</p>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       <input
                         type="number"
