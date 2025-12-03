@@ -122,7 +122,7 @@ const port = process.env.PORT || 4000;
 // Normalize allowed origins (strip trailing slash and lowercase) to avoid
 // accidental mismatches like a trailing slash on the incoming Origin header.
 const baseAllowedOrigins = [
-  "https://aesthesia-haven.vercel.app",
+  "https://aesthesia-haven-408pjvnjw-pharez-oyelades-projects.vercel.app/",
   "https://aesthesiahaven.com",
   "https://www.aesthesiahaven.com",
   "https://aesthesia-admin-panel.vercel.app",
