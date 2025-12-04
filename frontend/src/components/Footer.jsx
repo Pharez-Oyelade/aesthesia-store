@@ -44,14 +44,14 @@ const Footer = () => {
             <Link to="/collection">
               <li className="cursor-pointer">Collection</li>
             </Link>
-            <Link to="/collection/the rere collection">
-              <li className="cursor-pointer">RERE Collection</li>
+            <Link to="/collection/unfold">
+              <li className="cursor-pointer">Unfold</li>
             </Link>
             <Link to="/collection/the color code collection">
               <li className="cursor-pointer">Color Code Collection</li>
             </Link>
-            <Link to="/collection/unfold">
-              <li className="cursor-pointer">Unfold</li>
+            <Link to="/collection/the rere collection">
+              <li className="cursor-pointer">RERE Collection</li>
             </Link>
           </ul>
         </div>
