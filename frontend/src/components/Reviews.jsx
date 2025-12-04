@@ -119,7 +119,7 @@ const Reviews = () => {
     <div className="pb-10">
       <div className="text-center mt-10">
         <div className="text-2xl sm:text-3xl">
-          <Title text1={"Reviews"} text2={"From Our Customers"} />
+          <Title text1={"Reviews"} text2={"from our Customers"} />
         </div>
       </div>
 
