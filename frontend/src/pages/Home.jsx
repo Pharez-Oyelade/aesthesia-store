@@ -7,6 +7,8 @@ import Policy from "../components/Policy";
 import NewsletterBox from "../components/NewsletterBox";
 import Title from "../components/Title";
 import PromotionBanner from "../components/PromotionBanner";
+import Reviews from "../components/Reviews";
+import { assets } from "../assets/assets";
 
 const Home = () => {
   return (
@@ -37,7 +39,28 @@ const Home = () => {
 
       <NewProducts />
       <Policy />
+
       <FeaturedGrid />
+      <Reviews />
+      {/* Why choose us */}
+      <div className="flex justify-center items-center gap-3 sm:gap-10 mt-10 mb-20">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 w-60 text-center">
+          <img src={assets.badge} alt="Premium quality" className="w-10" />
+          <h3 className="font-semibold text-lg">Premium Quality</h3>
+        </div>
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 w-60 text-center">
+          <img src={assets.reliability} alt="Reliability" className="w-10" />
+          <h3 className="font-semibold text-lg">Reliable Delivery</h3>
+        </div>
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 w-60 text-center">
+          <img
+            src={assets.secure_payment}
+            alt="secure-checkout"
+            className="w-10"
+          />
+          <h3 className="font-semibold text-lg">Secure Checkout</h3>
+        </div>
+      </div>
       <div className="px-4">
         <NewsletterBox />
       </div>

@@ -53,6 +53,9 @@ import jewelry_bg from "./jewelry_bg.png";
 import time from "./time.png";
 import contact from "./contact.png";
 import contact_2 from "./contact.webp";
+import badge from "./badge.png";
+import reliability from "./reliability.png";
+import secure_payment from "./secure-payment.png";
 
 export const assets = {
   logo,
@@ -110,4 +113,8 @@ export const assets = {
   contact_2,
   size_chart_demo,
   size_chart,
+
+  badge,
+  reliability,
+  secure_payment,
 };
