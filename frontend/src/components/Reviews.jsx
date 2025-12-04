@@ -92,6 +92,7 @@
 import React, { useState } from "react";
 import { reviews } from "../../data/review";
 import Title from "./Title";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Reviews = () => {
@@ -117,10 +118,11 @@ const Reviews = () => {
 
   return (
     <div className="pb-10">
-      <div className="text-center mt-10">
+      <div className="text-center my-10">
         <div className="text-2xl sm:text-3xl">
           <Title text1={"Reviews"} text2={"from our Customers"} />
         </div>
+        <p className="font-semibold text-xl">"Loved by Those Who Know Style"</p>
       </div>
 
       {/* Navigation buttons */}
@@ -165,6 +167,14 @@ const Reviews = () => {
           );
         })}
       </div>
+      {/* Shop the collections our customers adore CTA */}
+      <Link to="/collection">
+        <div className="text-center w-[85%] sm:w-[30%] rounded-full px-3 py-5 mx-auto mt-6 hover:scale-[1.05] transition ease-in-out cursor-pointer text-white bg-red-800">
+          <h2 className="text-base font-semibold mb-2">
+            Shop the collections our customers adore
+          </h2>
+        </div>
+      </Link>
 
       {/* Optional auto-scroll on mobile — uncomment if needed */}
       {/* <div className="sm:hidden text-center mt-3 text-gray-500 text-xs">
