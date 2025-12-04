@@ -60,7 +60,7 @@ export const reviews = [
     name: "Chichi",
     rating: 5,
     comment:
-      "Thank you so much! I got my package. Love the presentation and the fragrance! I am aso happy with my set and kudos for your great customer service. Please keep it up, it made me take notice. I am keeping an eye on your pager for different styles, will definitely be ordering more pieces. Thank you",
+      "Thank you so much! I got my package. Love the presentation and the fragrance! I am also happy with my set and kudos for your great customer service. Please keep it up, it made me take notice. I am keeping an eye on your pager for different styles, will definitely be ordering more pieces. Thank you",
   },
   {
     id: 10,
