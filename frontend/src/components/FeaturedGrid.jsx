@@ -7,9 +7,8 @@ import { motion } from "framer-motion";
 const FeaturedGrid = () => {
   const images = [
     assets.bg_main_4_mobile,
-    assets.bg_1_main,
     assets.bg_3_main,
-
+    assets.bg_1_main,
     assets.bg_2_main,
     // assets.jewelry_bg,
     // assets.hair_bg,
@@ -22,16 +21,15 @@ const FeaturedGrid = () => {
       link: "/collection/unfold",
     },
     {
-      title: "THE RERE COLLECTION",
-      desc: "Where new life meets timeless grace",
-      link: "/collection/the rere collection",
-    },
-    {
       title: "THE COLOR CODE COLLECTION",
       desc: "Where Color becomes emotion- and emotion becomes you",
       link: "/collection/the color code collection",
     },
-
+    {
+      title: "THE RERE COLLECTION",
+      desc: "Where new life meets timeless grace",
+      link: "/collection/the rere collection",
+    },
     {
       title: "All Collections",
       desc: "Explore our diverse range of collections",
