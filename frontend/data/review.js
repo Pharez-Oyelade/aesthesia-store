@@ -4,7 +4,7 @@ export const reviews = [
     name: "Esther Ibiyemi",
     rating: 5,
     comment:
-      "I rocked my beautiful dress today and everyone kept commenting about how lovely I looked",
+      "I rocked my beautiful dress today and everyone kept commenting about how lovely I looked ☺",
   },
   {
     id: 2,
@@ -67,7 +67,7 @@ export const reviews = [
     name: "Ene",
     rating: 4,
     comment:
-      "Hi, good afternoo. Seen the dress, its beautifully sewn and the colors are amazing.",
+      "Hi, good afternoon. Seen the dress, its beautifully sewn and the colors are amazing.",
   },
   {
     id: 11,
