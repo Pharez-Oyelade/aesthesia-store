@@ -122,7 +122,9 @@ const Reviews = () => {
         <div className="text-2xl sm:text-3xl">
           <Title text1={"Reviews"} text2={"from our Customers"} />
         </div>
-        <p className="font-semibold text-xl">"Loved by Those Who Know Style"</p>
+        <p className="font-semibold text-md sm:text-xl">
+          "Loved by Those Who Know Style"
+        </p>
       </div>
 
       {/* Navigation buttons */}
