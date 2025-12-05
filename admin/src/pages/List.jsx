@@ -4,6 +4,7 @@ import { backendUrl, currency } from "../App";
 import { toast } from "react-toastify";
 import { FaSearch } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
+import ArrayInput from "../components/ArrayInput";
 
 const List = ({ token }) => {
   const [list, setList] = useState([]);
@@ -22,6 +23,7 @@ const List = ({ token }) => {
     preorder: false,
     soldOut: false,
     weight: "",
+    fitLength: [],
     colors: [],
   });
   const [search, setSearch] = useState("");
@@ -155,9 +157,11 @@ const List = ({ token }) => {
                         price: item.price || "",
                         section: item.section || "",
                         weight: item.weight || "",
-                        // store colors as a comma-separated string for the text input
-                        colors: item.colors ? item.colors.join(",") : "",
+                        // store colors as array
+                        colors: item.colors || [],
                         sizes: item.sizes || [],
+                        // fitLength: item.length || [],
+                        fitLength: item.fitLength || [],
                         bestseller: item.bestseller || false,
                         preorder: item.preorder || false,
                         soldOut: item.soldOut || false,
@@ -183,7 +187,7 @@ const List = ({ token }) => {
       {/* Edit Product Modal */}
       {editProduct && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-transparent bg-opacity-50 overflow-scroll"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-transparent bg-opacity-50 overflow-auto"
           style={{ backdropFilter: "blur(2px)" }}
         >
           <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative">
@@ -200,14 +204,6 @@ const List = ({ token }) => {
                 e.preventDefault();
                 try {
                   // ensure colors and sizes are sent as JSON strings (backend expects JSON strings)
-                  const colorsPayload = Array.isArray(editFields.colors)
-                    ? editFields.colors
-                    : typeof editFields.colors === "string"
-                    ? editFields.colors
-                        .split(",")
-                        .map((c) => c.trim())
-                        .filter(Boolean)
-                    : [];
 
                   const response = await axios.post(
                     backendUrl + "/api/product/update",
@@ -215,7 +211,9 @@ const List = ({ token }) => {
                       id: editProduct._id,
                       ...editFields,
                       sizes: JSON.stringify(editFields.sizes),
-                      colors: JSON.stringify(colorsPayload),
+                      colors: JSON.stringify(editFields.colors),
+                      // length: JSON.stringify(editFields.length),
+                      fitLength: JSON.stringify(editFields.fitLength),
                     },
                     { headers: { token } }
                   );
@@ -243,7 +241,8 @@ const List = ({ token }) => {
                   }
                 />
               </label>
-              <label className="font-medium">
+              <div className="flex gap-2">
+                <label className="font-medium">
                 Price
                 <input
                   type="number"
@@ -255,6 +254,31 @@ const List = ({ token }) => {
                   }
                 />
               </label>
+                <label className="font-medium">
+                Weight(grams)
+                <input
+                  type="number"
+                  className="w-full px-3 py-2 border rounded-lg mt-1"
+                  value={editFields.weight || ""}
+                  min="0"
+                  onChange={(e) =>
+                    setEditFields((f) => ({ ...f, weight: e.target.value }))
+                  }
+                />
+              </label>
+              </div>
+              {/* <label className="font-medium">
+                Price
+                <input
+                  type="number"
+                  className="w-full px-3 py-2 border rounded-lg mt-1"
+                  value={editFields.price || ""}
+                  min="0"
+                  onChange={(e) =>
+                    setEditFields((f) => ({ ...f, price: e.target.value }))
+                  }
+                />
+              </label> */}
               {/* <label className="font-medium">
                 Description
                 <textarea
@@ -281,29 +305,37 @@ const List = ({ token }) => {
                   }
                 />
               </label>
-              <label className="font-medium">
-                Weight
-                <input
-                  type="number"
-                  className="w-full px-3 py-2 border rounded-lg mt-1"
-                  value={editFields.weight || ""}
-                  min="0"
-                  onChange={(e) =>
-                    setEditFields((f) => ({ ...f, weight: e.target.value }))
+             
+              <div className="flex flex-col gap-1">
+                <span className="font-medium">Sizes</span>
+                <ArrayInput
+                  value={editFields.sizes}
+                  onChange={(newSizes) =>
+                    setEditFields((f) => ({ ...f, sizes: newSizes }))
                   }
+                  placeholder="Type size (e.g. 18) and press Enter"
                 />
-              </label>
-              <label htmlFor="">
-                Colors (comma separated)
-                <input
-                  type="text"
-                  className="w-full px-3 py-2 border rounded-lg mt-1"
-                  value={editFields.colors || ""}
-                  onChange={(e) =>
-                    setEditFields((f) => ({ ...f, colors: e.target.value }))
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="font-medium">Fit Length</span>
+                <ArrayInput
+                  value={editFields.fitLength}
+                  onChange={(newLength) =>
+                    setEditFields((f) => ({ ...f, fitLength: newLength }))
                   }
+                  placeholder="Type length (e.g. Petite) and press Enter"
                 />
-              </label>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="font-medium">Colors</span>
+                <ArrayInput
+                  value={editFields.colors}
+                  onChange={(newColors) =>
+                    setEditFields((f) => ({ ...f, colors: newColors }))
+                  }
+                  placeholder="Type color (e.g. Red) and press Enter"
+                />
+              </div>
 
               <div className="grid grid-cols-2">
                 <label className="font-medium">

@@ -28,6 +28,8 @@ const Product = () => {
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
+  const [length, setLength] = useState("");
+  const [fitLength, setFitLength] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [measurements, setMeasurements] = useState({
     waist: "",
@@ -86,6 +88,11 @@ const Product = () => {
       setImage(
         prod && prod.image && prod.image[0].url ? prod.image[0].url : ""
       );
+      setSize("");
+      setColor("");
+      setLength("");
+      setFitLength("");
+      setQuantity(1);
     }
   }, [products, productId, id]);
 
@@ -121,6 +128,14 @@ const Product = () => {
       alert("Please select a color");
       return;
     }
+    if (!fitLength) {
+      alert("Please select a fit length");
+      return;
+    }
+    // if (productData.length && productData.length.length > 0 && !length) {
+    //   alert("Please select a length");
+    //   return;
+    // }
     // if (requiresMeasurements && Object.values(measurements).some((v) => !v)) {
     //   alert("Please fill all measurements");
     //   return;
@@ -129,7 +144,7 @@ const Product = () => {
       productData._id,
       size,
       color,
-      requiresMeasurements ? measurements : {},
+      { ...measurements, fitLength },
       quantity
     );
     navigate("/cart");
@@ -313,6 +328,49 @@ const Product = () => {
                           required
                           className={`px-5 py-2 rounded-lg border-2 transition-all duration-200 font-semibold text-gray-700 focus:outline-none ${
                             item === color
+                              ? "border-red-600 bg-red-50 text-red-700"
+                              : "border-gray-300 bg-white hover:bg-gray-100"
+                          }`}
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Length Selection*/}
+                
+                  {/* <div className="mb-6">
+                    <p className="font-medium mb-2">Select Fit Length</p>
+                    <div className="flex gap-3 flex-wrap">
+                      {["petite", "Regular", "Tall"].map((item, index) => (
+                        <button
+                          onClick={() => setFitLength(item)}
+                          key={index}
+                          className={`px-5 py-2 rounded-lg border-2 transition-all duration-200 font-semibold text-gray-700 focus:outline-none ${
+                            item === fitLength
+                              ? "border-red-600 bg-red-50 text-red-700"
+                              : "border-gray-300 bg-white hover:bg-gray-100"
+                          }`}
+                        >
+                          {item}
+                        </button>
+                      ))}
+                    </div>
+                  </div> */}
+                
+
+                {productData.fitLength && productData.fitLength.length > 0 && (
+                  <div className="mb-6">
+                    <p className="font-medium mb-2">Select Length</p>
+                    <div className="flex gap-3 flex-wrap">
+                      {productData.fitLength.map((item, index) => (
+                        <button
+                          onClick={() => setFitLength(item)}
+                          key={index}
+                          className={`px-5 py-2 rounded-lg border-2 transition-all duration-200 font-semibold text-gray-700 focus:outline-none ${
+                            item === fitLength
                               ? "border-red-600 bg-red-50 text-red-700"
                               : "border-gray-300 bg-white hover:bg-gray-100"
                           }`}

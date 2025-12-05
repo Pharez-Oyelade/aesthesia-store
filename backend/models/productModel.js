@@ -79,7 +79,11 @@ const productSchema = new mongoose.Schema({
     min: 0,
   },
   // End flow additions
-
+  fitLength: {
+    type: Array,
+    required: false,
+    default: [],
+  },
   date: {
     type: Number,
     required: true,

@@ -23,6 +23,7 @@ const addProduct = async (req, res) => {
       salePrice,
       preorder,
       weight,
+      fitLength
     } = req.body;
 
     // Validate price
@@ -86,6 +87,7 @@ const addProduct = async (req, res) => {
       colors: colors ? JSON.parse(colors) : [],
       image: imagesData,
       weight: Number(weight) || 0,
+      fitLength: JSON.parse(fitLength),
       date: Date.now(),
     };
 
@@ -121,6 +123,7 @@ const updateProduct = async (req, res) => {
       salePrice,
       soldOut,
       weight,
+      fitLength,
     } = req.body;
 
     const updateFields = {
@@ -137,6 +140,7 @@ const updateProduct = async (req, res) => {
       ...(typeof onSale !== "undefined" && { onSale }),
       ...(typeof salePrice !== "undefined" && { salePrice: Number(salePrice) }),
       ...(typeof weight !== "undefined" && { weight: Number(weight) }),
+      ...(fitLength && { fitLength: JSON.parse(fitLength) }),
     };
 
     await productModel.findByIdAndUpdate(id, updateFields);
