@@ -89,12 +89,12 @@ const Section = ({ token }) => {
   }, []);
 
   return (
-    <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 mx-[30%]">
+    <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 mx-[25%]">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-800">Collections</h2>
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">Collections</h2>
         <button
           onClick={() => setIsAddSection(!isAddSection)}
-          className="bg-red-700 hover:bg-red-800 text-white px-6 py-2 rounded-full font-semibold shadow-lg transition-all duration-300 flex items-center gap-2 transform hover:scale-105"
+          className="bg-red-700 hover:bg-red-800 text-white px-4 sm:px-6 py-2 rounded-full font-semibold shadow-lg transition-all duration-300 flex items-center gap-2 transform hover:scale-105"
         >
           <span className="text-xl">{isAddSection ? "×" : "+"}</span>
           {isAddSection ? "Close" : "Add New"}

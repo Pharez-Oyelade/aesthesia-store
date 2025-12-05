@@ -131,7 +131,7 @@ const Add = ({ token }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-3xl mx-[30%] flex flex-col gap-6 border border-gray-100"
+      className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-3xl mx-[25%] sm:mx-[40%] flex flex-col gap-6 border border-gray-100"
     >
       <div>
         <p className="mb-2 font-semibold text-gray-700">Upload Image</p>

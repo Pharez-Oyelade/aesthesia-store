@@ -93,7 +93,7 @@ const List = ({ token }) => {
 
   return (
     <>
-      <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100 mx-[30%] w-full">
+      <div className="bg-white shadow-xl rounded-2xl p-8 border border-gray-100 mx-[25%] sm:mx-[28%] w-full">
         <div className="flex items-center justify-between">
           <p className="mb-4 text-2xl font-bold text-red-700">
             All Products List
