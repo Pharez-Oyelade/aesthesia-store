@@ -13,7 +13,7 @@ const Collection = () => {
   const { products, search, showSearch, collection } = useContext(shopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
-  const [sectionFilter, setSectionFilter] = useState([]); // was category
+  const [sectionFilter, setSectionFilter] = useState([]);
   const [sortType, setSortType] = useState("relevant");
   const [currentPage, setCurrentPage] = useState(1);
 

@@ -182,8 +182,7 @@ const formatPrice = (amount) => {
 
 const ShopContextProvider = (props) => {
   const currency = <TbCurrencyNaira />;
-  // const delivery_fee = 100;
-  // const VAT_RATE = 0.075; //7.5%
+
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
@@ -206,7 +205,7 @@ const ShopContextProvider = (props) => {
 
   const logout = async () => {
     try {
-      // Clear tokens first
+      // Clear tokens
       authService.clearTokens();
 
       // Clear state
@@ -218,33 +217,16 @@ const ShopContextProvider = (props) => {
       // Navigate to login
       navigate("/login");
 
-      // Optionally call logout API in background (don't await)
       authService
         .logout()
         .catch((err) => console.log("Background logout error:", err));
     } catch (error) {
       console.log("Logout error:", error);
-      // Even if there's an error, still clear local state
       authService.clearTokens();
       setToken("");
       navigate("/login");
     }
   };
-
-  // const [sections, setSections] = useState([]);
-
-  // const getSections = async () => {
-  //   try {
-  //     const response = await axios.get(backendUrl + "/api/section/list");
-  //     if (response.data.success) {
-  //       setSections(response.data.sections.map((s) => s.name));
-  //     }
-  //   } catch (err) {}
-  // };
-
-  // const getVAT = () => {
-  //   return getCartAmount() * VAT_RATE;
-  // };
 
   // Currency state
   const [currencyCode, setCurrencyCode] = useState("NGN");
@@ -271,7 +253,6 @@ const ShopContextProvider = (props) => {
       try {
         const symbols = supportedCurrencies.join(",");
         const res = await fetch(
-          // `http://data.fixer.io/api/latest?access_key=8c1642632da8d81c67684ebeaec5dc9d&symbols=${symbols}`
           `https://api.currencyapi.com/v3/latest?apikey=cur_live_dTEc4h83P8JtkzIQhFlxOUfTVJvsClgaUNhqQx0e&symbols=${symbols}`
         );
         const data = await res.json();
@@ -600,10 +581,8 @@ const ShopContextProvider = (props) => {
     try {
       const response = await axios.get(backendUrl + "/api/section/list");
       if (response.data.success) {
-        // backend may return the sections under different keys depending on API version
         const sectionsData =
           response.data.categories ?? response.data.sections ?? [];
-        // ensure we always set an array to avoid runtime errors in consumers
         setCollection(Array.isArray(sectionsData) ? sectionsData : []);
       } else {
         toast.error(response.data.message);
@@ -694,11 +673,6 @@ const ShopContextProvider = (props) => {
       return false;
     }
   };
-
-  // const getLocalDeliveryFee = (area) => {
-  //   const match = localDelivery.find((loc) => loc.areas.includes(area));
-  //   return match ? match.price : 0;
-  // };
 
   useEffect(() => {
     getCollectionData();
