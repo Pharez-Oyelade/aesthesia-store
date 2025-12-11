@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
 import { ToastContainer } from "react-toastify";
+import NotFound from "./pages/NotFound";
 
 // Lazy load all page components for code splitting
 const Home = lazy(() => import("./pages/Home"));
@@ -79,12 +80,7 @@ const App = () => {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/shipping-policy" element={<ShippingPolicy />} />
-              <Route
-                path="*"
-                element={
-                  <h1 className="text-center text-2xl">Page Not Found</h1>
-                }
-              />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         )}
