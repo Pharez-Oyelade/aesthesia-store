@@ -7,7 +7,7 @@ const slides = [
   {
     image: assets.aesthesia_sale,
   },
-  {
+  /*{
     image: assets.bg_main_4,
     image_mobile: assets.bg_main_4_mobile,
     title: "UNFOLD -  A Celebration of Quiet Evolution",
@@ -40,7 +40,7 @@ const slides = [
     subtitle: "We would love to hear from you",
     b_text: "CONTACT",
     link: "/contact",
-  },
+  },*/
 ];
 
 // Additional slides for mobile only
@@ -48,7 +48,7 @@ const mobileAdditionalSlides = [
   {
     image: assets.aesthesia_sale_mobile,
   },
-  {
+  /*{
     image: assets.bg_main_4,
     image_mobile: assets.bg_main_4_mobile,
     title: "UNFOLD -  A Celebration of Quiet Evolution",
@@ -79,7 +79,7 @@ const mobileAdditionalSlides = [
     subtitle: "Every stage tells a story",
     b_text: "SHOP NOW",
     link: "/product/6928e6c3d56b7f9f684dd0e6",
-  },
+  },*/
 ];
 
 const Hero = () => {
