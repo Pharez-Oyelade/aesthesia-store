@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
   {
+    image: assets.aesthesia_sale,
+  },
+  {
     image: assets.bg_main_4,
     image_mobile: assets.bg_main_4_mobile,
     title: "UNFOLD -  A Celebration of Quiet Evolution",
@@ -42,6 +45,9 @@ const slides = [
 
 // Additional slides for mobile only
 const mobileAdditionalSlides = [
+  {
+    image: assets.aesthesia_sale_mobile,
+  },
   {
     image: assets.bg_main_4,
     image_mobile: assets.bg_main_4_mobile,
@@ -220,7 +226,7 @@ const Hero = () => {
             >
               {subtitle}
             </motion.p>
-            <Link to={link}>
+            {current !== 0 && ( <Link to={link}>
               <motion.button
                 variants={childVariants}
                 whileHover={{ scale: 1.05 }}
@@ -229,7 +235,7 @@ const Hero = () => {
               >
                 {b_text}
               </motion.button>
-            </Link>
+            </Link>)}
           </motion.div>
         </AnimatePresence>
       </div>
