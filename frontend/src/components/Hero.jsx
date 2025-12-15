@@ -7,38 +7,6 @@ const slides = [
   {
     image: assets.aestesia_sale,
   },
-  {
-    image: assets.bg_main_4,
-    image_mobile: assets.bg_main_4_mobile,
-    title: "UNFOLD -  A Celebration of Quiet Evolution",
-    subtitle: "Explore our Latest Collection",
-    b_text: "UNFOLD",
-    link: "/collection/unfold",
-  },
-  {
-    image: assets.size_bg,
-    image_mobile: assets.size_bg,
-    title: "First Bloom: The Beginning and Awakening",
-    subtitle: "The courage to begin — softly, yet surely",
-    b_text: "SHOP NOW",
-    link: "/product/6928eb30d56b7f9f684dd2cf",
-  },
-  {
-    image: assets.bg_2_main,
-    image_mobile: assets.bg_2_main_mobile,
-    title: "AESTHESIA...",
-    subtitle: "Where women see themselves again",
-    b_text: "ABOUT US",
-    link: "/about",
-  },
-  {
-    image: assets.bg_3_main,
-    image_mobile: assets.bg_3_main_mobile,
-    title: "GET IN TOUCH WITH US",
-    subtitle: "We would love to hear from you",
-    b_text: "CONTACT",
-    link: "/contact",
-  },
 ];
 
 const Hero = () => {
