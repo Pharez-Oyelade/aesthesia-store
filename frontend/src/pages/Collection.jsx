@@ -123,6 +123,7 @@ const Collection = () => {
 
   return (
     <div className="bg-gradient-to-br from-white to-gray-100 min-h-screen py-0 ">
+      <img src={assets.aesthesia_sale}/>
       <div className="max-w-7xl mx-auto px-5 pt-5 flex flex-col md:flex-row gap-8">
         {/* FILTER OPTIONS */}
         <aside className="w-full md:w-64 bg-white rounded-xl shadow-xs p-6 mb-0 md:mb-0">
