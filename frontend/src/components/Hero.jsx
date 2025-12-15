@@ -162,7 +162,7 @@ const Hero = () => {
             >
               {subtitle}
             </motion.p>
-            {slides.b_text && (<Link to={link}>
+            {current !== 0 && (<Link to={link}>
               <motion.button
                 variants={childVariants}
                 whileHover={{ scale: 1.05 }}
