@@ -162,7 +162,7 @@ const Hero = () => {
             >
               {subtitle}
             </motion.p>
-            <Link to={link}>
+            {slides.b_text && (<Link to={link}>
               <motion.button
                 variants={childVariants}
                 whileHover={{ scale: 1.05 }}
@@ -171,7 +171,8 @@ const Hero = () => {
               >
                 {b_text}
               </motion.button>
-            </Link>
+            </Link>)}
+            
           </motion.div>
         </AnimatePresence>
       </div>
