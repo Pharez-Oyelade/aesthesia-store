@@ -57,6 +57,9 @@ import badge from "./badge.png";
 import reliability from "./reliability.png";
 import secure_payment from "./secure-payment.png";
 
+import aesthesia_sale from "./AESTHESIA SALES W-2B.jpg";
+import aesthesia_sale_mobile from "./AESTHESIA SALES B.jpg";
+
 export const assets = {
   logo,
   logo_light,
@@ -117,4 +120,7 @@ export const assets = {
   badge,
   reliability,
   secure_payment,
+
+  aesthesia_sale,
+  aesthesia_sale_mobile,
 };
