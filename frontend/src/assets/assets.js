@@ -18,6 +18,7 @@ import size_chart_demo from "./size-chart-demo.png";
 import size_chart from "./IMG-20251107-WA0012_1.jpg";
 
 import size_bg from "./1764291454452.jpg";
+import aestesia_sale from "./AESTHESIA SALES W-2B.jpg"
 
 import logo from "./logo.png";
 import logo_light from "./Logo-Light.png";
@@ -100,4 +101,6 @@ export const assets = {
   contact_2,
   size_chart_demo,
   size_chart,
+
+  aestesia_sale,
 };
