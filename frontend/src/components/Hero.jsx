@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
   {
-    image: assets.bg_main_4,
+    image: assets.aestesia_sale,
   },
   {
     image: assets.bg_main_4,
