@@ -3,6 +3,7 @@ import { assets } from "../assets/assets";
 import { shopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import CartTotal from "../components/CartTotal";
+import ReactPixel from "react-facebook-pixel";
 
 // parse measurements key
 const parseMeasurements = (mKey) => {
@@ -51,6 +52,19 @@ const Cart = () => {
 
   const handleImageSelect = (cartKey, imgUrl) => {
     setSelectedImages((prev) => ({ ...prev, [cartKey]: imgUrl }));
+  };
+
+  const handleCheckout = () => {
+    ReactPixel.track("InitiateCheckout", {
+      value: cartData.reduce((total, item) => {
+        const product = products.find((p) => p._id === item._id);
+        if (!product) return total;
+        const price = product.onSale ? product.salePrice : product.price;
+        return total + price * item.quantity;
+      }, 0),
+      currency: currency,
+    });
+    navigate("/place-order");
   };
 
   if (cartData.length === 0) {
@@ -172,7 +186,7 @@ const Cart = () => {
           <CartTotal />
         </div>
         <button
-          onClick={() => navigate("/place-order")}
+          onClick={handleCheckout}
           className="mt-4 bg-red-800 text-white px-6 py-2 rounded hover:bg-red-700"
         >
           Proceed to Checkout

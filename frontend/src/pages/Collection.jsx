@@ -41,39 +41,39 @@ const Collection = () => {
     }
   };
 
-  const applyFilter = () => {
-    let filtered = products.slice();
-    if (showSearch && search) {
-      filtered = filtered.filter(
-        (item) =>
-          item.name.toLowerCase().includes(search.toLowerCase()) ||
-          item.section.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-    if (sectionFilter.length > 0) {
-      filtered = filtered.filter((item) =>
-        sectionFilter.includes(item.section)
-      );
-    }
-    setFilterProducts(filtered);
-  };
+  // const applyFilter = () => {
+  //   let filtered = products.slice();
+  //   if (showSearch && search) {
+  //     filtered = filtered.filter(
+  //       (item) =>
+  //         item.name.toLowerCase().includes(search.toLowerCase()) ||
+  //         item.section.toLowerCase().includes(search.toLowerCase())
+  //     );
+  //   }
+  //   if (sectionFilter.length > 0) {
+  //     filtered = filtered.filter((item) =>
+  //       sectionFilter.includes(item.section)
+  //     );
+  //   }
+  //   setFilterProducts(filtered);
+  // };
 
-  const sortProduct = () => {
-    let fpCopy = filterProducts.slice();
-    switch (sortType) {
-      case "lowest-highest":
-        fpCopy.sort((a, b) => a.price - b.price);
-        setFilterProducts(fpCopy);
-        break;
-      case "highest-lowest":
-        fpCopy.sort((a, b) => b.price - a.price);
-        setFilterProducts(fpCopy);
-        break;
-      default:
-        applyFilter();
-        break;
-    }
-  };
+  // const sortProduct = () => {
+  //   let fpCopy = filterProducts.slice();
+  //   switch (sortType) {
+  //     case "lowest-highest":
+  //       fpCopy.sort((a, b) => a.price - b.price);
+  //       setFilterProducts(fpCopy);
+  //       break;
+  //     case "highest-lowest":
+  //       fpCopy.sort((a, b) => b.price - a.price);
+  //       setFilterProducts(fpCopy);
+  //       break;
+  //     default:
+  //       applyFilter();
+  //       break;
+  //   }
+  // };
 
   // useEffect(() => {
   //   applyFilter();
@@ -123,6 +123,10 @@ const Collection = () => {
 
   return (
     <div className="bg-gradient-to-br from-white to-gray-100 min-h-screen py-0 ">
+      <div className="w-full h-[30vh] overflow-hidden">
+        <img src={assets.aesthesia_sale} alt="" className="w-full" />
+      </div>
+
       <div className="max-w-7xl mx-auto px-5 pt-5 flex flex-col md:flex-row gap-8">
         {/* FILTER OPTIONS */}
         <aside className="w-full md:w-64 bg-white rounded-xl shadow-xs p-6 mb-0 md:mb-0">

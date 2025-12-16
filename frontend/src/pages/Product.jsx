@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { shopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
+import ReactPixel from "react-facebook-pixel";
 
 // import { RxCaretLeft } from "react-icons/rx";
 // import { RxCaretRight } from "react-icons/rx";
@@ -147,6 +148,14 @@ const Product = () => {
       { ...measurements, fitLength },
       quantity
     );
+    ReactPixel.track("AddToCart", {
+      content_ids: [productData._id],
+      content_type: "product",
+      value:
+        (productData.onSale ? productData.salePrice : productData.price) *
+        quantity,
+      currency: "",
+    });
     navigate("/cart");
   };
 
@@ -340,8 +349,8 @@ const Product = () => {
                 )}
 
                 {/* Length Selection*/}
-                
-                  {/* <div className="mb-6">
+
+                {/* <div className="mb-6">
                     <p className="font-medium mb-2">Select Fit Length</p>
                     <div className="flex gap-3 flex-wrap">
                       {["petite", "Regular", "Tall"].map((item, index) => (
@@ -359,7 +368,6 @@ const Product = () => {
                       ))}
                     </div>
                   </div> */}
-                
 
                 {productData.fitLength && productData.fitLength.length > 0 && (
                   <div className="mb-6">
@@ -417,7 +425,9 @@ const Product = () => {
                     onSubmit={handleAddToCart}
                     className="flex flex-col gap-4 mt-4"
                   >
-                    <p className="font-bold">Measurements for fitting(optional)</p>
+                    <p className="font-bold">
+                      Measurements for fitting(optional)
+                    </p>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       <input
                         type="number"

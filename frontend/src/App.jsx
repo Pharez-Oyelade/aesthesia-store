@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
 import { ToastContainer } from "react-toastify";
 import NotFound from "./pages/NotFound";
+import MetaPageTracker from "./components/MetaPageTracker";
 
 // Lazy load all page components for code splitting
 const Home = lazy(() => import("./pages/Home"));
@@ -52,6 +53,7 @@ const App = () => {
         <PreNav />
         <Navbar />
         <SearchBar />
+        <MetaPageTracker />
         {isHome || isClothing || isWig || isRere || isJewelry ? (
           <Routes>
             <Route path="/" element={<Home />} />
