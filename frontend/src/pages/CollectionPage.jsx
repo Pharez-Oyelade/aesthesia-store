@@ -111,8 +111,25 @@ const CollectionPage = () => {
                   </p>
                 </div>
                 <p className="text-sm font-medium text-gray-900">
-                  {currency}
-                  {convertPrice(product.price)}
+                  {/* {convertPrice(product.price)} */}
+
+                  {product.onSale ? (
+                    <>
+                      <span className="line-through text-xs text-gray-400">
+                        {currency}
+                        {convertPrice(product.price)}
+                      </span>
+                      <span className="pl-2">
+                        {currency}
+                        {convertPrice(product.salePrice)}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="">
+                      {currency}
+                      {convertPrice(product.price)}
+                    </span>
+                  )}
                 </p>
               </div>
             </div>
