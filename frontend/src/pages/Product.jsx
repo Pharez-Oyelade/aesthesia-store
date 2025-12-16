@@ -154,7 +154,7 @@ const Product = () => {
       value:
         (productData.onSale ? productData.salePrice : productData.price) *
         quantity,
-      currency: "",
+      currency: currency,
     });
     navigate("/cart");
   };
