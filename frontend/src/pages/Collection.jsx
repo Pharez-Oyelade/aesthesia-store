@@ -123,9 +123,9 @@ const Collection = () => {
 
   return (
     <div className="bg-gradient-to-br from-white to-gray-100 min-h-screen py-0 ">
-      <div className="w-full h-[30vh] overflow-hidden">
+      {/* <div className="w-full h-[30vh] overflow-hidden">
         <img src={assets.aesthesia_sale} alt="" className="w-full" />
-      </div>
+      </div> */}
 
       <div className="max-w-7xl mx-auto px-5 pt-5 flex flex-col md:flex-row gap-8">
         {/* FILTER OPTIONS */}
