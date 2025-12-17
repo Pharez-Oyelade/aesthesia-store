@@ -22,6 +22,8 @@ const Product = () => {
     convertPrice,
     token,
     navigate,
+    PLUS_SIZE_FEE,
+    PLUS_SIZE_THRESHOLD,
   } = useContext(shopContext);
 
   // Find product after products are loaded
@@ -80,6 +82,11 @@ const Product = () => {
   };
 
   const charLimit = 250;
+
+  const isPlusSize = (size) => {
+    const numericSize = parseInt(size);
+    return !isNaN(numericSize) && numericSize >= PLUS_SIZE_THRESHOLD;
+  };
 
   // Find product when products or params change
   useEffect(() => {
@@ -326,6 +333,18 @@ const Product = () => {
                     )}
                   </div>
                 )}
+
+                {/* .........  PLUS SIZE DISCLAIMER ......... */}
+                {availableSizes.length > 0 && size && isPlusSize(size) && (
+                  <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <p className="text-sm text-blue-800">
+                      <strong>Plus Size Notice:</strong> An additional fee of{" "}
+                      {currency}
+                      {convertPrice(PLUS_SIZE_FEE)} applies to size {size}.
+                    </p>
+                  </div>
+                )}
+
                 {availableColors.length > 0 && (
                   <div className="mb-6">
                     <p className="font-medium mb-2">Select Color</p>

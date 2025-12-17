@@ -11,7 +11,11 @@ const CartTotal = () => {
     convertPrice,
     getShippingCost,
     isInternational,
+    getPlusSizeFee,
+    PLUS_SIZE_FEE,
   } = useContext(shopContext);
+
+  const plusSizeFee = getPlusSizeFee();
 
   return (
     <div className="w-full">
@@ -37,6 +41,27 @@ const CartTotal = () => {
           </p>
         </div>
         <hr />
+
+        {/* Plus Size Fee - Only show if applicable */}
+        {plusSizeFee > 0 && (
+          <>
+            <div className="flex justify-between">
+              <p className="flex items-center gap-1">
+                Plus Size Fee (Size 18+)
+                <span className="text-xs text-gray-500">
+                  ({currency}
+                  {convertPrice(PLUS_SIZE_FEE)} per item)
+                </span>
+              </p>
+              <p>
+                {currency}
+                {convertPrice(plusSizeFee)}
+              </p>
+            </div>
+            <hr />
+          </>
+        )}
+
         {/* <div className="flex justify-between">
           <p>VAT 7.5%</p>
           <p>{formatPrice(getVAT())}</p>
@@ -46,11 +71,10 @@ const CartTotal = () => {
           <b>Total</b>
           <b>
             {currency}
-            {/* {convertPrice(
-              getCartAmount() === 0 ? 0 : getCartAmount() + delivery_fee
-            )} */}
             {convertPrice(
-              getCartAmount() === 0 ? 0 : getCartAmount() + getShippingCost()
+              getCartAmount() === 0
+                ? 0
+                : getCartAmount() + getShippingCost() + plusSizeFee
             )}
           </b>
         </div>

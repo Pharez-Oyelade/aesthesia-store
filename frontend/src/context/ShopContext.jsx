@@ -171,6 +171,9 @@ const CACHE_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 //   return number.toLocaleString("en-NG");
 // };
 
+const PLUS_SIZE_FEE = 20000; // Fee for sizes 18 and above
+const PLUS_SIZE_THRESHOLD = 18;
+
 const formatPrice = (amount) => {
   return amount.toLocaleString("en-NG", {
     style: "currency",
@@ -202,6 +205,34 @@ const ShopContextProvider = (props) => {
 
   const [userOrders, setUserOrders] = useState([]);
   const prevOrderStatus = useRef({});
+
+  const isPlusSize = (size) => {
+    const numericSize = parseInt(size);
+    return !isNaN(numericSize) && numericSize >= PLUS_SIZE_THRESHOLD;
+  };
+
+  // function to calculate plus size fees
+  const getPlusSizeFee = () => {
+    let totalFee = 0;
+    for (const items in cartItems) {
+      let itemInfo = products.find((product) => product._id === items);
+      for (const size in cartItems[items]) {
+        if (isPlusSize(size)) {
+          for (const colorKey in cartItems[items][size]) {
+            for (const mKey in cartItems[items][size][colorKey]) {
+              try {
+                if (cartItems[items][size][colorKey][mKey] > 0) {
+                  totalFee +=
+                    PLUS_SIZE_FEE * cartItems[items][size][colorKey][mKey];
+                }
+              } catch (error) {}
+            }
+          }
+        }
+      }
+    }
+    return totalFee;
+  };
 
   const logout = async () => {
     try {
@@ -888,6 +919,10 @@ const ShopContextProvider = (props) => {
     localDelivery,
     // sections,
     // getSections,
+    getPlusSizeFee,
+    PLUS_SIZE_FEE,
+    PLUS_SIZE_THRESHOLD,
+    isPlusSize,
   };
 
   return (

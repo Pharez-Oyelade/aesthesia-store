@@ -34,6 +34,7 @@ const PlaceOrder = () => {
     getShippingCost,
     selectedCountry,
     setSelectedCountry,
+    getPlusSizeFee,
   } = useContext(shopContext);
 
   // Check authentication on component mount - show modal but don't block
@@ -238,7 +239,7 @@ const PlaceOrder = () => {
       return;
     }
 
-    const amount = getCartAmount() + getShippingCost();
+    const amount = getCartAmount() + getShippingCost() + getPlusSizeFee();
     const handler = window.PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
       email: formData.email,
