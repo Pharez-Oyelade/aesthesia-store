@@ -226,18 +226,17 @@ const Hero = () => {
             >
               {subtitle}
             </motion.p>
-            {current !== 0 && (
-              <Link to={link}>
-                <motion.button
-                  variants={childVariants}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
-                >
-                  {b_text}
-                </motion.button>
-              </Link>
-            )}
+
+            <Link to={link}>
+              <motion.button
+                variants={childVariants}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
+              >
+                {b_text}
+              </motion.button>
+            </Link>
           </motion.div>
         </AnimatePresence>
       </div>
