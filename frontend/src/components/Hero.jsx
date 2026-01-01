@@ -4,10 +4,10 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
+  // {
+  //   image: assets.aesthesia_sale,
+  // },
   {
-    image: assets.aesthesia_sale,
-  },
-  /*{
     image: assets.bg_main_4,
     image_mobile: assets.bg_main_4_mobile,
     title: "UNFOLD -  A Celebration of Quiet Evolution",
@@ -40,15 +40,15 @@ const slides = [
     subtitle: "We would love to hear from you",
     b_text: "CONTACT",
     link: "/contact",
-  },*/
+  },
 ];
 
 // Additional slides for mobile only
 const mobileAdditionalSlides = [
+  // {
+  //   image: assets.aesthesia_sale_mobile,
+  // },
   {
-    image: assets.aesthesia_sale_mobile,
-  },
-  /*{
     image: assets.bg_main_4,
     image_mobile: assets.bg_main_4_mobile,
     title: "UNFOLD -  A Celebration of Quiet Evolution",
@@ -79,7 +79,7 @@ const mobileAdditionalSlides = [
     subtitle: "Every stage tells a story",
     b_text: "SHOP NOW",
     link: "/product/6928e6c3d56b7f9f684dd0e6",
-  },*/
+  },
 ];
 
 const Hero = () => {
@@ -226,16 +226,18 @@ const Hero = () => {
             >
               {subtitle}
             </motion.p>
-            {current !== 0 && ( <Link to={link}>
-              <motion.button
-                variants={childVariants}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
-              >
-                {b_text}
-              </motion.button>
-            </Link>)}
+            {current !== 0 && (
+              <Link to={link}>
+                <motion.button
+                  variants={childVariants}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
+                >
+                  {b_text}
+                </motion.button>
+              </Link>
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
