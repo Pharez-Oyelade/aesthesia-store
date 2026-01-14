@@ -50,12 +50,12 @@ import cross_icon from "./cross_icon.png";
 import naira_icon from "./naira.png";
 import hair_bg from "./hair_bg.png";
 import jewelry_bg from "./jewelry_bg.png";
-import time from "./time.png";
+import time from "./time.webp";
 import contact from "./contact.png";
 import contact_2 from "./contact.webp";
-import badge from "./badge.png";
-import reliability from "./reliability.png";
-import secure_payment from "./secure-payment.png";
+import badge from "./badge.webp";
+import reliability from "./reliability.webp";
+import secure_payment from "./secure-payment.webp";
 
 import aesthesia_sale from "./AESTHESIA SALES W-2B.jpg";
 import aesthesia_sale_mobile from "./AESTHESIA SALES B.jpg";
