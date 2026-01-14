@@ -29,7 +29,7 @@ import logo_light from "./Logo-Light.png";
 import logo_dark from "./logo_dark.png";
 import aesthesia_logo_dark from "./Aesthesia-Haven.png";
 import aesthesia_logo_light from "./Aesthesia-Haven-light.png";
-import aesthesia_logo_footer from "./Aesthesia-Haven-light.jpeg";
+import aesthesia_logo_footer from "./Aesthesia_Footer_logo.webp";
 import hero_img from "./hero_img.png";
 import cart_icon from "./cart_icon.png";
 import bin_icon from "./bin_icon.png";
