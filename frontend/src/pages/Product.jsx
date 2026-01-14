@@ -5,6 +5,7 @@ import { shopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
 import ReactPixel from "react-facebook-pixel";
+import { getOptimizedUrl } from "../utils/cloudinaryHelper";
 
 // import { RxCaretLeft } from "react-icons/rx";
 // import { RxCaretRight } from "react-icons/rx";
@@ -183,7 +184,7 @@ const Product = () => {
             <div className="flex-1 flex flex-col gap-6">
               <div className="w-full aspect-square bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden shadow-md">
                 <img
-                  src={image}
+                  src={getOptimizedUrl(image, 400)}
                   className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
                   alt={productData.name}
                 />
@@ -193,7 +194,7 @@ const Product = () => {
                   <img
                     onClick={() => setImage(item?.url)}
                     loading="lazy"
-                    src={item.url}
+                    src={getOptimizedUrl(item.url, 400)}
                     key={index}
                     className={`w-16 h-16 object-cover rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                       image === item.url
