@@ -216,7 +216,7 @@ const Hero = () => {
           >
             <motion.h1
               variants={childVariants}
-              className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg prata-regular"
+              className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg outfit-bold"
             >
               {title}
             </motion.h1>
