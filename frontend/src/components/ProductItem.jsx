@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, memo } from "react";
 import { shopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import { IoMdHeart } from "react-icons/io";
+import { getOptimizedUrl } from "../utils/cloudinaryHelper";
 
 const ProductItem = memo(
   ({
@@ -86,7 +87,7 @@ const ProductItem = memo(
               setIsHovered(false);
               setShowImage(image[0]?.url);
             }}
-            src={showImage}
+            src={getOptimizedUrl(showImage, 400)}
             alt=""
             className={`${
               image[1]?.url ? "" : "hover:scale-115 transition ease-in-out"
