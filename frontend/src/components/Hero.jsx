@@ -185,21 +185,7 @@ const Hero = () => {
   return (
     <div className="relative w-full h-dvh flex items-center justify-center overflow-hidden pt-0">
       {/* Background transition */}
-
-      <img
-        key={bgImage}
-        src={bgImage}
-        srcSet={srcSet}
-        sizes={sizes}
-        alt={title}
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ willChange: "transform, opacity" }}
-        initial={{ scale: 1.05 }}
-        animate={{ scale: 1 }}
-        transition={{ duration: 1, ease: "easeInOut" }}
-      />
-
-      {/* <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait">
         <motion.img
           key={bgImage}
           src={bgImage}
@@ -212,47 +198,47 @@ const Hero = () => {
           animate={{ scale: 1 }}
           transition={{ duration: 1, ease: "easeInOut" }}
         />
-      </AnimatePresence> */}
+      </AnimatePresence>
 
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/40 z-10" />
 
       {/* Slide Content */}
       <div className="relative z-20 flex items-center justify-center w-full h-full">
-        {/* <AnimatePresence mode="wait"> */}
-        <div
-          key={current}
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          className="flex flex-col items-center text-center text-white px-4"
-        >
-          <motion.h1
-            variants={childVariants}
-            className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg prata-regular"
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="flex flex-col items-center text-center text-white px-4"
           >
-            {title}
-          </motion.h1>
-          <motion.p
-            variants={childVariants}
-            className="text-md w-[75%] sm:w-[100%] sm:text-lg font-medium drop-shadow-md"
-          >
-            {subtitle}
-          </motion.p>
-
-          <Link to={link}>
-            <motion.button
+            <motion.h1
               variants={childVariants}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
+              className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg prata-regular"
             >
-              {b_text}
-            </motion.button>
-          </Link>
-        </div>
-        {/* </AnimatePresence> */}
+              {title}
+            </motion.h1>
+            <motion.p
+              variants={childVariants}
+              className="text-md w-[75%] sm:w-[100%] sm:text-lg font-medium drop-shadow-md"
+            >
+              {subtitle}
+            </motion.p>
+
+            <Link to={link}>
+              <motion.button
+                variants={childVariants}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
+              >
+                {b_text}
+              </motion.button>
+            </Link>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Dots */}
