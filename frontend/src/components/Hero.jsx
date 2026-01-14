@@ -49,7 +49,7 @@ const mobileAdditionalSlides = [
   //   image: assets.aesthesia_sale_mobile,
   // },
   {
-    image: assets.bg_main_4,
+    image: assets.bg_main_4_mobile,
     image_mobile: assets.bg_main_4_mobile,
     title: "UNFOLD -  A Celebration of Quiet Evolution",
     subtitle: "Explore our Latest Collection",

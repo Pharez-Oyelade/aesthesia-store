@@ -8,7 +8,7 @@ import bg_2_main_mobile from "./bg_2_main_mobile.webp";
 import bg_3_main from "./bg_3_main.webp";
 import bg_3_main_mobile from "./bg_3_main_mobile.webp";
 import bg_main_4 from "./bg-main-4.webp";
-import bg_main_4_mobile from "./bg-main-4-mobile.webp";
+import bg_main_4_mobile from "./bg_main_4.webp";
 import bg_4 from "./bg-4.jpg";
 import bg_5 from "./bg-5.jpg";
 import the_kali from "./thr_kali.jpg";
@@ -18,11 +18,11 @@ import size_chart_demo from "./size-chart-demo.png";
 import size_chart from "./IMG-20251107-WA0012_1.jpg";
 
 import alaafia_bg from "./alaafia-bg.webp";
-import alaafia_bg_mobile from "./ALAAFIA 2.webp";
+import alaafia_bg_mobile from "./alaafia_bg_mobile.webp";
 import first_bg from "./FIRST.webp";
 import bloom_bg from "./bloom-main.webp";
 import bloom_bg_mobile from "./bloom-bg-mobile.webp";
-import the_chronicle_bg from "./the-chronicle-mobile.webp";
+import the_chronicle_bg from "./the_chronicle_bg.webp";
 
 import logo from "./logo.png";
 import logo_light from "./Logo-Light.png";
