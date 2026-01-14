@@ -87,7 +87,7 @@ const ProductItem = memo(
               setIsHovered(false);
               setShowImage(image[0]?.url);
             }}
-            src={getOptimizedUrl(showImage, 400)}
+            src={getOptimizedUrl(showImage, 320)}
             alt=""
             className={`${
               image[1]?.url ? "" : "hover:scale-115 transition ease-in-out"
