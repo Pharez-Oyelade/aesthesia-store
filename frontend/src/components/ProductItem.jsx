@@ -78,6 +78,26 @@ const ProductItem = memo(
             </span>
           )}
 
+          {/* <img
+            onMouseEnter={() => {
+              setIsHovered(true);
+              if (image[1]?.url) setShowImage(image[1].url);
+            }}
+            onMouseLeave={() => {
+              setIsHovered(false);
+              setShowImage(image[0]?.url);
+            }}
+            src={getOptimizedUrl(showImage, 320)}
+            alt=""
+            width="320"
+            height="400"
+            className={`w-full h-auto ${
+              image[1]?.url
+                ? ""
+                : "hover:scale-115 transition ease-in-out w-full h-auto"
+            }`}
+          /> */}
+
           <img
             onMouseEnter={() => {
               setIsHovered(true);
@@ -89,7 +109,9 @@ const ProductItem = memo(
             }}
             src={getOptimizedUrl(showImage, 320)}
             alt=""
-            className={`${
+            width="320"
+            height="500"
+            className={`w-full aspect-[4/5] object-cover ${
               image[1]?.url ? "" : "hover:scale-115 transition ease-in-out"
             }`}
           />
