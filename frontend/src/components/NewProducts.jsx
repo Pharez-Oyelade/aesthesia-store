@@ -26,12 +26,7 @@ const NewProducts = () => {
   }
 
   return (
-    <motion.div
-      innitial={{ opacity: 0, y: 300 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 1.5, ease: "easeIn" }}
-      viewport={{ once: true, amount: 0.6 }}
-    >
+    <div>
       <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] py-10">
         <div className="text-center  py-8 text-3xl">
           <Title text1={"NEW"} text2={"PRODUCTS"} />
@@ -58,7 +53,7 @@ const NewProducts = () => {
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
