@@ -223,20 +223,19 @@ const Navbar = () => {
           </div>
 
           <div className="text-sm  sm:text-base">
-            <label htmlFor="currency_select">
-              <select
-                value={currencyCode}
-                onChange={(e) => setCurrencyCode(e.target.value)}
-                className="border rounded px-1 sm:px-2 py-1 text-xs sm:text-base"
-                name="currency_select"
-              >
-                {supportedCurrencies.map((cur) => (
-                  <option key={cur} value={cur}>
-                    {cur}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <label htmlFor="currency_select" />
+            <select
+              value={currencyCode}
+              onChange={(e) => setCurrencyCode(e.target.value)}
+              className="border rounded px-1 sm:px-2 py-1 text-xs sm:text-base"
+              name="currency_select"
+            >
+              {supportedCurrencies.map((cur) => (
+                <option key={cur} value={cur}>
+                  {cur}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div
