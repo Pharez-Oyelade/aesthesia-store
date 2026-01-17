@@ -223,17 +223,20 @@ const Navbar = () => {
           </div>
 
           <div className="text-sm  sm:text-base">
-            <select
-              value={currencyCode}
-              onChange={(e) => setCurrencyCode(e.target.value)}
-              className="border rounded px-1 sm:px-2 py-1 text-xs sm:text-base"
-            >
-              {supportedCurrencies.map((cur) => (
-                <option key={cur} value={cur}>
-                  {cur}
-                </option>
-              ))}
-            </select>
+            <label htmlFor="currency_select">
+              <select
+                value={currencyCode}
+                onChange={(e) => setCurrencyCode(e.target.value)}
+                className="border rounded px-1 sm:px-2 py-1 text-xs sm:text-base"
+                name="currency_select"
+              >
+                {supportedCurrencies.map((cur) => (
+                  <option key={cur} value={cur}>
+                    {cur}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
 
           <div
@@ -286,24 +289,26 @@ const Navbar = () => {
               {/* Mobile: show subsections under COLLECTION */}
               {collection && collection.length > 0 && (
                 <div className="pl-4 pt-2 pb-2 flex flex-col gap-2 border-l border-gray-100">
-                  {collection.map((col, idx) => {
-                    const name =
-                      typeof col === "string" ? col : col?.name || "";
-                    if (!name) return null;
-                    const key = col?._id || col?.id || `${name}-${idx}`;
-                    return (
-                      <Link
-                        key={key}
-                        to={`/collection/${encodeURIComponent(
-                          name.toLowerCase()
-                        )}`}
-                        onClick={() => setIsVisible(false)}
-                        className="text-sm text-gray-700 py-1 pl-1 hover:underline"
-                      >
-                        {name}
-                      </Link>
-                    );
-                  }).reverse()}
+                  {collection
+                    .map((col, idx) => {
+                      const name =
+                        typeof col === "string" ? col : col?.name || "";
+                      if (!name) return null;
+                      const key = col?._id || col?.id || `${name}-${idx}`;
+                      return (
+                        <Link
+                          key={key}
+                          to={`/collection/${encodeURIComponent(
+                            name.toLowerCase()
+                          )}`}
+                          onClick={() => setIsVisible(false)}
+                          className="text-sm text-gray-700 py-1 pl-1 hover:underline"
+                        >
+                          {name}
+                        </Link>
+                      );
+                    })
+                    .reverse()}
                 </div>
               )}
             </div>
@@ -337,21 +342,23 @@ const Navbar = () => {
           onMouseLeave={() => setCollectionDropdown(false)}
           className="absolute top-full left-0 w-full bg-white m-0 p-0 shadow-md flex justify-center gap-10 py-5"
         >
-          {collection.map((col) => (
-            <div
-              key={col._id || col.id}
-              className="flex flex-col items-start gap-2"
-            >
-              {col.name && (
-                <Link
-                  to={`/collection/${col.name.toLowerCase()}`}
-                  className="font-semibold hover:underline"
-                >
-                  {col.name}
-                </Link>
-              )}
-            </div>
-          )).reverse()}
+          {collection
+            .map((col) => (
+              <div
+                key={col._id || col.id}
+                className="flex flex-col items-start gap-2"
+              >
+                {col.name && (
+                  <Link
+                    to={`/collection/${col.name.toLowerCase()}`}
+                    className="font-semibold hover:underline"
+                  >
+                    {col.name}
+                  </Link>
+                )}
+              </div>
+            ))
+            .reverse()}
         </div>
       )}
     </div>
