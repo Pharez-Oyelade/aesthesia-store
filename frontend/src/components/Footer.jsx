@@ -25,34 +25,49 @@ const Footer = () => {
         <div>
           <p className="text-xl font-medium mb-5">ABOUT US</p>
           <ul className="flex flex-col gap-1 text-color-gray-600">
-            <HashLink smooth to="/about#policies">
-              <li className="cursor-pointer">Our Policies</li>
-            </HashLink>
-            <HashLink smooth to="/about#faqs">
-              <li className="cursor-pointer">FAQs</li>
-            </HashLink>
-            <Link to="/shipping-policy">Shipping Policy</Link>
-            <Link to="/contact">
-              <li className="cursor-pointer">Contact Us</li>
-            </Link>
+            <li>
+              <HashLink smooth to="/about#policies">
+                Our Policies
+              </HashLink>
+            </li>
+
+            <li className="cursor-pointer">
+              <HashLink smooth to="/about#faqs">
+                FAQs
+              </HashLink>
+            </li>
+
+            <li>
+              <Link to="/shipping-policy">Shipping Policy</Link>
+            </li>
+
+            <li className="cursor-pointer">
+              <Link to="/contact">Contact Us</Link>
+            </li>
           </ul>
         </div>
 
         <div>
           <p className="text-xl font-medium mb-5">SHOP</p>
           <ul className="flex flex-col gap-1 text-color-gray-600">
-            <Link to="/collection">
-              <li className="cursor-pointer">Collection</li>
-            </Link>
-            <Link to="/collection/unfold">
-              <li className="cursor-pointer">Unfold</li>
-            </Link>
-            <Link to="/collection/the color code collection">
-              <li className="cursor-pointer">Color Code Collection</li>
-            </Link>
-            <Link to="/collection/the rere collection">
-              <li className="cursor-pointer">RERE Collection</li>
-            </Link>
+            <li className="cursor-pointer">
+              <Link to="/collection">Collection</Link>
+            </li>
+
+            <li className="cursor-pointer">
+              <Link to="/collection/unfold">Unfold</Link>
+            </li>
+
+            <li className="cursor-pointer">
+              C
+              <Link to="/collection/the color code collection">
+                Color Code Collection
+              </Link>
+            </li>
+
+            <li className="cursor-pointer">
+              <Link to="/collection/the rere collection">RERE Collection</Link>
+            </li>
           </ul>
         </div>
 
