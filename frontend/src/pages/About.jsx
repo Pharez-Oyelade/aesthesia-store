@@ -156,9 +156,35 @@ const About = () => {
                 What is Aesthesia’s return policy?
               </h4>
               <p className="text-gray-600">
-                We offer hassle-free returns within 14 days of delivery. Items
-                must be unused, in original packaging, and accompanied by a
-                receipt. Please contact our support team to initiate a return.
+                All Aesthesia Haven pieces are made-to-order and produced only
+                after an order is placed.
+              </p>
+              <ul className="list-disc list-inside text-gray-600 mt-2 space-y-1">
+                <li>
+                  Made-to-order items are non-returnable and non-refundable,
+                  whether created using custom measurements or our standard size
+                  chart.
+                </li>
+                <li>
+                  Customers are responsible for providing accurate measurements
+                  or selecting the correct size from our size guide.
+                </li>
+                <li>
+                  Orders cannot be cancelled, modified, or exchanged once
+                  production has begun.
+                </li>
+                <li>
+                  In the rare event of a construction or production error on our
+                  part, we will correct the issue at no additional cost.
+                </li>
+                <li>Sale or discounted items are also non-returnable.</li>
+                Customers are responsible for shipping costs unless the item is
+                faulty.
+              </ul>
+              <p className="text-gray-600 mt-5">
+                If you experience an issue with your order, please contact us
+                within 48 hours of delivery with clear photos and your order
+                number.
               </p>
             </div>
             <div className="bg-white rounded-xl shadow-md p-6">
@@ -194,9 +220,8 @@ const About = () => {
                 How can I contact customer support?
               </h4>
               <p className="text-gray-600">
-                You can reach us via our contact form, email
-                (aesthesiahaven@gmail.com), or by phone. Our team is available
-                Monday to Saturday, 9am-6pm.
+                You can reach us via email (aesthesiahaven@gmail.com), or by
+                phone. Our team is available Monday to Saturday, 9am-6pm.
               </p>
             </div>
           </div>
