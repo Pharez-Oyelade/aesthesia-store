@@ -8,7 +8,7 @@ export default function PreNav() {
   };
 
   const message =
-    "Please allow up to 7 working days for your order to be processed";
+    "Please allow us up to 7-10 working days to process your order";
 
   return (
     <div className="fixed top-0 left-0 z-50 w-full bg-gray-900 text-gray-100 text-sm py-2 px-4">

@@ -112,7 +112,7 @@ const Footer = () => {
           Aesthesia Haven - All Rights Reserved | website by{" "}
           <a
             className="text-red-600 font-bold underline"
-            href="https://pharez-oyelade.github.io/my-portfolio/"
+            href="https://pharez-portfolio.vercel.app/"
           >
             Pharez
           </a>

@@ -72,7 +72,7 @@ const PlaceOrder = () => {
           (loc) =>
             (Array.isArray(loc.areas) &&
               loc.areas.includes(selectedLocation)) ||
-            loc.location === selectedLocation
+            loc.location === selectedLocation,
         );
         if (!isValidLocation) {
           setSelectedLocation("");
@@ -278,7 +278,7 @@ const PlaceOrder = () => {
         {
           headers,
           timeout: 30000, // 30 second timeout
-        }
+        },
       );
 
       if (res.data.success) {
@@ -292,7 +292,7 @@ const PlaceOrder = () => {
               reference: response.reference,
             };
             const existingOrders = JSON.parse(
-              localStorage.getItem("guestOrders") || "[]"
+              localStorage.getItem("guestOrders") || "[]",
             );
             existingOrders.push(guestOrder);
             localStorage.setItem("guestOrders", JSON.stringify(existingOrders));
@@ -317,7 +317,7 @@ const PlaceOrder = () => {
         if (isGuestMode || !token) {
           toast.info(
             `Order placed! Check your email (${formData.email}) for confirmation. Order ID: ${res.data.orderId}`,
-            { autoClose: 10000 }
+            { autoClose: 10000 },
           );
           // Optionally navigate to a success page or home
           navigate("/");
@@ -331,7 +331,7 @@ const PlaceOrder = () => {
         if (res.data.reference) {
           toast.error(
             `${errorMsg}. Your payment reference: ${res.data.reference}. Please contact support.`,
-            { autoClose: false }
+            { autoClose: false },
           );
         } else {
           toast.error(errorMsg);
@@ -344,12 +344,12 @@ const PlaceOrder = () => {
       if (error.code === "ECONNABORTED" || !error.response) {
         toast.error(
           `Network error. Your payment was successful (Ref: ${response.reference}). Please contact support to confirm your order.`,
-          { autoClose: false }
+          { autoClose: false },
         );
       } else {
         toast.error(
           error.response?.data?.message ||
-            "An error occurred. Please contact support if payment was deducted."
+            "An error occurred. Please contact support if payment was deducted.",
         );
       }
     }
@@ -374,7 +374,7 @@ const PlaceOrder = () => {
       const response = await axios.post(
         backendUrl + "/api/order/place",
         orderData,
-        { headers }
+        { headers },
       );
       if (response.data.success) {
         // Save guest order to localStorage if guest
@@ -386,7 +386,7 @@ const PlaceOrder = () => {
               date: Date.now(),
             };
             const existingOrders = JSON.parse(
-              localStorage.getItem("guestOrders") || "[]"
+              localStorage.getItem("guestOrders") || "[]",
             );
             existingOrders.push(guestOrder);
             localStorage.setItem("guestOrders", JSON.stringify(existingOrders));
@@ -404,7 +404,7 @@ const PlaceOrder = () => {
         if (isGuestMode || !token) {
           toast.success(
             `Order placed! Check your email (${formData.email}) for confirmation. Order ID: ${response.data.orderId}`,
-            { autoClose: 10000 }
+            { autoClose: 10000 },
           );
           navigate("/");
         } else {
@@ -558,9 +558,11 @@ const PlaceOrder = () => {
                         !Array.isArray(loc.areas) ||
                         loc.areas.length === 0 ||
                         loc.areas.every(
-                          (a) => !a || a.toString().trim() === ""
+                          (a) => !a || a.toString().trim() === "",
                         ) ||
-                        loc.areas.some((a) => a.toLowerCase().includes("other"))
+                        loc.areas.some((a) =>
+                          a.toLowerCase().includes("other"),
+                        ),
                     );
                     if (matchingGroup)
                       setSelectedLocation(matchingGroup.location);
@@ -612,7 +614,7 @@ const PlaceOrder = () => {
             *Enter a valid email address to receive payment receipt
           </p>
           <p className="text-md font-bold">
-            NOTE: This outfit requires 7 working days for production.
+            NOTE: Please allow us up to 7-10 working days to process your order
           </p>
         </div>
 
@@ -732,7 +734,7 @@ const PlaceOrder = () => {
                   setIsGuestMode(true);
                   setShowAuthModal(false);
                   toast.info(
-                    "Proceeding as guest. Please fill in all delivery information."
+                    "Proceeding as guest. Please fill in all delivery information.",
                   );
                 }}
                 className="w-full bg-green-600 text-white py-3 rounded font-semibold hover:bg-green-700 transition duration-200"

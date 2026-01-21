@@ -35,13 +35,27 @@
       crossorigin
     />
 
-    <link rel="preconnect" href="https://js.paystack.co" />
+    <!-- <link rel="preconnect" href="https://js.paystack.co" />
     <link rel="dns-prefetch" href="https://js.paystack.co" />
-    <link rel="preconnect" href="https://api.currencyapi.com" />
+    <link rel="preconnect" href="https://api.currencyapi.com" /> -->
+    <link rel="preconnect" href="https://js.paystack.co" crossorigin />
+    <link rel="dns-prefetch" href="https://js.paystack.co" />
+    <link rel="preconnect" href="https://api.currencyapi.com" crossorigin />
+    <link rel="dns-prefetch" href="https://api.currencyapi.com" />
+    <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+    <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+    <link
+      rel="preconnect"
+      href="https://www.googletagmanager.com"
+      crossorigin
+    />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+    <link rel="dns-prefetch" href="https://connect.facebook.net" />
     <!-- <link rel="preload" as="image" href="./src/assets/bg-main-4.webp" /> -->
 
-    <!-- Load critical script asynchronously -->
-    <script src="https://js.paystack.co/v1/inline.js" async defer></script>
+    <!-- defer paystack-->
+    <script src="https://js.paystack.co/v1/inline.js" defer></script>
   </head>
   <body>
     <div id="root"></div>
