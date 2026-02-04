@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { FaSearch } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import ArrayInput from "../components/ArrayInput";
+import { getOptimizedUrl } from "../utils/cloudinaryHelper";
 
 const List = ({ token }) => {
   const [list, setList] = useState([]);
@@ -56,7 +57,7 @@ const List = ({ token }) => {
       const response = await axios.post(
         backendUrl + "/api/product/remove",
         { id: selectedProduct._id },
-        { headers: { token } }
+        { headers: { token } },
       );
 
       if (response.data.success) {
@@ -130,7 +131,7 @@ const List = ({ token }) => {
             >
               <img
                 className="w-14 h-14 object-cover rounded-lg border"
-                src={item.image[0]?.url}
+                src={getOptimizedUrl(item.image[0]?.url, 100)}
                 alt=""
               />
               <p className="font-medium">{item.name}</p>
@@ -215,7 +216,7 @@ const List = ({ token }) => {
                       // length: JSON.stringify(editFields.length),
                       fitLength: JSON.stringify(editFields.fitLength),
                     },
-                    { headers: { token } }
+                    { headers: { token } },
                   );
                   if (response.data.success) {
                     toast.success("Product updated successfully");
@@ -243,29 +244,29 @@ const List = ({ token }) => {
               </label>
               <div className="flex gap-2">
                 <label className="font-medium">
-                Price
-                <input
-                  type="number"
-                  className="w-full px-3 py-2 border rounded-lg mt-1"
-                  value={editFields.price || ""}
-                  min="0"
-                  onChange={(e) =>
-                    setEditFields((f) => ({ ...f, price: e.target.value }))
-                  }
-                />
-              </label>
+                  Price
+                  <input
+                    type="number"
+                    className="w-full px-3 py-2 border rounded-lg mt-1"
+                    value={editFields.price || ""}
+                    min="0"
+                    onChange={(e) =>
+                      setEditFields((f) => ({ ...f, price: e.target.value }))
+                    }
+                  />
+                </label>
                 <label className="font-medium">
-                Weight(grams)
-                <input
-                  type="number"
-                  className="w-full px-3 py-2 border rounded-lg mt-1"
-                  value={editFields.weight || ""}
-                  min="0"
-                  onChange={(e) =>
-                    setEditFields((f) => ({ ...f, weight: e.target.value }))
-                  }
-                />
-              </label>
+                  Weight(grams)
+                  <input
+                    type="number"
+                    className="w-full px-3 py-2 border rounded-lg mt-1"
+                    value={editFields.weight || ""}
+                    min="0"
+                    onChange={(e) =>
+                      setEditFields((f) => ({ ...f, weight: e.target.value }))
+                    }
+                  />
+                </label>
               </div>
               {/* <label className="font-medium">
                 Price
@@ -305,7 +306,7 @@ const List = ({ token }) => {
                   }
                 />
               </label>
-             
+
               <div className="flex flex-col gap-1">
                 <span className="font-medium">Sizes</span>
                 <ArrayInput
