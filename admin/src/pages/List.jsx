@@ -188,10 +188,10 @@ const List = ({ token }) => {
       {/* ........... EDIT PRODUCTS MODAL .............. */}
       {editProduct && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-transparent bg-opacity-50 overflow-auto"
+          className="fixed inset-0 z-100 flex items-center justify-center bg-transparent bg-opacity-50 overflow-auto"
           style={{ backdropFilter: "blur(2px)" }}
         >
-          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative my-auto">
             <button
               className="absolute top-3 right-3 text-gray-400 hover:text-red-600 text-2xl font-bold"
               onClick={() => setEditProduct(null)}
