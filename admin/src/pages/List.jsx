@@ -185,7 +185,7 @@ const List = ({ token }) => {
         </div>
       </div>
 
-      {/* Edit Product Modal */}
+      {/* ........... EDIT PRODUCTS MODAL .............. */}
       {editProduct && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-transparent bg-opacity-50 overflow-auto"
