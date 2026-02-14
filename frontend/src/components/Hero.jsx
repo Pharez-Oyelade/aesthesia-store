@@ -32,6 +32,24 @@ const slides = [
     b_text: "SHOP NOW",
     link: "/product/6928e4a7d56b7f9f684dd04e",
   },
+
+  {
+    image: assets.first_bloom3,
+    image_mobile: assets.first_bloom3,
+    title: "FIRST BLOOM RETURNS",
+    subtitle:
+      "Where confidence blossoms in every shade - Magenta & Onion and Soft Blue & Pastel Yellow",
+    b_text: "SHOP NOW",
+    link: "/product/6928eb30d56b7f9f684dd2cf",
+  },
+  {
+    image: assets.first_bloom1,
+    image_mobile: assets.first_bloom1,
+    title: "FIRST BLOOM - Bloom in your own color",
+    subtitle: "Now reintroduced in beloved hues and soft new tones",
+    b_text: "SHOP NOW",
+    link: "/product/6928eb30d56b7f9f684dd2cf",
+  },
   {
     image: assets.bg_1_main,
     // image: assets.alaafia_bg,
@@ -89,6 +107,23 @@ const mobileAdditionalSlides = [
       "Experience the signature Àlàáfíà, reimagined in Green and Purple",
     b_text: "SHOP NOW",
     link: "/product/6928e4a7d56b7f9f684dd04e",
+  },
+  {
+    image: assets.first_bloom3,
+    image_mobile: assets.first_bloom3,
+    title: "FIRST BLOOM RETURNS",
+    subtitle:
+      "Where confidence blossoms in every shade - Magenta & Onion and Soft Blue & Pastel Yellow",
+    b_text: "SHOP NOW",
+    link: "/product/6928eb30d56b7f9f684dd2cf",
+  },
+  {
+    image: assets.first_bloom1,
+    image_mobile: assets.first_bloom1,
+    title: "FIRST BLOOM - Bloom in your own color",
+    subtitle: "Now reintroduced in beloved hues and soft new tones",
+    b_text: "SHOP NOW",
+    link: "/product/6928eb30d56b7f9f684dd2cf",
   },
   // {
   //   image: assets.bloom_bg,

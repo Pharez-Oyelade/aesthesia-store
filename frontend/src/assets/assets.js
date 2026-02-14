@@ -62,7 +62,9 @@ import aesthesia_sale from "./AESTHESIA SALES W-2B.jpg";
 import aesthesia_sale_mobile from "./AESTHESIA SALES B.jpg";
 
 // new colors hero baner
+import first_bloom1 from "./first_bloom1.webp";
 import first_bloom2 from "./first_bloom2.webp";
+import first_bloom3 from "./first_bloom3.webp";
 import peace4 from "./peace4.webp";
 
 export const assets = {
@@ -129,6 +131,8 @@ export const assets = {
   aesthesia_sale,
   aesthesia_sale_mobile,
 
+  first_bloom1,
   first_bloom2,
+  first_bloom3,
   peace4,
 };
