@@ -61,6 +61,10 @@ import secure_payment from "./secure-payment.webp";
 import aesthesia_sale from "./AESTHESIA SALES W-2B.jpg";
 import aesthesia_sale_mobile from "./AESTHESIA SALES B.jpg";
 
+// new colors hero baner
+import first_bloom2 from "./first_bloom2.webp";
+import peace4 from "./peace4.webp";
+
 export const assets = {
   logo,
   logo_light,
@@ -124,4 +128,7 @@ export const assets = {
 
   aesthesia_sale,
   aesthesia_sale_mobile,
+
+  first_bloom2,
+  peace4,
 };
