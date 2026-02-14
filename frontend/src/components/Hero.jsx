@@ -7,21 +7,30 @@ const slides = [
   // {
   //   image: assets.aesthesia_sale,
   // },
+  // {
+  //   image: assets.bg_main_4,
+  //   image_mobile: assets.bg_main_4_mobile,
+  //   title: "UNFOLD -  A Celebration of Quiet Evolution",
+  //   subtitle: "Explore our Latest Collection",
+  //   b_text: "UNFOLD",
+  //   link: "/collection/unfold",
+  // },
   {
-    image: assets.bg_main_4,
-    image_mobile: assets.bg_main_4_mobile,
-    title: "UNFOLD -  A Celebration of Quiet Evolution",
-    subtitle: "Explore our Latest Collection",
-    b_text: "UNFOLD",
-    link: "/collection/unfold",
-  },
-  {
-    image: assets.bloom_bg,
-    image_mobile: assets.bloom_bg_mobile,
-    title: "FIRST BLOOM",
-    subtitle: "The courage to begin - softly, yet surely",
+    image: assets.first_bloom2,
+    image_mobile: assets.first_bloom2,
+    title: "First Bloom - A Fresh Palette",
+    subtitle: "Your favorite silhouette, now blossoming in two new colorways",
     b_text: "SHOP NOW",
     link: "/product/6928eb30d56b7f9f684dd2cf",
+  },
+  {
+    image: assets.peace4,
+    image_mobile: assets.peace4,
+    title: "Àlàáfíà - Peace",
+    subtitle:
+      "Experience the signature Àlàáfíà, reimagined in Green and Purple",
+    b_text: "SHOP NOW",
+    link: "/product/6928e4a7d56b7f9f684dd04e",
   },
   {
     image: assets.bg_1_main,
@@ -48,6 +57,47 @@ const mobileAdditionalSlides = [
   // {
   //   image: assets.aesthesia_sale_mobile,
   // },
+  // {
+  //   image: assets.bg_main_4_mobile,
+  //   image_mobile: assets.bg_main_4_mobile,
+  //   title: "UNFOLD -  A Celebration of Quiet Evolution",
+  //   subtitle: "Explore our Latest Collection",
+  //   b_text: "UNFOLD",
+  //   link: "/collection/unfold",
+  // },
+  // {
+  //   image: assets.peace4,
+  //   image_mobile: assets.peace4,
+  //   title: "Àlàáfíà - Peace",
+  //   subtitle: "Ease is her new luxury",
+  //   b_text: "SHOP NOW",
+  //   link: "/product/6928e4a7d56b7f9f684dd04e",
+  // },
+  {
+    image: assets.first_bloom2,
+    image_mobile: assets.first_bloom2,
+    title: "FIRST BLOOM",
+    subtitle: "Your favorite piece, now blossoming in two new colorways",
+    b_text: "SHOP NOW",
+    link: "/product/6928eb30d56b7f9f684dd2cf",
+  },
+  {
+    image: assets.peace4,
+    image_mobile: assets.peace4,
+    title: "Àlàáfíà - Peace",
+    subtitle:
+      "Experience the signature Àlàáfíà, reimagined in Green and Purple",
+    b_text: "SHOP NOW",
+    link: "/product/6928e4a7d56b7f9f684dd04e",
+  },
+  // {
+  //   image: assets.bloom_bg,
+  //   image_mobile: assets.bloom_bg,
+  //   title: "FIRST BLOOM",
+  //   subtitle: "The courage to begin - softly, yet surely",
+  //   b_text: "SHOP NOW",
+  //   link: "/product/6928eb30d56b7f9f684dd2cf",
+  // },
   {
     image: assets.bg_main_4_mobile,
     image_mobile: assets.bg_main_4_mobile,
@@ -57,36 +107,29 @@ const mobileAdditionalSlides = [
     link: "/collection/unfold",
   },
   {
-    image: assets.alaafia_bg_mobile,
-    image_mobile: assets.alaafia_bg_mobile,
-    title: "Àlàáfíà - Peace",
-    subtitle: "Ease is her new luxury",
+    image: assets.bg_1_main,
+    // image: assets.alaafia_bg,
+    image_mobile: assets.bg_1_main_mobile,
+    title: "EMBRACE YOUR BEAUTIFUL",
+    subtitle: "Browse our Collection",
     b_text: "SHOP NOW",
-    link: "/product/6928e4a7d56b7f9f684dd04e",
+    link: "/collection",
   },
-  {
-    image: assets.bloom_bg,
-    image_mobile: assets.bloom_bg,
-    title: "FIRST BLOOM",
-    subtitle: "The courage to begin - softly, yet surely",
-    b_text: "SHOP NOW",
-    link: "/product/6928eb30d56b7f9f684dd2cf",
-  },
-  {
-    image: assets.the_chronicle_bg,
-    image_mobile: assets.the_chronicle_bg,
-    title: "THE CHRONICLE",
-    subtitle: "Every stage tells a story",
-    b_text: "SHOP NOW",
-    link: "/product/6928e6c3d56b7f9f684dd0e6",
-  },
+  // {
+  //   image: assets.the_chronicle_bg,
+  //   image_mobile: assets.the_chronicle_bg,
+  //   title: "THE CHRONICLE",
+  //   subtitle: "Every stage tells a story",
+  //   b_text: "SHOP NOW",
+  //   link: "/product/6928e6c3d56b7f9f684dd0e6",
+  // },
 ];
 
 const Hero = () => {
   const [current, setCurrent] = useState(0);
 
   const [isMobile, setIsMobile] = useState(
-    typeof window !== "undefined" ? window.innerWidth <= 768 : false
+    typeof window !== "undefined" ? window.innerWidth <= 768 : false,
   );
 
   // Get the appropriate slide array based on device type
