@@ -95,7 +95,7 @@ const Product = () => {
       const prod = products.find((item) => item._id === (productId || id));
       setProductData(prod || null);
       setImage(
-        prod && prod.image && prod.image[0].url ? prod.image[0].url : ""
+        prod && prod.image && prod.image[0].url ? prod.image[0].url : "",
       );
       setSize("");
       setColor("");
@@ -154,7 +154,7 @@ const Product = () => {
       size,
       color,
       { ...measurements, fitLength },
-      quantity
+      quantity,
     );
     ReactPixel.track("AddToCart", {
       content_ids: [productData._id],
@@ -184,7 +184,7 @@ const Product = () => {
             <div className="flex-1 flex flex-col gap-6">
               <div className="w-full aspect-square bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden shadow-md">
                 <img
-                  src={getOptimizedUrl(image, 400)}
+                  src={getOptimizedUrl(image, 900)}
                   className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
                   alt={productData.name}
                 />
@@ -525,8 +525,8 @@ const Product = () => {
                         productData.soldOut
                           ? "Sold Out"
                           : productData.preorder
-                          ? "Preorder Now"
-                          : "Add to Cart"
+                            ? "Preorder Now"
+                            : "Add to Cart"
                       }`}
                     </button>
                   </form>
@@ -567,8 +567,8 @@ const Product = () => {
                             productData.soldOut
                               ? "Sold Out"
                               : productData.preorder
-                              ? "Preorder Now"
-                              : "Add to Cart"
+                                ? "Preorder Now"
+                                : "Add to Cart"
                           }`}
                       {/* {productData.soldOut
                       ? "Sold Out"
