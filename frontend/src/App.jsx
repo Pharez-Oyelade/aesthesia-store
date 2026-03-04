@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
@@ -44,6 +44,18 @@ const App = () => {
   const isWig = location.pathname === "/wigs";
   const isRere = location.pathname === "/rere-collection";
   const isJewelry = location.pathname === "/jewelry";
+
+  useEffect(() => {
+    if (!window.clarity) {
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;
+        t.src="https://www.clarity.ms/tag/vq4h0d3qnn";
+        y=l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "vq4h0d3qnn");
+    }
+  }, []);
 
   return (
     <div className="overflow-x-hidden">
