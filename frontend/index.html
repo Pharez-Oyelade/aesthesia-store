@@ -35,23 +35,26 @@
       crossorigin
     />
 
-    <!-- <link rel="preconnect" href="https://js.paystack.co" />
-    <link rel="dns-prefetch" href="https://js.paystack.co" />
-    <link rel="preconnect" href="https://api.currencyapi.com" /> -->
-    <link rel="preconnect" href="https://js.paystack.co" crossorigin />
-    <link rel="dns-prefetch" href="https://js.paystack.co" />
-    <link rel="preconnect" href="https://api.currencyapi.com" crossorigin />
-    <link rel="dns-prefetch" href="https://api.currencyapi.com" />
+    <!--
+      Preconnect: open TCP+TLS tunnel early for origins used on first render.
+      Limit to ≤4 to avoid wasting browser connection slots.
+    -->
+    <!-- Backend API — first data fetch (products + sections). Est. 290ms LCP savings -->
+    <link rel="preconnect" href="https://aesthesia-store-backend.onrender.com" crossorigin />
+    <link rel="dns-prefetch" href="https://aesthesia-store-backend.onrender.com" />
+    <!-- Cloudinary — product images load immediately on homepage -->
     <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
     <link rel="dns-prefetch" href="https://res.cloudinary.com" />
-    <link
-      rel="preconnect"
-      href="https://www.googletagmanager.com"
-      crossorigin
-    />
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-    <link rel="preconnect" href="https://connect.facebook.net" crossorigin />
+
+    <!--
+      dns-prefetch only (fires after JS loads, not on first paint):
+      - connect.facebook.net: Facebook Pixel loads via react-facebook-pixel after hydration
+      - api.currencyapi.com: 30-day localStorage cache means rarely fires on repeat visits
+      - js.paystack.co: lazy-loaded on /place-order page only
+    -->
     <link rel="dns-prefetch" href="https://connect.facebook.net" />
+    <link rel="dns-prefetch" href="https://api.currencyapi.com" />
+    <link rel="dns-prefetch" href="https://js.paystack.co" />
     <!-- <link rel="preload" as="image" href="./src/assets/bg-main-4.webp" /> -->
 
     <!-- Paystack inline.js is now dynamically loaded only on the /place-order page -->
