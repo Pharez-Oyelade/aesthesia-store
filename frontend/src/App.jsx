@@ -46,14 +46,31 @@ const App = () => {
   const isJewelry = location.pathname === "/jewelry";
 
   useEffect(() => {
-    if (!window.clarity) {
-      (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;
-        t.src="https://www.clarity.ms/tag/vq4h0d3qnn";
-        y=l.getElementsByTagName(r)[0];
-        y.parentNode.insertBefore(t,y);
+    // Defer Clarity until browser is idle to keep it off the critical path.
+    // This prevents it from affecting LCP / FID on Lighthouse audits.
+    const loadClarity = () => {
+      if (window.clarity) return;
+      (function (c, l, a, r, i, t, y) {
+        c[a] =
+          c[a] ||
+          function () {
+            (c[a].q = c[a].q || []).push(arguments);
+          };
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = "https://www.clarity.ms/tag/vq4h0d3qnn";
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
       })(window, document, "clarity", "script", "vq4h0d3qnn");
+    };
+
+    if ("requestIdleCallback" in window) {
+      const idleId = requestIdleCallback(loadClarity, { timeout: 3000 });
+      return () => cancelIdleCallback(idleId);
+    } else {
+      // Fallback for Safari which doesn't support requestIdleCallback
+      const timerId = setTimeout(loadClarity, 3000);
+      return () => clearTimeout(timerId);
     }
   }, []);
 
