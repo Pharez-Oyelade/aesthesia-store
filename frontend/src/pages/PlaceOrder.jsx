@@ -44,6 +44,21 @@ const PlaceOrder = () => {
     }
   }, [token, isGuestMode]);
 
+  // Dynamically load Paystack inline.js only on this page (not globally).
+  // This keeps the 10 KiB script out of the critical path for all other pages.
+  useEffect(() => {
+    if (document.getElementById("paystack-script")) return; // already loaded
+    const script = document.createElement("script");
+    script.id = "paystack-script";
+    script.src = "https://js.paystack.co/v1/inline.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      // Leave the script in DOM on unmount so re-visiting the page is instant.
+      // The global PaystackPop object persists until full page reload.
+    };
+  }, []);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -235,7 +250,7 @@ const PlaceOrder = () => {
     }
 
     if (!window.PaystackPop) {
-      toast.error("Paystack script not loaded");
+      toast.error("Paystack is still loading, please try again in a moment.");
       return;
     }
 
