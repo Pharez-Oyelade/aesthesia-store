@@ -283,9 +283,9 @@ app.get("/og/product/:id", async (req, res) => {
 
     //return minimal HTML OG tags + redirect for real users
     return res.send(`<!DOCTYPE html>
-      <html lang="en">
-      <head>
-      <meta charset="utf-8" />
+<html>
+  <head>
+    <meta charset="utf-8" />
     <title>${ogTitle}</title>
     <meta property="og:title" content="${ogTitle}" />
     <meta property="og:description" content="${ogDescription}" />
@@ -295,14 +295,9 @@ app.get("/og/product/:id", async (req, res) => {
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${ogTitle}" />
     <meta name="twitter:image" content="${ogImage}" />
-    <meta http-equiv="refresh" content="0;url=${url}" />
-      </head>
-      <body>
-    <script>window.location.href = "${url}";</script>
-    <p>Redirecting... <a href="${url}">Click here</a></p>
-  </body>
-</html>
-      `);
+  </head>
+  <body></body>
+</html>`);
   } catch (error) {
     console.error("OG route error:", error);
     res.status(500).send("Error");
