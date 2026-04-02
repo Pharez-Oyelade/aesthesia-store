@@ -264,45 +264,45 @@ app.use((req, res, next) => {
 
 // ========= OG META ROUTE FOR CRAWLERS =========
 
-app.get("/og/product/:id", async (req, res) => {
-  try {
-    const product = await productModel.findById(req.params.id).lean();
+// app.get("/og/product/:id", async (req, res) => {
+//   try {
+//     const product = await productModel.findById(req.params.id).lean();
 
-    if (!product) {
-      return res.status(404).send("Product not found");
-    }
+//     if (!product) {
+//       return res.status(404).send("Product not found");
+//     }
 
-    const ogTitle = product.name;
-    const ogDescription = product.description
-      ? product.description.substring(0, 150) + "..."
-      : `Shop ${product.name} on Aesthesia Haven!`;
-    const ogImage = Array.isArray(product.image)
-      ? product.image[0].url
-      : product.image.url;
-    const url = `https://aesthesiahaven.com/product/${product._id}`;
+//     const ogTitle = product.name;
+//     const ogDescription = product.description
+//       ? product.description.substring(0, 150) + "..."
+//       : `Shop ${product.name} on Aesthesia Haven!`;
+//     const ogImage = Array.isArray(product.image)
+//       ? product.image[0].url
+//       : product.image.url;
+//     const url = `https://aesthesiahaven.com/product/${product._id}`;
 
-    //return minimal HTML OG tags + redirect for real users
-    return res.send(`<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <title>${ogTitle}</title>
-    <meta property="og:title" content="${ogTitle}" />
-    <meta property="og:description" content="${ogDescription}" />
-    <meta property="og:image" content="${ogImage}" />
-    <meta property="og:url" content="${url}" />
-    <meta property="og:type" content="product" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="${ogTitle}" />
-    <meta name="twitter:image" content="${ogImage}" />
-  </head>
-  <body></body>
-</html>`);
-  } catch (error) {
-    console.error("OG route error:", error);
-    res.status(500).send("Error");
-  }
-});
+//     //return minimal HTML OG tags + redirect for real users
+//     return res.send(`<!DOCTYPE html>
+// <html>
+//   <head>
+//     <meta charset="utf-8" />
+//     <title>${ogTitle}</title>
+//     <meta property="og:title" content="${ogTitle}" />
+//     <meta property="og:description" content="${ogDescription}" />
+//     <meta property="og:image" content="${ogImage}" />
+//     <meta property="og:url" content="${url}" />
+//     <meta property="og:type" content="product" />
+//     <meta name="twitter:card" content="summary_large_image" />
+//     <meta name="twitter:title" content="${ogTitle}" />
+//     <meta name="twitter:image" content="${ogImage}" />
+//   </head>
+//   <body></body>
+// </html>`);
+//   } catch (error) {
+//     console.error("OG route error:", error);
+//     res.status(500).send("Error");
+//   }
+// });
 
 // ========== ROUTES ==========
 // Apply stricter rate limit to auth routes
