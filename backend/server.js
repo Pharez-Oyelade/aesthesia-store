@@ -1,100 +1,3 @@
-// import express from "express";
-// import cors from "cors";
-// import "dotenv/config";
-// import connectDB from "./config/mongodb.js";
-// import connectCloudinary from "./config/cloudinary.js";
-// import userRouter from "./routes/userRoute.js";
-// import productRouter from "./routes/productRoute.js";
-// import cartRouter from "./routes/cartRoute.js";
-// import orderRouter from "./routes/orderRoute.js";
-// import wishlistRouter from "./routes/wishRoute.js";
-// import mailRouter from "./routes/mailchimpRoute.js";
-// import compression from "compression";
-// import sectionRouter from "./routes/sectionRoute.js";
-
-// const app = express(); // ✅ MUST be first before using middleware
-// const port = process.env.PORT || 4000;
-
-// const allowedOrigins = [
-//   "https://aesthesia-haven.vercel.app",
-//   "https://aesthesia-admin-panel.vercel.app",
-//   "http://localhost:5173",
-//   "http://localhost:5174",
-// ];
-
-// connectDB();
-// connectCloudinary();
-
-// // ✅ Compression first
-// app.use(compression());
-
-// // ✅ CORS next
-// app.use(
-//   cors({
-//     origin: (origin, callback) => {
-//       if (!origin || allowedOrigins.includes(origin)) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-//     credentials: true,
-//   })
-// );
-
-// // ✅ JSON body parser
-// app.use(express.json());
-
-// // ✅ Caching after JSON parsing
-// app.use((req, res, next) => {
-//   if (
-//     req.path.match(
-//       /\.(jpg|jpeg|png|gif|webp|svg|ico|css|js|woff|woff2|ttf|eot)$/
-//     )
-//   ) {
-//     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-//   } else if (req.path.startsWith("/api/product")) {
-//     res.setHeader(
-//       "Cache-Control",
-//       "no-store, no-cache, must-revalidate, private"
-//     );
-//   } else if (req.path.startsWith("/api/section")) {
-//     res.setHeader("Cache-Control", "public, max-age=43200");
-//   } else {
-//     res.setHeader(
-//       "Cache-Control",
-//       "no-store, no-cache, must-revalidate, private"
-//     );
-//   }
-//   next();
-// });
-
-// // ✅ Routes
-// app.use("/api/user", userRouter);
-// app.use("/api/product", productRouter);
-// app.use("/api/cart", cartRouter);
-// app.use("/api/order", orderRouter);
-// app.use("/api/wishlist", wishlistRouter);
-// app.use("/api/mailchimp", mailRouter);
-// app.use("/api/section", sectionRouter);
-
-// // ✅ Root route
-// app.get("/", (req, res) => {
-//   res.send("Welcome to the API!");
-// });
-
-// // ✅ Start server
-// app.listen(port, () => {
-//   console.log(`Server is running on port ${port}`);
-// });
-
-// setInterval(() => {
-//   fetch("https://aesthesia-store-backend.onrender.com")
-//     .then(() => console.log("self-ping"))
-//     .catch((err) => console.log("ping failed:", err));
-// }, 14 * 60 * 1000);
-
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
@@ -111,8 +14,12 @@ import wishlistRouter from "./routes/wishRoute.js";
 import mailRouter from "./routes/mailchimpRoute.js";
 import compression from "compression";
 import sectionRouter from "./routes/sectionRoute.js";
+import productModel from "./models/productModel.js";
+// import dns from "node:dns";
 
 const app = express();
+
+// dns.setServers(["8.8.8.8", "8.8.4.4"]); // Use Google's public DNS servers for better reliability
 
 // If the app is behind a reverse proxy (load balancer), enable trust proxy
 // so `req.secure` and `x-forwarded-*` headers are interpreted correctly.
@@ -134,7 +41,7 @@ const allowedOrigins = new Set(
   (process.env.NODE_ENV === "development"
     ? [...baseAllowedOrigins, ...devOrigins]
     : baseAllowedOrigins
-  ).map((u) => u.replace(/\/$/, "").toLowerCase())
+  ).map((u) => u.replace(/\/$/, "").toLowerCase()),
 );
 
 // Database connections with error handling
@@ -164,7 +71,7 @@ app.use(
       includeSubDomains: true,
       preload: true,
     },
-  })
+  }),
 );
 
 // 2. Rate limiting - Prevent brute force and DDoS
@@ -207,7 +114,7 @@ app.use(
     credentials: true,
     maxAge: 86400, // Cache preflight for 24 hours
     optionsSuccessStatus: 204,
-  })
+  }),
 );
 
 // 5. Body parser with size limits (prevent payload attacks)
@@ -215,13 +122,13 @@ app.use(
   express.json({
     limit: "10mb", // Adjust based on your needs
     strict: true,
-  })
+  }),
 );
 app.use(
   express.urlencoded({
     extended: true,
     limit: "10mb",
-  })
+  }),
 );
 
 // Enforce HTTPS in production when behind a proxy/load-balancer that sets
@@ -264,21 +171,21 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   if (
     req.path.match(
-      /\.(jpg|jpeg|png|gif|webp|svg|ico|css|js|woff|woff2|ttf|eot)$/
+      /\.(jpg|jpeg|png|gif|webp|svg|ico|css|js|woff|woff2|ttf|eot)$/,
     )
   ) {
     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
   } else if (req.path.startsWith("/api/product")) {
     res.setHeader(
       "Cache-Control",
-      "no-store, no-cache, must-revalidate, private"
+      "no-store, no-cache, must-revalidate, private",
     );
   } else if (req.path.startsWith("/api/section")) {
     res.setHeader("Cache-Control", "public, max-age=43200");
   } else {
     res.setHeader(
       "Cache-Control",
-      "no-store, no-cache, must-revalidate, private"
+      "no-store, no-cache, must-revalidate, private",
     );
   }
   next();
@@ -335,7 +242,7 @@ app.use((req, res, next) => {
       // don't throw from sanitization
       console.warn(
         "sanitizeInPlace error:",
-        err && err.message ? err.message : err
+        err && err.message ? err.message : err,
       );
     }
   };
@@ -348,11 +255,58 @@ app.use((req, res, next) => {
   } catch (err) {
     console.warn(
       "Request sanitization failed:",
-      err && err.message ? err.message : err
+      err && err.message ? err.message : err,
     );
   }
 
   next();
+});
+
+// ========= OG META ROUTE FOR CRAWLERS =========
+
+app.get("/og/product/:id", async (req, res) => {
+  try {
+    const product = await productModel.findById(req.params.id).lean();
+
+    if (!product) {
+      return res.status(404).send("Product not found");
+    }
+
+    const ogTitle = product.name;
+    const ogDescription = product.description
+      ? product.description.substring(0, 150) + "..."
+      : `Shop ${product.name} on Aesthesia Haven!`;
+    const ogImage = Array.isArray(product.image)
+      ? product.image[0].url
+      : product.image.url;
+    const url = `https://aesthesiahaven.com/product/${product._id}`;
+
+    //return minimal HTML OG tags + redirect for real users
+    return res.send(`<!DOCTYPE html>
+      <html lang="en">
+      <head>
+      <meta charset="utf-8" />
+    <title>${ogTitle}</title>
+    <meta property="og:title" content="${ogTitle}" />
+    <meta property="og:description" content="${ogDescription}" />
+    <meta property="og:image" content="${ogImage}" />
+    <meta property="og:url" content="${url}" />
+    <meta property="og:type" content="product" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${ogTitle}" />
+    <meta name="twitter:image" content="${ogImage}" />
+    <meta http-equiv="refresh" content="0;url=${url}" />
+      </head>
+      <body>
+    <script>window.location.href = "${url}";</script>
+    <p>Redirecting... <a href="${url}">Click here</a></p>
+  </body>
+</html>
+      `);
+  } catch (error) {
+    console.error("OG route error:", error);
+    res.status(500).send("Error");
+  }
 });
 
 // ========== ROUTES ==========
@@ -475,7 +429,7 @@ if (process.env.ENABLE_SELF_PING === "true") {
     try {
       const response = await fetch(
         process.env.APP_URL ||
-          "https://aesthesia-store-backend.onrender.com/health"
+          "https://aesthesia-store-backend.onrender.com/health",
       );
 
       if (response.ok) {
@@ -484,13 +438,13 @@ if (process.env.ENABLE_SELF_PING === "true") {
       } else {
         pingFailures++;
         console.warn(
-          `Self-ping failed with status ${response.status}, failures: ${pingFailures}`
+          `Self-ping failed with status ${response.status}, failures: ${pingFailures}`,
         );
       }
     } catch (err) {
       pingFailures++;
       console.error(
-        `Self-ping failed: ${err.message}, failures: ${pingFailures}`
+        `Self-ping failed: ${err.message}, failures: ${pingFailures}`,
       );
 
       if (pingFailures >= MAX_FAILURES) {
