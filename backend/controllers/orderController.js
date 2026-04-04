@@ -381,18 +381,31 @@ const placeOrderPaystack = async (req, res) => {
     }
 
     // ===== VERIFY AMOUNT (CRITICAL SECURITY CHECK) =====
-    const expectedAmount = Math.round(amount * 100); // Convert to kobo
-    const paidAmount = paymentData.amount;
+    //const expectedAmount = Math.round(amount * 100); // Convert to kobo
+    //const paidAmount = paymentData.amount;
 
-    if (paidAmount !== expectedAmount) {
-      console.error(
-        `Amount mismatch! Expected: ${expectedAmount}, Paid: ${paidAmount}`
-      );
-      return res.json({
-        success: false,
-        message: "Payment amount mismatch. Please contact support.",
-      });
-    }
+    //if (paidAmount !== expectedAmount) {
+      //console.error(
+        //`Amount mismatch! Expected: ${expectedAmount}, Paid: ${paidAmount}`
+      //);
+     // return res.json({
+        //success: false,
+    //  message: "Payment amount mismatch. Please contact support.",
+      //});
+   // }
+
+    const verifiedAmount = paymentData.amount / 100; // Paystack's confirmed amount in Naira
+
+// Only reject if customer was undercharged (potential fraud), never for overcharge
+if (paymentData.amount < Math.round(amount * 100)) {
+  console.error(
+    `Underpayment detected! Expected: ${Math.round(amount * 100)}, Paid: ${paymentData.amount}`
+  );
+  return res.json({
+    success: false,
+    message: "Payment amount mismatch. Please contact support.",
+  });
+}
 
     // Optional: Verify amount against actual product prices in database
     // This prevents frontend tampering
@@ -411,24 +424,25 @@ const placeOrderPaystack = async (req, res) => {
 
     // ===== CREATE ORDER =====
     const orderData = {
-      userId: isGuest ? null : userId,
-      items,
-      address,
-      amount,
-      paymentMethod: "paystack",
-      payment: true,
-      paymentReference: reference, // Store reference for idempotency
-      paystackData: {
-        reference: paymentData.reference,
-        amount: paymentData.amount,
-        currency: paymentData.currency,
-        transactionDate: paymentData.transaction_date,
-        channel: paymentData.channel,
-      },
-      date: Date.now(),
-      isGuest: isGuest,
-      guestEmail: isGuest ? address.email : null,
-    };
+  userId: isGuest ? null : userId,
+  items,
+  address,
+  amount: verifiedAmount, // ← use Paystack's confirmed amount, not frontend's
+  paymentMethod: "paystack",
+  payment: true,
+  paymentReference: reference,
+  paystackData: {
+    reference: paymentData.reference,
+    amount: paymentData.amount,
+    currency: paymentData.currency,
+    transactionDate: paymentData.transaction_date,
+    channel: paymentData.channel,
+    metadata: paymentData.metadata || null, // ← store metadata as fallback
+  },
+  date: Date.now(),
+  isGuest: isGuest,
+  guestEmail: isGuest ? address.email : null,
+};
 
     const newOrder = new orderModel(orderData);
     await newOrder.save();
