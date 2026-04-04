@@ -256,18 +256,23 @@ const PlaceOrder = () => {
 
     const amount = getCartAmount() + getShippingCost() + getPlusSizeFee();
     const handler = window.PaystackPop.setup({
-      key: PAYSTACK_PUBLIC_KEY,
-      email: formData.email,
-      amount: Math.round(amount * 100),
-      firstname: formData.firstName,
-      lastname: formData.lastName,
-      callback: function (response) {
-        handlePaystackSuccess(response);
-      },
-      onClose: function () {
-        toast.info("Payment cancelled");
-      },
-    });
+  key: PAYSTACK_PUBLIC_KEY,
+  email: formData.email,
+  amount: Math.round(amount * 100),
+  firstname: formData.firstName,
+  lastname: formData.lastName,
+  metadata: {
+    items: buildOrderItems(),
+    address: formData,
+    isGuest: !token,
+  },
+  callback: function (response) {
+    handlePaystackSuccess(response);
+  },
+  onClose: function () {
+    toast.info("Payment cancelled");
+  },
+});
     handler.openIframe();
   };
 
@@ -281,7 +286,7 @@ const PlaceOrder = () => {
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + getShippingCost(),
+        amount: getCartAmount() + getShippingCost() + (getPlusSizeFee() || 0),
         reference: response.reference,
       };
 
