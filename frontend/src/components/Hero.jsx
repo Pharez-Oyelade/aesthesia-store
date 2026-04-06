@@ -320,37 +320,20 @@ const Hero = () => {
       </div> */}
 
       <div className="relative z-20 flex items-center justify-center w-full h-full">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current}
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="flex flex-col items-center text-center text-white px-4"
-          >
-            <motion.h1
-              variants={childVariants}
-              className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg outfit-bold"
-            >
-              {title}
-            </motion.h1>
-            <p className="text-md w-[75%] sm:w-[100%] sm:text-lg font-medium drop-shadow-md">
-              {subtitle}
-            </p>
+        <div className="flex flex-col items-center text-center text-white px-4">
+          <h1 className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg outfit-bold">
+            {title}
+          </h1>
+          <p className="text-md w-[75%] sm:w-[100%] sm:text-lg font-medium drop-shadow-md">
+            {subtitle}
+          </p>
 
-            <Link to={link}>
-              <motion.button
-                variants={childVariants}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
-              >
-                {b_text}
-              </motion.button>
-            </Link>
-          </motion.div>
-        </AnimatePresence>
+          <Link to={link}>
+            <button className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300">
+              {b_text}
+            </button>
+          </Link>
+        </div>
       </div>
 
       {/* Dots */}
