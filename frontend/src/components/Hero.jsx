@@ -282,7 +282,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-black/40 z-10" />
 
       {/* Slide Content */}
-      <div className="relative z-20 flex items-center justify-center w-full h-full">
+      {/* <div className="relative z-20 flex items-center justify-center w-full h-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
@@ -304,6 +304,40 @@ const Hero = () => {
             >
               {subtitle}
             </motion.p>
+
+            <Link to={link}>
+              <motion.button
+                variants={childVariants}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
+              >
+                {b_text}
+              </motion.button>
+            </Link>
+          </motion.div>
+        </AnimatePresence>
+      </div> */}
+
+      <div className="relative z-20 flex items-center justify-center w-full h-full">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={current}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="flex flex-col items-center text-center text-white px-4"
+          >
+            <motion.h1
+              variants={childVariants}
+              className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg outfit-bold"
+            >
+              {title}
+            </motion.h1>
+            <p className="text-md w-[75%] sm:w-[100%] sm:text-lg font-medium drop-shadow-md">
+              {subtitle}
+            </p>
 
             <Link to={link}>
               <motion.button
