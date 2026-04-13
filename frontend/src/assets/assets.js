@@ -16,7 +16,7 @@ import green_main from "./green_main.png";
 import main_1 from "./main_1.jpg";
 import size_chart_demo from "./size-chart-demo.png";
 // import size_chart from "./IMG-20251107-WA0012_1.jpg";
-import size_chart from "./size_chart.webp";
+import size_chart from "./size_chart_new.webp";
 
 import alaafia_bg from "./alaafia-bg.webp";
 import alaafia_bg_mobile from "./alaafia_bg_mobile.webp";

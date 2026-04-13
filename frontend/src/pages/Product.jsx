@@ -623,7 +623,7 @@ const Product = () => {
             ))}
           </div>
           <div
-            className="gap-4 text-gray-600 text-lg leading-relaxed"
+            className={`gap-4 text-gray-600 text-lg leading-relaxed`}
             id="size-guide"
           >
             <div>{renderTabContent()}</div>
