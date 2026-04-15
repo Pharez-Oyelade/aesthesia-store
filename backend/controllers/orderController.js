@@ -273,8 +273,8 @@ const placeOrder = async (req, res) => {
 
 // Placing an order with Paystack - SECURE VERSION
 const placeOrderPaystack = async (req, res) => {
-  const MAX_RETRIES = 3;
-  const RETRY_DELAY = 1000; // 1 second
+  const MAX_RETRIES = 5;
+  const RETRY_DELAY = 2000; // 1 second
 
   try {
     const { userId, items, amount, address, reference } = req.body;
