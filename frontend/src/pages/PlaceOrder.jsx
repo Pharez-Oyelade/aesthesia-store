@@ -7,8 +7,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
-//const PAYSTACK_PUBLIC_KEY = "pk_test_c4b2eb84f0a0f617c83c345b25ba357a5169a821";
-const PAYSTACK_PUBLIC_KEY = "pk_live_65339f2e907214cfc666681ca71100b0c0d4d5ea";
+const PAYSTACK_PUBLIC_KEY = "pk_test_c4b2eb84f0a0f617c83c345b25ba357a5169a821";
+//const PAYSTACK_PUBLIC_KEY = "pk_live_65339f2e907214cfc666681ca71100b0c0d4d5ea";
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("paystack");
