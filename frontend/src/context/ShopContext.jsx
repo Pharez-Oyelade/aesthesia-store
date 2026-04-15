@@ -79,6 +79,7 @@ const localDelivery = [
       "LBS",
       "Sangotedo",
       "Ajah",
+      "VGC"
     ],
   },
   {
@@ -97,6 +98,7 @@ const localDelivery = [
       "Ketu",
       "Bariga",
       "Magodo",
+      "Ogudu"
     ],
   },
   {
