@@ -540,6 +540,9 @@ const paystackWebhook = async (req, res) => {
         await recoveryOrder.save();
         console.log(`Webhook: recovery order saved for reference ${reference}`);
 
+        // Responsd before email
+        res.sendStatus(200);
+
         // Alert admin to follow up manually
         try {
           await sendNewOrderAdminNotification({
@@ -565,7 +568,7 @@ const paystackWebhook = async (req, res) => {
         }
       }
 
-      return res.sendStatus(200);
+      // return res.sendStatus(200);
     }
 
     // CREATE FULL ORDER FROM METADATA
@@ -597,6 +600,9 @@ const paystackWebhook = async (req, res) => {
       `Webhook: order created successfully for reference ${reference}`,
     );
 
+    // response before emails
+    res.sendStatus(200);
+
     // Send confirmation email
     const emailTo = metadata.address?.email || customerEmail;
     try {
@@ -627,7 +633,7 @@ const paystackWebhook = async (req, res) => {
       }
     }
 
-    res.sendStatus(200);
+    // res.sendStatus(200);
   } catch (error) {
     // Duplicate key - race between webhook and placeOrderPaystack
     // Both tried to save same reference at the same time
