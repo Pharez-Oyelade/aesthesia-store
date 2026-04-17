@@ -1,174 +1,3 @@
-// import orderModel from "../models/orderModel.js";
-// import userModel from "../models/userModel.js";
-// import axios from "axios";
-// import { sendOrderConfirmationEmail } from "../services/emailService.js";
-// import { sendOrderStatusEmail } from "../services/emailService.js";
-// import { sendNewOrderAdminNotification } from "../services/emailService.js";
-
-// // Placing an order with cash on delivery
-
-// const placeOrder = async (req, res) => {
-//   let newOrder = null;
-//   try {
-//     const { userId, items, amount, address } = req.body;
-
-//     const orderData = {
-//       userId,
-//       items,
-//       address,
-//       amount,
-//       paymentMethod: "cod",
-//       payment: false,
-//       date: Date.now(),
-//     };
-
-//     newOrder = new orderModel(orderData);
-//     await newOrder.save();
-
-//     await userModel.findByIdAndUpdate(userId, { cartData: {} });
-
-//     // send order confirmation email
-//     try {
-//       const user = await userModel.findById(userId);
-//       if (user?.email) {
-//         await sendOrderConfirmationEmail({ to: user.email, order: newOrder });
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//     res.json({ success: true, message: "Order Placed" });
-//   } catch (error) {
-//     console.log(error);
-//     res.json({ success: false, message: error.message });
-//   }
-
-//   try {
-//     await sendNewOrderAdminNotification({ order: newOrder });
-//   } catch (error) {
-//     console.log("Failed to send admin notification:", error.message);
-//   }
-// };
-
-// // Placing an order with payment gateway
-
-// const placeOrderPaystack = async (req, res) => {
-//   try {
-//     const { userId, items, amount, address, reference } = req.body;
-
-//     // Verify payment with Paystack
-//     const paystackRes = await axios.get(
-//       `https://api.paystack.co/transaction/verify/${reference}`,
-//       {
-//         headers: {
-//           Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-//         },
-//       }
-//     );
-
-//     if (
-//       paystackRes.data.status &&
-//       paystackRes.data.data.status === "success" &&
-//       paystackRes.data.data.amount === amount * 100 // Paystack amount in kobo
-//     ) {
-//       const orderData = {
-//         userId,
-//         items,
-//         address,
-//         amount,
-//         paymentMethod: "paystack",
-//         payment: true,
-//         date: Date.now(),
-//       };
-
-//       const newOrder = new orderModel(orderData);
-//       await newOrder.save();
-//       await userModel.findByIdAndUpdate(userId, { cartData: {} });
-
-//       // send order confirmation email
-//       try {
-//         const user = await userModel.findById(userId);
-//         if (user?.email) {
-//           await sendOrderConfirmationEmail({ to: user.email, order: newOrder });
-//         }
-//       } catch (error) {
-//         console.log(error);
-//       }
-
-//       try {
-//         await sendNewOrderAdminNotification({ order: newOrder });
-//       } catch (error) {
-//         console.log("Failed to send admin notification:", error.message);
-//       }
-
-//       return res.json({ success: true, message: "Order Placed" });
-//     } else {
-//       return res.json({
-//         success: false,
-//         message: "Payment verification failed",
-//       });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.json({ success: false, message: error.message });
-//   }
-// };
-
-// // Getting all orders for admin
-// const allOrders = async (req, res) => {
-//   try {
-//     const orders = await orderModel.find({});
-//     res.json({ success: true, orders });
-//   } catch (error) {
-//     console.log(error);
-//     res.json({ success: false, message: error.message });
-//   }
-// };
-
-// // User Order Data
-// const userOrders = async (req, res) => {
-//   try {
-//     const { userId } = req.body;
-
-//     const orders = await orderModel.find({ userId });
-//     res.json({ success: true, orders });
-//   } catch (error) {
-//     console.log(error);
-//     res.json(error.message);
-//   }
-// };
-
-// // update order status from admin
-// const updateStatus = async (req, res) => {
-//   try {
-//     const { orderId, status } = req.body;
-
-//     await orderModel.findByIdAndUpdate(orderId, { status });
-
-//     // send order status email
-//     try {
-//       const order = await orderModel.findById(orderId);
-//       if (order?.userId) {
-//         const user = await userModel.findById(order.userId);
-//         if (user?.email) {
-//           await sendOrderStatusEmail({
-//             to: user.email,
-//             orderId,
-//             newStatus: status,
-//           });
-//         }
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//     res.json({ success: true, message: "Status Updated" });
-//   } catch (error) {
-//     console.log(error);
-//     res.json(error.message);
-//   }
-// };
-
-// export { placeOrder, placeOrderPaystack, allOrders, userOrders, updateStatus };
-
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
 import axios from "axios";
@@ -176,19 +5,21 @@ import { sendOrderConfirmationEmail } from "../services/emailService.js";
 import { sendOrderStatusEmail } from "../services/emailService.js";
 import { sendNewOrderAdminNotification } from "../services/emailService.js";
 
+import crypto from "crypto";
+
 // Helper function to calculate order amount server-side
-const calculateOrderAmount = (items, products) => {
-  let total = 0;
-  for (const item of items) {
-    const product = products.find((p) => p._id.toString() === item._id);
-    if (!product) {
-      throw new Error(`Product ${item._id} not found`);
-    }
-    const price = product.onSale ? product.salePrice : product.price;
-    total += price * item.quantity;
-  }
-  return total;
-};
+// const calculateOrderAmount = (items, products) => {
+//   let total = 0;
+//   for (const item of items) {
+//     const product = products.find((p) => p._id.toString() === item._id);
+//     if (!product) {
+//       throw new Error(`Product ${item._id} not found`);
+//     }
+//     const price = product.onSale ? product.salePrice : product.price;
+//     total += price * item.quantity;
+//   }
+//   return total;
+// };
 
 // Placing an order with cash on delivery
 const placeOrder = async (req, res) => {
@@ -208,7 +39,10 @@ const placeOrder = async (req, res) => {
 
     // For authenticated users, userId should be present
     if (!isGuest && !userId) {
-      return res.json({ success: false, message: "User authentication required" });
+      return res.json({
+        success: false,
+        message: "User authentication required",
+      });
     }
 
     const orderData = {
@@ -273,8 +107,8 @@ const placeOrder = async (req, res) => {
 
 // Placing an order with Paystack - SECURE VERSION
 const placeOrderPaystack = async (req, res) => {
-  const MAX_RETRIES = 5;
-  const RETRY_DELAY = 2000; // 1 second
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY = 1000; // 1 second
 
   try {
     const { userId, items, amount, address, reference } = req.body;
@@ -297,7 +131,10 @@ const placeOrderPaystack = async (req, res) => {
 
     // For authenticated users, userId should be present
     if (!isGuest && !userId) {
-      return res.json({ success: false, message: "User authentication required" });
+      return res.json({
+        success: false,
+        message: "User authentication required",
+      });
     }
 
     // ===== IDEMPOTENCY CHECK =====
@@ -329,20 +166,20 @@ const placeOrderPaystack = async (req, res) => {
               Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
             },
             timeout: 10000, // 10 second timeout
-          }
+          },
         );
         break; // Success, exit retry loop
       } catch (error) {
         lastError = error;
         console.error(
           `Paystack verification attempt ${attempt} failed:`,
-          error.message
+          error.message,
         );
 
         if (attempt < MAX_RETRIES) {
           // Wait before retrying
           await new Promise((resolve) =>
-            setTimeout(resolve, RETRY_DELAY * attempt)
+            setTimeout(resolve, RETRY_DELAY * attempt),
           );
         }
       }
@@ -351,7 +188,7 @@ const placeOrderPaystack = async (req, res) => {
     // If all retries failed
     if (!paystackRes) {
       console.error(
-        `All verification attempts failed for reference: ${reference}`
+        `All verification attempts failed for reference: ${reference}`,
       );
       return res.json({
         success: false,
@@ -385,27 +222,27 @@ const placeOrderPaystack = async (req, res) => {
     //const paidAmount = paymentData.amount;
 
     //if (paidAmount !== expectedAmount) {
-      //console.error(
-        //`Amount mismatch! Expected: ${expectedAmount}, Paid: ${paidAmount}`
-      //);
-     // return res.json({
-        //success: false,
+    //console.error(
+    //`Amount mismatch! Expected: ${expectedAmount}, Paid: ${paidAmount}`
+    //);
+    // return res.json({
+    //success: false,
     //  message: "Payment amount mismatch. Please contact support.",
-      //});
-   // }
+    //});
+    // }
 
     const verifiedAmount = paymentData.amount / 100; // Paystack's confirmed amount in Naira
 
-// Only reject if customer was undercharged (potential fraud), never for overcharge
-if (paymentData.amount < Math.round(amount * 100)) {
-  console.error(
-    `Underpayment detected! Expected: ${Math.round(amount * 100)}, Paid: ${paymentData.amount}`
-  );
-  return res.json({
-    success: false,
-    message: "Payment amount mismatch. Please contact support.",
-  });
-}
+    // Only reject if customer was undercharged (potential fraud), never for overcharge
+    if (paymentData.amount < Math.round(amount * 100)) {
+      console.error(
+        `Underpayment detected! Expected: ${Math.round(amount * 100)}, Paid: ${paymentData.amount}`,
+      );
+      return res.json({
+        success: false,
+        message: "Payment amount mismatch. Please contact support.",
+      });
+    }
 
     // Optional: Verify amount against actual product prices in database
     // This prevents frontend tampering
@@ -424,25 +261,25 @@ if (paymentData.amount < Math.round(amount * 100)) {
 
     // ===== CREATE ORDER =====
     const orderData = {
-  userId: isGuest ? null : userId,
-  items,
-  address,
-  amount: verifiedAmount, // ← use Paystack's confirmed amount, not frontend's
-  paymentMethod: "paystack",
-  payment: true,
-  paymentReference: reference,
-  paystackData: {
-    reference: paymentData.reference,
-    amount: paymentData.amount,
-    currency: paymentData.currency,
-    transactionDate: paymentData.transaction_date,
-    channel: paymentData.channel,
-    metadata: paymentData.metadata || null, // ← store metadata as fallback
-  },
-  date: Date.now(),
-  isGuest: isGuest,
-  guestEmail: isGuest ? address.email : null,
-};
+      userId: isGuest ? null : userId,
+      items,
+      address,
+      amount: verifiedAmount, // ← use Paystack's confirmed amount, not frontend's
+      paymentMethod: "paystack",
+      payment: true,
+      paymentReference: reference,
+      paystackData: {
+        reference: paymentData.reference,
+        amount: paymentData.amount,
+        currency: paymentData.currency,
+        transactionDate: paymentData.transaction_date,
+        channel: paymentData.channel,
+        metadata: paymentData.metadata || null, // ← store metadata as fallback
+      },
+      date: Date.now(),
+      isGuest: isGuest,
+      guestEmail: isGuest ? address.email : null,
+    };
 
     const newOrder = new orderModel(orderData);
     await newOrder.save();
@@ -490,6 +327,18 @@ if (paymentData.amount < Math.round(amount * 100)) {
     }
   } catch (error) {
     console.error("Order processing error:", error);
+
+    if (error.code === 11000) {
+      const existingOrder = await orderModel.findOne({
+        paymentReference: req.body.reference,
+      });
+      return res.json({
+        success: true,
+        message: "Order already processed",
+        orderId: existingOrder?._id,
+        isDuplicate: true,
+      });
+    }
 
     // Check if it's a network error
     if (error.code === "ECONNABORTED" || error.code === "ETIMEDOUT") {
@@ -550,11 +399,13 @@ const updateStatus = async (req, res) => {
     }
 
     const validStatuses = [
+      "Order Placed",
       "pending",
       "processing",
       "shipped",
       "delivered",
       "cancelled",
+      "NEEDS_RECOVERY",
     ];
     if (!validStatuses.includes(status.toLowerCase())) {
       return res.json({ success: false, message: "Invalid status" });
@@ -586,4 +437,216 @@ const updateStatus = async (req, res) => {
   }
 };
 
-export { placeOrder, placeOrderPaystack, allOrders, userOrders, updateStatus };
+const paystackWebhook = async (req, res) => {
+  try {
+    // Signature verification
+    const hash = crypto
+      .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY)
+      .update(req.body) //raw buffer
+      .digest("hex");
+
+    if (hash !== req.headers["x-paystack-signature"]) {
+      console.warn("Webhook: signature verification failed");
+      return res.status(401).send("Unauthorized");
+    }
+
+    // parse raw body
+    const event = JSON.parse(req.body);
+    const eventType = event.event;
+
+    // Event Filtering
+    // Handle charge.success and transfer.success
+    if (!["charge.success", "transfer.success"].includes(eventType)) {
+      return res.sendStatus(200);
+    }
+
+    const paymentData = event.data;
+    const reference = paymentData.reference;
+
+    if (!reference) {
+      console.error("Webhook: missing reference in payload");
+      return res.sendStatus(200);
+    }
+
+    // Transfer.success refund guard
+    if (eventType === "transfer.success") {
+      if (paymentData.recipient?.type === "nuban") {
+        console.log(
+          `Webhook: outgoing transfer detected, ignoring. Reference: ${reference}`,
+        );
+        return res.sendStatus(200);
+      }
+    }
+
+    // IDEMPOTENCY CHECK
+    const existingOrder = await orderModel.findOne({
+      paymentReference: reference,
+    });
+
+    if (existingOrder) {
+      console.log(`Webhook: order already exists for reference ${reference}`);
+      return res.sendStatus(200);
+    }
+
+    const verifiedAmount = paymentData.amount / 100;
+    const customerEmail =
+      paymentData.customer?.email ||
+      paymentData.metadata?.address?.email ||
+      null;
+
+    // METADATA CHECK
+    const metadata = paymentData.metadata;
+    const hasValidMetadata =
+      metadata?.items &&
+      Array.isArray(metadata.items) &&
+      metadata.items.length > 0 &&
+      metadata?.address?.firstName &&
+      metadata?.address?.email;
+
+    if (!hasValidMetadata) {
+      // payment confirmed but can't reconstruct the order automatically
+      // save recovery record to show on admin panel for manual completions
+      console.error(
+        `Webhook: charge.success with missing/invalid metadata. Reference: ${reference}, Amount: ${verifiedAmount}, Email: ${customerEmail}`,
+      );
+
+      try {
+        const recoveryOrder = new orderModel({
+          userId: null,
+          items: [],
+          address: {
+            email: customerEmail || "unknown",
+            firstName: paymentData.customer?.first_name || "Unknown",
+            lastName: paymentData.customer?.last_name || "",
+          },
+          amount: verifiedAmount,
+          paymentMethod: "paystack",
+          payment: true,
+          paymentReference: reference,
+          status: "NEEDS_RECOVERY", // Flags it clearly on admin panel
+          paystackData: {
+            reference: paymentData.reference,
+            amount: paymentData.amount,
+            currency: paymentData.currency,
+            transactionDate: paymentData.transaction_date,
+            channel: paymentData.channel,
+            metadata: paymentData.metadata || null,
+          },
+          date: Date.now(),
+          isGuest: true,
+          guestEmail: customerEmail,
+        });
+
+        await recoveryOrder.save();
+        console.log(`Webhook: recovery order saved for reference ${reference}`);
+
+        // Alert admin to follow up manually
+        try {
+          await sendNewOrderAdminNotification({
+            order: recoveryOrder,
+            isRecovery: true,
+          });
+        } catch (adminEmailError) {
+          console.error(
+            "Webhook: recovery admin notification failed:",
+            adminEmailError.message,
+          );
+        }
+      } catch (recoveryError) {
+        if (recoveryError.code === 11000) {
+          console.log(
+            `Webhook: recovery order already exists for reference ${reference}`,
+          );
+        } else {
+          console.error(
+            "Webhook: recovery order save failed:",
+            recoveryError.message,
+          );
+        }
+      }
+
+      return res.sendStatus(200);
+    }
+
+    // CREATE FULL ORDER FROM METADATA
+    const orderData = {
+      userId: metadata.isGuest ? null : metadata.userId || null,
+      items: metadata.items,
+      address: metadata.address,
+      amount: verifiedAmount,
+      paymentMethod: "paystack",
+      payment: true,
+      paymentReference: reference,
+      paystackData: {
+        reference: paymentData.reference,
+        amount: paymentData.amount,
+        currency: paymentData.currency,
+        transactionDate: paymentData.transaction_date,
+        channel: paymentData.channel,
+        metadata: paymentData.metadata,
+      },
+      date: Date.now(),
+      isGuest: metadata.isGuest ?? true,
+      guestEmail: metadata.address?.email || customerEmail || null,
+    };
+
+    const newOrder = new orderModel(orderData);
+    await newOrder.save();
+
+    console.log(
+      `Webhook: order created successfully for reference ${reference}`,
+    );
+
+    // Send confirmation email
+    const emailTo = metadata.address?.email || customerEmail;
+    try {
+      if (emailTo) {
+        await sendOrderConfirmationEmail({ to: emailTo, order: newOrder });
+      }
+    } catch (emailError) {
+      console.error("Webhook: confirmation email failed:", emailError.message);
+      // Order is saved — email failure is non-critical
+    }
+
+    // ADMIN Notification
+    try {
+      await sendNewOrderAdminNotification({ order: newOrder });
+    } catch (adminEmailError) {
+      console.error(
+        "Webhook: admin notification failed:",
+        adminEmailError.message,
+      );
+    }
+
+    // Clear cart for authenticated users
+    if (!metadata.isGuest && metadata.userId) {
+      try {
+        await userModel.findByIdAndUpdate(metadata.userId, { cartData: {} });
+      } catch (cartError) {
+        console.error("Webhook: cart clear failed:", cartError.message);
+      }
+    }
+
+    res.sendStatus(200);
+  } catch (error) {
+    // Duplicate key - race between webhook and placeOrderPaystack
+    // Both tried to save same reference at the same time
+    if (error.code === 11000) {
+      console.log("Webhook: duplicate key — order already saved concurrently");
+      return res.sendStatus(200);
+    }
+
+    console.error("Webhook: unhandled error:", error.message);
+    // Return 500 so Paystack retries for genuine unexpected failures
+    res.sendStatus(500);
+  }
+};
+
+export {
+  placeOrder,
+  placeOrderPaystack,
+  allOrders,
+  userOrders,
+  updateStatus,
+  paystackWebhook,
+};

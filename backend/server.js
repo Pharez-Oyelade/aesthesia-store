@@ -17,9 +17,11 @@ import sectionRouter from "./routes/sectionRoute.js";
 import productModel from "./models/productModel.js";
 // import dns from "node:dns";
 
+import { paystackWebhook } from "./controllers/orderController.js";
+
 const app = express();
 
-// dns.setServers(["8.8.8.8", "8.8.4.4"]); // Use Google's public DNS servers for better reliability
+// dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 // If the app is behind a reverse proxy (load balancer), enable trust proxy
 // so `req.secure` and `x-forwarded-*` headers are interpreted correctly.
@@ -115,6 +117,12 @@ app.use(
     maxAge: 86400, // Cache preflight for 24 hours
     optionsSuccessStatus: 204,
   }),
+);
+
+app.post(
+  "/api/order/webhook/paystack",
+  express.raw({ type: "application/json" }),
+  paystackWebhook,
 );
 
 // 5. Body parser with size limits (prevent payload attacks)
