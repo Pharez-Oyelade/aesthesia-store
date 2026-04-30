@@ -57,8 +57,8 @@ const ProductItem = memo(
                 bestseller && preorder
                   ? "top-18"
                   : bestseller || preorder
-                  ? "top-10"
-                  : "top-2"
+                    ? "top-10"
+                    : "top-2"
               } `}
             >
               Sale
@@ -70,8 +70,8 @@ const ProductItem = memo(
                 bestseller && preorder
                   ? "top-18"
                   : bestseller || preorder
-                  ? "top-10"
-                  : "top-2"
+                    ? "top-10"
+                    : "top-2"
               } `}
             >
               Sold Out
@@ -107,7 +107,7 @@ const ProductItem = memo(
               setIsHovered(false);
               setShowImage(image[0]?.url);
             }}
-            src={getOptimizedUrl(showImage, 320)}
+            src={getOptimizedUrl(showImage, 300)}
             alt=""
             width="320"
             height="500"
@@ -153,7 +153,7 @@ const ProductItem = memo(
         </p>
       </Link>
     );
-  }
+  },
 );
 
 ProductItem.displayName = "ProductItem";

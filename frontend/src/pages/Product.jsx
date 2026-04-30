@@ -184,7 +184,7 @@ const Product = () => {
             <div className="flex-1 flex flex-col gap-6">
               <div className="w-full aspect-square bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden shadow-md">
                 <img
-                  src={getOptimizedUrl(image, 900)}
+                  src={getOptimizedUrl(image, 800)}
                   className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
                   alt={productData.name}
                 />
