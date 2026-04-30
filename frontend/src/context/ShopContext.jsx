@@ -79,7 +79,7 @@ const localDelivery = [
       "LBS",
       "Sangotedo",
       "Ajah",
-      "VGC"
+      "VGC",
     ],
   },
   {
@@ -98,7 +98,7 @@ const localDelivery = [
       "Ketu",
       "Bariga",
       "Magodo",
-      "Ogudu"
+      "Ogudu",
     ],
   },
   {
@@ -286,7 +286,7 @@ const ShopContextProvider = (props) => {
       try {
         const symbols = supportedCurrencies.join(",");
         const res = await fetch(
-          `https://api.currencyapi.com/v3/latest?apikey=cur_live_dTEc4h83P8JtkzIQhFlxOUfTVJvsClgaUNhqQx0e&symbols=${symbols}`
+          `https://api.currencyapi.com/v3/latest?apikey=cur_live_dTEc4h83P8JtkzIQhFlxOUfTVJvsClgaUNhqQx0e&symbols=${symbols}`,
         );
         const data = await res.json();
         if (data && data.data) {
@@ -401,8 +401,8 @@ const ShopContextProvider = (props) => {
   const convertPrice = (amount) => {
     if (currencyCode === "NGN") {
       return Number(amount).toLocaleString("en-NG", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
       });
     }
     const rates = currencyRates;
@@ -456,7 +456,7 @@ const ShopContextProvider = (props) => {
           { itemId, size, color, measurements, quantity },
           {
             headers: { token },
-          }
+          },
         );
       } catch (error) {
         console.log(error);
@@ -488,7 +488,7 @@ const ShopContextProvider = (props) => {
     size,
     color,
     measurements,
-    quantity
+    quantity,
   ) => {
     setCartItems((prevCart) => {
       let cartData = structuredClone(prevCart);
@@ -528,7 +528,7 @@ const ShopContextProvider = (props) => {
           { itemId, size, color, measurements, quantity },
           {
             headers: { token },
-          }
+          },
         );
       } catch (error) {
         console.log(error);
@@ -584,7 +584,7 @@ const ShopContextProvider = (props) => {
         const response = await axios.post(
           backendUrl + "/api/wishlist/add",
           { itemId: productId },
-          { headers: { token } }
+          { headers: { token } },
         );
         if (response.data.success && response.data.wishData) {
           setWishlist(response.data.wishData);
@@ -671,11 +671,11 @@ const ShopContextProvider = (props) => {
         {
           email,
           name,
-        }
+        },
       );
       if (response.status === 200) {
         toast.success(
-          response.data.message || "Successfully subscribed to newsletter!"
+          response.data.message || "Successfully subscribed to newsletter!",
         );
         return true;
       }
@@ -691,14 +691,14 @@ const ShopContextProvider = (props) => {
         if (error.response.data.error.includes("previously unsubscribed")) {
           toast.error(
             "This email was previously unsubscribed. Please use a different email address or contact support.",
-            { autoClose: 6000 }
+            { autoClose: 6000 },
           );
         } else {
           toast.error(error.response.data.error);
         }
       } else if (error.response?.status === 500) {
         toast.error(
-          "Newsletter service is temporarily unavailable. Please try again later."
+          "Newsletter service is temporarily unavailable. Please try again later.",
         );
       } else {
         toast.error("Failed to subscribe to newsletter. Please try again.");
@@ -728,7 +728,7 @@ const ShopContextProvider = (props) => {
       // Try to match selectedLocation as an area first
       const matchByArea = localDelivery.find(
         (loc) =>
-          Array.isArray(loc.areas) && loc.areas.includes(selectedLocation)
+          Array.isArray(loc.areas) && loc.areas.includes(selectedLocation),
       );
       if (matchByArea) {
         setDeliveryFee(matchByArea.price);
@@ -738,7 +738,7 @@ const ShopContextProvider = (props) => {
 
       // If no area matched, allow selectedLocation to be the location/group name
       const matchByGroup = localDelivery.find(
-        (loc) => loc.location === selectedLocation
+        (loc) => loc.location === selectedLocation,
       );
       if (matchByGroup) {
         setDeliveryFee(matchByGroup.price);
