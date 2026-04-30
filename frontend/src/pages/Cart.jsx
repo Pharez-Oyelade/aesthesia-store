@@ -71,7 +71,7 @@ const Cart = () => {
     return (
       <div className="p-8 text-center">
         <h2 className="text-2xl font-semibold mb-4">Your cart is empty</h2>
-        <Link to="/" className="text-red-600 underline">
+        <Link to="/collection" className="text-red-600 underline">
           Go shopping
         </Link>
       </div>
@@ -133,7 +133,7 @@ const Cart = () => {
                         item.size,
                         item.color,
                         item.measurements,
-                        qty
+                        qty,
                       );
                     }}
                     className="w-16 border rounded px-2 py-1"
@@ -155,7 +155,7 @@ const Cart = () => {
                     item.size,
                     item.color,
                     item.measurements,
-                    0
+                    0,
                   )
                 }
                 src={assets.bin_icon}
