@@ -177,8 +177,8 @@ const Product = () => {
 
   return (
     <div>
-      <div className="bg-gradient-to-br from-white to-gray-100 min-h-screen py-10">
-        <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl p-8 md:p-12">
+      <div className="min-h-screen py-6 md:py-10">
+        <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl px-4 py-5 md:p-12">
           <div className=" flex flex-col md:flex-row gap-12">
             {/* Product Images */}
             <div className="flex-1 flex flex-col gap-6">
