@@ -27,6 +27,9 @@
     <title>Aesthesia Haven</title>
 
     <!-- Performance optimizations -->
+
+    <link rel="preload" href="/assets/index-BDvZSJyx.css" as="style" />
+
     <link
       rel="preload"
       href="/fonts/Outfit-Regular.woff2"
@@ -35,27 +38,22 @@
       crossorigin
     />
 
-    <!--
-      Preconnect: open TCP+TLS tunnel early for origins used on first render.
-      Limit to ≤4 to avoid wasting browser connection slots.
-    -->
-    <!-- Backend API — first data fetch (products + sections). Est. 320ms LCP savings.
-         No `crossorigin` attribute: Axios uses custom `token` headers, not CORS credentials,
-         so the non-anonymous connection matches the actual request and won't be flagged as unused. -->
-    <link rel="preconnect" href="https://aesthesia-store-backend.onrender.com" />
-    <link rel="dns-prefetch" href="https://aesthesia-store-backend.onrender.com" />
-    <!-- CurrencyAPI — Est. 310ms LCP savings. Upgraded from dns-prefetch because Lighthouse
-         always runs cold (empty localStorage), so exchange rate fetch fires on every audit. -->
+    <link
+      rel="preconnect"
+      href="https://aesthesia-store-backend.onrender.com"
+      crossorigin
+    />
+    <link
+      rel="dns-prefetch"
+      href="https://aesthesia-store-backend.onrender.com"
+    />
+
     <link rel="preconnect" href="https://api.currencyapi.com" crossorigin />
     <link rel="dns-prefetch" href="https://api.currencyapi.com" />
-    <!-- Cloudinary — product images load immediately on homepage -->
+
     <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
     <link rel="dns-prefetch" href="https://res.cloudinary.com" />
-    <!--
-      dns-prefetch only (fires after JS loads, not on first paint):
-      - connect.facebook.net: Facebook Pixel loads via react-facebook-pixel after hydration
-      - js.paystack.co: lazy-loaded on /place-order page only
-    -->
+
     <link rel="dns-prefetch" href="https://connect.facebook.net" />
     <link rel="dns-prefetch" href="https://js.paystack.co" />
     <!-- <link rel="preload" as="image" href="./src/assets/bg-main-4.webp" /> -->
