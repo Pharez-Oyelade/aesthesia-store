@@ -232,7 +232,7 @@ const Product = () => {
                 {productData.soldOut && (
                   <div className="mb-4">
                     <span className="bg-red-500 text-white text-sm font-bold px-3 py-1 rounded-full shadow">
-                      Out of Stock
+                      Sold Out
                     </span>
                     <div className="mt-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                       <p className="text-sm text-red-800">

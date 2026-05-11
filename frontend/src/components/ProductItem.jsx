@@ -74,7 +74,7 @@ const ProductItem = memo(
                     : "top-2"
               } `}
             >
-              Out of Stock
+              Sold Out
             </span>
           )}
 
