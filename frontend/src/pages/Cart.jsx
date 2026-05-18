@@ -3,7 +3,7 @@ import { assets } from "../assets/assets";
 import { shopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import CartTotal from "../components/CartTotal";
-import ReactPixel from "react-facebook-pixel";
+import { trackInitiateCheckout } from "../utils/metaPixel";
 
 // parse measurements key
 const parseMeasurements = (mKey) => {
@@ -55,15 +55,7 @@ const Cart = () => {
   };
 
   const handleCheckout = () => {
-    ReactPixel.track("InitiateCheckout", {
-      value: cartData.reduce((total, item) => {
-        const product = products.find((p) => p._id === item._id);
-        if (!product) return total;
-        const price = product.onSale ? product.salePrice : product.price;
-        return total + price * item.quantity;
-      }, 0),
-      currency: currency,
-    });
+    trackInitiateCheckout(cartData, products);
     navigate("/place-order");
   };
 

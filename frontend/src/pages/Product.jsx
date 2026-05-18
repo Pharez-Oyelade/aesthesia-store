@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useParams } from "react-router-dom";
 import { shopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
-import ReactPixel from "react-facebook-pixel";
+import { trackAddToCart, trackViewContent } from "../utils/metaPixel";
 import { getOptimizedUrl } from "../utils/cloudinaryHelper";
 
 // import { RxCaretLeft } from "react-icons/rx";
@@ -42,6 +42,7 @@ const Product = () => {
     bust: "",
     sleeveLength: "",
   });
+  const trackedProductId = useRef(null);
 
   const [activeTab, setActiveTab] = useState("description");
   // const [isImageModal, setIsImageModal] = useState(false);
@@ -105,6 +106,13 @@ const Product = () => {
     }
   }, [products, productId, id]);
 
+  useEffect(() => {
+    if (!productData || trackedProductId.current === productData._id) return;
+
+    trackViewContent(productData);
+    trackedProductId.current = productData._id;
+  }, [productData]);
+
   // Handle measurement input
   const handleMeasurementChange = (e) => {
     setMeasurements({ ...measurements, [e.target.name]: e.target.value });
@@ -156,13 +164,10 @@ const Product = () => {
       { ...measurements, fitLength },
       quantity,
     );
-    ReactPixel.track("AddToCart", {
-      content_ids: [productData._id],
-      content_type: "product",
-      value:
-        (productData.onSale ? productData.salePrice : productData.price) *
-        quantity,
-      currency: currency,
+    trackAddToCart(productData, quantity, {
+      size,
+      color,
+      fitLength,
     });
     navigate("/cart");
   };
