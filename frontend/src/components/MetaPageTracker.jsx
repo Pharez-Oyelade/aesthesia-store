@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import ReactPixel from "react-facebook-pixel";
+import { trackPageView } from "../utils/metaPixel";
 
 const MetaPageTracker = () => {
   const location = useLocation();
 
   useEffect(() => {
-    ReactPixel.pageView();
-  }, [location.pathname]);
+    trackPageView();
+  }, [location.pathname, location.search]);
   return null;
 };
 
