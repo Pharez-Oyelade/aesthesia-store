@@ -7,6 +7,7 @@ import SearchBar from "./components/SearchBar";
 import { ToastContainer } from "react-toastify";
 import NotFound from "./pages/NotFound";
 import MetaPageTracker from "./components/MetaPageTracker";
+import InstagramIcon from "./components/InstagramIcon";
 
 // Lazy load all page components for code splitting
 const Home = lazy(() => import("./pages/Home"));
@@ -76,6 +77,7 @@ const App = () => {
 
   return (
     <div className="overflow-x-hidden">
+      <InstagramIcon />
       <ToastContainer />
       <ScrollToTop />
       <Suspense fallback={<LoadingFallback />}>
