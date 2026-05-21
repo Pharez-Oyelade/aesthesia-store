@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://aesthesia-haven.vercel.app/sitemap.xml
+Sitemap: https://www.aesthesiahaven.com/sitemap.xml
