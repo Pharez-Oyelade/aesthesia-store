@@ -4,6 +4,9 @@ import axios from "axios";
 import { sendOrderConfirmationEmail } from "../services/emailService.js";
 import { sendOrderStatusEmail } from "../services/emailService.js";
 import { sendNewOrderAdminNotification } from "../services/emailService.js";
+import subscriberModel from "../models/subscriberModel.js";
+import campaignModel from "../models/campaignModel.js";
+import { resolveDiscountAmount } from "./discountController.js";
 
 import crypto from "crypto";
 
@@ -111,7 +114,8 @@ const placeOrderPaystack = async (req, res) => {
   const RETRY_DELAY = 1000; // 1 second
 
   try {
-    const { userId, items, amount, address, reference } = req.body;
+    const { userId, items, amount, address, reference, discountCode } =
+      req.body;
     const isGuest = req.isGuest || false;
 
     // ===== VALIDATION =====
@@ -259,12 +263,47 @@ const placeOrderPaystack = async (req, res) => {
     //   return res.json({ success: false, message: "Order validation failed" });
     // }
 
+    // ===== RESOLVE DISCOUNT =====
+    let discountAmount = 0;
+    let discountCampaignId = null;
+    let resolvedCode = null;
+
+    // const { discountCode } = req.body;
+
+    if (discountCode) {
+      const subscriber = await subscriberModel
+        .findOne({
+          code: discountCode.toUpperCase(),
+          status: "active",
+        })
+        .populate("campaignId");
+
+      if (
+        subscriber &&
+        subscriber.campaignId?.status === "active" &&
+        new Date() <= new Date(subscriber.campaignId.expiresAt)
+      ) {
+        discountAmount = resolveDiscountAmount(
+          verifiedAmount,
+          subscriber.campaignId.discountType,
+          subscriber.campaignId.discountValue,
+        );
+        discountCampaignId = subscriber.campaignId._id;
+        resolvedCode = subscriber.code;
+      }
+    }
+
+    const finalAmount = verifiedAmount - discountAmount;
+
     // ===== CREATE ORDER =====
     const orderData = {
       userId: isGuest ? null : userId,
       items,
       address,
-      amount: verifiedAmount, // ← use Paystack's confirmed amount, not frontend's
+      amount: finalAmount,
+      discountCode: resolvedCode,
+      discountAmount,
+      discountCampaignId,
       paymentMethod: "paystack",
       payment: true,
       paymentReference: reference,
@@ -595,6 +634,21 @@ const paystackWebhook = async (req, res) => {
 
     const newOrder = new orderModel(orderData);
     await newOrder.save();
+
+    // ====== MARK DISCOUNT CODE AS USED ======
+    if (metadata.discountCode) {
+      try {
+        await subscriberModel.findOneAndUpdate(
+          { code: metadata.discountCode },
+          { status: "used", usedAt: new Date() },
+        );
+      } catch (dsicountError) {
+        console.error(
+          "webhook: failed to mark discount code as used:",
+          dsicountError.message,
+        );
+      }
+    }
 
     console.log(
       `Webhook: order created successfully for reference ${reference}`,
