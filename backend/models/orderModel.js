@@ -18,7 +18,7 @@ const orderSchema = new mongoose.Schema({
   discountCampaignId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Campaign",
-    deafult: null,
+    default: null,
   },
 });
 

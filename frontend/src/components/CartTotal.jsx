@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { shopContext } from "../context/ShopContext";
 import Title from "./Title";
 
-const CartTotal = () => {
+const CartTotal = ({ discountAmount = 0 }) => {
   const {
     currency,
     delivery_fee,
@@ -16,6 +16,8 @@ const CartTotal = () => {
   } = useContext(shopContext);
 
   const plusSizeFee = getPlusSizeFee();
+  const subtotal = getCartAmount() + getShippingCost() + plusSizeFee;
+  const finalTotal = subtotal - discountAmount;
 
   return (
     <div className="w-full">
@@ -62,6 +64,20 @@ const CartTotal = () => {
           </>
         )}
 
+        {/* Discount - Show if applied */}
+        {discountAmount > 0 && (
+          <>
+            <div className="flex justify-between text-green-600">
+              <p className="font-medium">Discount</p>
+              <p className="font-medium">
+                -{currency}
+                {convertPrice(discountAmount)}
+              </p>
+            </div>
+            <hr />
+          </>
+        )}
+
         {/* <div className="flex justify-between">
           <p>VAT 7.5%</p>
           <p>{formatPrice(getVAT())}</p>
@@ -71,11 +87,7 @@ const CartTotal = () => {
           <b>Total</b>
           <b>
             {currency}
-            {convertPrice(
-              getCartAmount() === 0
-                ? 0
-                : getCartAmount() + getShippingCost() + plusSizeFee
-            )}
+            {convertPrice(getCartAmount() === 0 ? 0 : finalTotal)}
           </b>
         </div>
       </div>

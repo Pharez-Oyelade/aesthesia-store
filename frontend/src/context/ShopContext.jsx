@@ -996,7 +996,6 @@ const ShopContextProvider = (props) => {
     campaign,
     showPopup,
     setShowPopup,
-    subscribeToWaitlist,
   };
 
   return (

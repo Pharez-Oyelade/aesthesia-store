@@ -5,7 +5,7 @@ import { sendOrderConfirmationEmail } from "../services/emailService.js";
 import { sendOrderStatusEmail } from "../services/emailService.js";
 import { sendNewOrderAdminNotification } from "../services/emailService.js";
 import subscriberModel from "../models/subscriberModel.js";
-import campaignModel from "../models/campaignModel.js";
+import "../models/campaignModel.js";
 import { resolveDiscountAmount } from "./discountController.js";
 
 import crypto from "crypto";
@@ -28,7 +28,14 @@ import crypto from "crypto";
 const placeOrder = async (req, res) => {
   let newOrder = null;
   try {
-    const { userId, items, amount, address } = req.body;
+    const {
+      userId,
+      items,
+      amount,
+      address,
+      discountCode,
+      discountAmount = 0,
+    } = req.body;
     const isGuest = req.isGuest || false;
 
     // Basic validation - items and address are required for both guest and authenticated users
@@ -53,6 +60,8 @@ const placeOrder = async (req, res) => {
       items,
       address,
       amount,
+      discountCode: discountCode || null,
+      discountAmount,
       paymentMethod: "cod",
       payment: false,
       date: Date.now(),
@@ -62,6 +71,20 @@ const placeOrder = async (req, res) => {
 
     newOrder = new orderModel(orderData);
     await newOrder.save();
+
+    if (discountCode) {
+      try {
+        await subscriberModel.findOneAndUpdate(
+          { code: discountCode },
+          { status: "used", usedAt: new Date() },
+        );
+      } catch (discountError) {
+        console.error(
+          "Failed to mark discount code as used:",
+          discountError.message,
+        );
+      }
+    }
 
     // Only clear cart for authenticated users
     if (!isGuest && userId) {
@@ -114,8 +137,17 @@ const placeOrderPaystack = async (req, res) => {
   const RETRY_DELAY = 1000; // 1 second
 
   try {
-    const { userId, items, amount, address, reference, discountCode } =
-      req.body;
+    const {
+      userId,
+      items,
+      amount,
+      preDiscountAmount,
+      discountBaseAmount,
+      discountAmount: submittedDiscountAmount = 0,
+      address,
+      reference,
+      discountCode,
+    } = req.body;
     const isGuest = req.isGuest || false;
 
     // ===== VALIDATION =====
@@ -236,11 +268,12 @@ const placeOrderPaystack = async (req, res) => {
     // }
 
     const verifiedAmount = paymentData.amount / 100; // Paystack's confirmed amount in Naira
+    const expectedPaidAmount = Number(amount) || verifiedAmount;
 
     // Only reject if customer was undercharged (potential fraud), never for overcharge
-    if (paymentData.amount < Math.round(amount * 100)) {
+    if (paymentData.amount < Math.round(expectedPaidAmount * 100)) {
       console.error(
-        `Underpayment detected! Expected: ${Math.round(amount * 100)}, Paid: ${paymentData.amount}`,
+        `Underpayment detected! Expected: ${Math.round(expectedPaidAmount * 100)}, Paid: ${paymentData.amount}`,
       );
       return res.json({
         success: false,
@@ -267,6 +300,8 @@ const placeOrderPaystack = async (req, res) => {
     let discountAmount = 0;
     let discountCampaignId = null;
     let resolvedCode = null;
+    const resolvedDiscountBaseAmount =
+      Number(discountBaseAmount) || Number(preDiscountAmount) || verifiedAmount;
 
     // const { discountCode } = req.body;
 
@@ -284,7 +319,7 @@ const placeOrderPaystack = async (req, res) => {
         new Date() <= new Date(subscriber.campaignId.expiresAt)
       ) {
         discountAmount = resolveDiscountAmount(
-          verifiedAmount,
+          resolvedDiscountBaseAmount,
           subscriber.campaignId.discountType,
           subscriber.campaignId.discountValue,
         );
@@ -293,14 +328,16 @@ const placeOrderPaystack = async (req, res) => {
       }
     }
 
-    const finalAmount = verifiedAmount - discountAmount;
+    if (!discountAmount && Number(submittedDiscountAmount) > 0) {
+      discountAmount = Number(submittedDiscountAmount);
+    }
 
     // ===== CREATE ORDER =====
     const orderData = {
       userId: isGuest ? null : userId,
       items,
       address,
-      amount: finalAmount,
+      amount: verifiedAmount,
       discountCode: resolvedCode,
       discountAmount,
       discountCampaignId,
@@ -322,6 +359,20 @@ const placeOrderPaystack = async (req, res) => {
 
     const newOrder = new orderModel(orderData);
     await newOrder.save();
+
+    if (resolvedCode) {
+      try {
+        await subscriberModel.findOneAndUpdate(
+          { code: resolvedCode },
+          { status: "used", usedAt: new Date() },
+        );
+      } catch (discountError) {
+        console.error(
+          "Failed to mark discount code as used:",
+          discountError.message,
+        );
+      }
+    }
 
     // Only clear cart for authenticated users
     if (!isGuest && userId) {
@@ -616,6 +667,8 @@ const paystackWebhook = async (req, res) => {
       items: metadata.items,
       address: metadata.address,
       amount: verifiedAmount,
+      discountCode: metadata.discountCode || null,
+      discountAmount: metadata.discountAmount || 0,
       paymentMethod: "paystack",
       payment: true,
       paymentReference: reference,
