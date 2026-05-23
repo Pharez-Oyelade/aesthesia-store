@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import NotFound from "./pages/NotFound";
 import MetaPageTracker from "./components/MetaPageTracker";
 import InstagramIcon from "./components/InstagramIcon";
+import WaitlistPopup from "./components/waitlistPopup";
 
 // Lazy load all page components for code splitting
 const Home = lazy(() => import("./pages/Home"));
@@ -77,6 +78,7 @@ const App = () => {
 
   return (
     <div className="overflow-x-hidden">
+      <WaitlistPopup />
       <InstagramIcon />
       <ToastContainer />
       <ScrollToTop />
