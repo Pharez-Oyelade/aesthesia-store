@@ -13,6 +13,8 @@ const WaitlistPopup = () => {
   const [generatedCode, setGeneratedCode] = useState("");
   const [error, setError] = useState("");
 
+  const [copySuccess, setCopySuccess] = useState(false);
+
   // close popup and store dismissed in local storage
   const closePopup = () => {
     localStorage.setItem("aest_waitlist_dismissed", "true");
@@ -81,7 +83,8 @@ const WaitlistPopup = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generatedCode);
-    alert("Code copied to clipboard!");
+    setCopySuccess(true);
+    // alert("Code copied to clipboard!");
   };
 
   // Only render if showPopup is true
@@ -121,7 +124,7 @@ const WaitlistPopup = () => {
                   onClick={copyToClipboard}
                   className="ml-2 bg-gray-800 text-white px-3 py-1 rounded text-sm hover:bg-gray-700 transition"
                 >
-                  Copy
+                  {copySuccess ? "Copied!" : "Copy"}
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-2">
