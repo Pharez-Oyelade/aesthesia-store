@@ -1,13 +1,15 @@
 import subscriberModel from "../models/subscriberModel.js";
-import campaignModel from "../models/campaignModel.js";
-import { Suspense } from "react";
+import "../models/campaignModel.js";
 
 // POST validate discount code - called at checkout
 export const validateDiscountCode = async (req, res) => {
   const { code, cartTotal } = req.body;
 
   if (!code || !cartTotal) {
-    return res.status(400).json({ error: "Code and cart total are required" });
+    return res.status(400).json({
+      success: false,
+      message: "Code and cart total are required",
+    });
   }
 
   try {
@@ -16,29 +18,33 @@ export const validateDiscountCode = async (req, res) => {
       .populate("campaignId");
 
     if (!subscriber) {
-      return res
-        .status(404)
-        .json({ success: false, error: "Invalid discount code" });
+      return res.status(200).json({
+        success: false,
+        message: "Invalid discount code",
+      });
     }
 
     if (subscriber.status === "used") {
-      return res
-        .status(400)
-        .json({ success: false, error: "Discount code has already been used" });
+      return res.status(200).json({
+        success: false,
+        message: "Discount code has already been used",
+      });
     }
 
     if (subscriber.status === "expired") {
-      return res
-        .status(400)
-        .json({ success: false, error: "Discount code has expired" });
+      return res.status(200).json({
+        success: false,
+        message: "Discount code has expired",
+      });
     }
 
     const campaign = subscriber.campaignId;
 
     if (campaign.status !== "active") {
-      return res
-        .status(400)
-        .json({ success: false, error: "Campaign is no longer active" });
+      return res.status(200).json({
+        success: false,
+        message: "Campaign is no longer active",
+      });
     }
 
     if (new Date() > new Date(campaign.expiresAt)) {
@@ -46,9 +52,10 @@ export const validateDiscountCode = async (req, res) => {
       await subscriberModel.findByIdAndUpdate(subscriber._id, {
         status: "expired",
       });
-      return res
-        .status(400)
-        .json({ success: false, error: "Discount code has expired" });
+      return res.status(200).json({
+        success: false,
+        message: "Discount code has expired",
+      });
     }
 
     const discountAmount = resolveDiscountAmount(
@@ -59,6 +66,7 @@ export const validateDiscountCode = async (req, res) => {
 
     return res.status(200).json({
       success: true,
+      code: subscriber.code,
       discountAmount,
       finalAmount: cartTotal - discountAmount,
       discountType: campaign.discountType,
@@ -67,7 +75,7 @@ export const validateDiscountCode = async (req, res) => {
     });
   } catch (error) {
     console.error("Error validating discount code:", error);
-    res.status(500).json({ success: false, error: "Internal server error" });
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
 
