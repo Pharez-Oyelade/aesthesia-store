@@ -13,6 +13,13 @@ const orderSchema = new mongoose.Schema({
   date: { type: Number, required: true },
   isGuest: { type: Boolean, required: true, default: false }, // Flag for guest orders
   guestEmail: { type: String, required: false }, // Store guest email for easy lookup
+  discountCode: { type: String, default: null },
+  discountAmount: { type: Number, default: 0 },
+  discountCampaignId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Campaign",
+    deafult: null,
+  },
 });
 
 const orderModel =

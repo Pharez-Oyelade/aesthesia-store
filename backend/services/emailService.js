@@ -55,7 +55,7 @@ export async function sendNewOrderAdminNotification({ order }) {
   if (validRecipients.length === 0) {
     console.warn(
       "No valid admin email addresses found in ADMIN_EMAIL_ADDRESS — skipping admin notification",
-      raw
+      raw,
     );
     return;
   }
@@ -74,10 +74,24 @@ export async function sendPasswordResetEmail({ to, resetUrl }) {
   return sendEmail({ to, subject, html });
 }
 
+// --- SEND WAITLIST EMAIL ---
+export async function sendWaitlistEmail({
+  to,
+  code,
+  discountValue,
+  expiresAt,
+}) {
+  if (!isEmailNotificationsEnabled()) return;
+  const subject =
+    "You're on the waitlist - your ${discountValue}% discount code inside!";
+  const html = waitlistEmailTemplate({ code, discountValue, expiresAt });
+  return sendEmail({ to, subject, html });
+}
+
 async function sendEmail({ to, subject, html }) {
   if (!process.env.RESEND_API_KEY || !FROM_EMAIL) {
     throw new Error(
-      "Email not configured (RESEND_API_KEY or FROM_EMAIL missing)."
+      "Email not configured (RESEND_API_KEY or FROM_EMAIL missing).",
     );
   }
 
@@ -104,7 +118,7 @@ async function sendEmail({ to, subject, html }) {
       const codeOrMessage = String(err.code || err.message || err);
       const isTransient =
         /Unable to fetch|ENOTFOUND|ECONNREFUSED|ECONNRESET|ETIMEDOUT|EAI_AGAIN/i.test(
-          codeOrMessage
+          codeOrMessage,
         );
 
       console.error(`sendEmail attempt ${attempt} failed:`, codeOrMessage);
@@ -113,8 +127,8 @@ async function sendEmail({ to, subject, html }) {
         // Permanent or exhausted attempts — surface a clearer error
         throw new Error(
           `Failed to send email to ${recipients.join(
-            ", "
-          )} after ${attempt} attempt(s): ${codeOrMessage}`
+            ", ",
+          )} after ${attempt} attempt(s): ${codeOrMessage}`,
         );
       }
 
@@ -150,7 +164,7 @@ function orderConfirmationTemplate(order) {
         <td style="padding: 12px 8px; text-align:right; border-bottom: 1px solid #e5e7eb; font-weight: 500; color: #111827;">
           ${it.price ? `₦${Number(it.price).toLocaleString()}` : ""}
         </td>
-      </tr>`
+      </tr>`,
     )
     .join("");
 
@@ -406,8 +420,8 @@ function orderStatusTemplate(orderId, newStatus) {
                     <td style="background: ${
                       status.bg
                     }; border-left: 4px solid ${
-    status.color
-  }; padding: 20px; border-radius: 8px; text-align: center;">
+                      status.color
+                    }; padding: 20px; border-radius: 8px; text-align: center;">
                       <p style="margin: 0 0 8px; color: #111827; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px;">New Status</p>
                       <p style="margin: 0; color: ${
                         status.color
@@ -551,7 +565,7 @@ function adminOrderConfirmationTemplate(order) {
         <td style="padding: 12px 8px; text-align:right; border-bottom: 1px solid #e5e7eb; font-weight: 500; color: #111827;">
           ₦${it.price ? Number(it.price).toLocaleString() : "0"}
         </td>
-      </tr>`
+      </tr>`,
     )
     .join("");
 
@@ -625,7 +639,7 @@ function adminOrderConfirmationTemplate(order) {
                     <td style="width: 50%; padding-bottom: 12px; text-align: right;">
                       <div style="color: #6b7280; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Total Amount</div>
                       <div style="color: #111827; font-size: 18px; font-weight: 700;">₦${Number(
-                        order.amount
+                        order.amount,
                       ).toLocaleString()}</div>
                     </td>
                   </tr>
@@ -666,8 +680,8 @@ function adminOrderConfirmationTemplate(order) {
                       <a href="mailto:${
                         order.customerEmail || order.user?.email
                       }" style="color: #3b82f6; text-decoration: none; margin-left: 8px; font-size: 14px;">${
-    order.address.email || order.user?.email || "N/A"
-  }</a>
+                        order.address.email || order.user?.email || "N/A"
+                      }</a>
                     </td>
                   </tr>
                   <tr>
@@ -703,7 +717,7 @@ function adminOrderConfirmationTemplate(order) {
                     <tr>
                       <td colspan="2" style="padding: 16px 8px; text-align: right; font-weight: 600; color: #111827; font-size: 15px; border-top: 2px solid #e5e7eb;">Total:</td>
                       <td style="padding: 16px 8px; text-align: right; font-weight: 700; color: #111827; font-size: 18px; border-top: 2px solid #e5e7eb;">₦${Number(
-                        order.amount
+                        order.amount,
                       ).toLocaleString()}</td>
                     </tr>
                   </tfoot>
@@ -914,6 +928,63 @@ function passwordResetTemplate(resetUrl) {
   `;
 }
 
+function waitlistEmailTemplate({ code, discountValue, expiresAt }) {
+  return `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waitlist Confirmation</title>
+  </head>
+  <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+      <tr>
+        <td style="padding: 20px;">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden;">
+            <!-- Header -->
+            <tr>
+              <td style="background: #111827; padding: 30px; text-align: center;">
+                <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">Aesthesia Haven</h1>
+              </td>
+            </tr>
+
+            <!-- Main Content -->
+            <tr>
+              <td style="padding: 30px;">
+                <h2 style="margin: 0 0 20px; color: #111827; font-size: 20px; font-weight: 600;">You're on the Waitlist!</h2>
+                <p style="margin: 0 0 16px; color: #6b7280; font-size: 16px; line-height: 1.6;">
+                  Thank you for joining our waitlist! Here's your exclusive discount code:
+                </p>
+                <div style="background-color: #f9fafb; border-radius: 6px; padding: 24px; text-align: center;">
+                  <h3 style="margin: 0; color: #111827; font-size: 24px; font-weight: 700;">${code}</h3>
+                </div>
+                <p style="margin: 16px; color: #6b7280; font-size: 14px; line-height: 1.6;">
+                  This code is valid until ${formatExpiry(expiresAt)}.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style("background": "#f9fafb", "padding": "30px", "text-align": "center", "border-top": "1px solid #e5e7eb")>
+                <p style("margin": "0", "color": "#111827", "font-size": "16px", "font-weight": "600")>Aesthesia Haven</p>
+                <p style("margin": "0", "color": "#6b7280", "font-size": "13px")>Curating beauty, delivering excellence</p>
+                <p style("margin": "0", "color": "#9ca3af", "font-size": "12px")>
+                  © ${new Date().getFullYear()} Aesthesia Haven. All rights reserved.
+                </p>
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+  </html>
+  `;
+}
+
 // Helper function to format address
 function formatAddress(address) {
   if (!address)
@@ -953,4 +1024,12 @@ function safeJson(obj) {
   } catch {
     return "";
   }
+}
+
+function formatExpiry(date) {
+  return new Date(date).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
