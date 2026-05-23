@@ -6,6 +6,7 @@ import { shopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { trackOrderPlaced } from "../utils/metaPixel";
 
 const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_KEY;
 
@@ -376,6 +377,14 @@ const PlaceOrder = () => {
       );
 
       if (res.data.success) {
+        if (!res.data.isDuplicate) {
+          trackOrderPlaced(orderItems, getPayableAmount(), {
+            orderId: res.data.orderId,
+            reference: response.reference,
+            paymentMethod: "paystack",
+          });
+        }
+
         // Clear waitlist code and set dismissed flag
         if (discountData && discountData.code) {
           localStorage.removeItem("aest_waitlist_code");
