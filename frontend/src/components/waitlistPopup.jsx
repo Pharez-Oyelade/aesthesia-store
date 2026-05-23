@@ -13,6 +13,8 @@ const WaitlistPopup = () => {
   const [generatedCode, setGeneratedCode] = useState("");
   const [error, setError] = useState("");
 
+  const [copySuccess, setCopySuccess] = useState(false);
+
   // close popup and store dismissed in local storage
   const closePopup = () => {
     localStorage.setItem("aest_waitlist_dismissed", "true");
@@ -81,7 +83,8 @@ const WaitlistPopup = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(generatedCode);
-    alert("Code copied to clipboard!");
+    setCopySuccess(true);
+    // alert("Code copied to clipboard!");
   };
 
   // Only render if showPopup is true
@@ -89,11 +92,11 @@ const WaitlistPopup = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-full bg-black/50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl">
+      <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl relative">
         {/* Close Button */}
         <button
           onClick={closePopup}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-light cursor-pointer"
+          className="absolute top-4 right-5 text-gray-500 hover:text-gray-700 text-3xl font-light cursor-pointer"
           aria-label="Close"
         >
           ×
@@ -121,7 +124,7 @@ const WaitlistPopup = () => {
                   onClick={copyToClipboard}
                   className="ml-2 bg-gray-800 text-white px-3 py-1 rounded text-sm hover:bg-gray-700 transition"
                 >
-                  Copy
+                  {copySuccess ? "Copied!" : "Copy"}
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-2">
