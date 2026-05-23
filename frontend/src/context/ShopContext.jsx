@@ -208,6 +208,55 @@ const ShopContextProvider = (props) => {
   const [userOrders, setUserOrders] = useState([]);
   const prevOrderStatus = useRef({});
 
+  const [campaign, setCampaign] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+
+  // get campaigns on mount
+  useEffect(() => {
+    // check localStorage for cached waitlist code
+    const cachedWaitlistCode = localStorage.getItem("aest_waitlist_code");
+    const waitlistDismissed = localStorage.getItem("aest_waitlist_dismissed");
+
+    if (cachedWaitlistCode || waitlistDismissed) {
+      return;
+    }
+
+    const fetchCampaigns = async () => {
+      try {
+        const response = await axios.get(
+          backendUrl + "/api/campaigns/active-waitlist",
+        );
+        if (response.data && response.data.isOpen && response.data.campaign) {
+          // Set campaign data from the response
+          setCampaign(response.data.campaign);
+        }
+      } catch (error) {
+        console.error("Error fetching campaigns:", error);
+      }
+    };
+
+    // Actually call the function
+    fetchCampaigns();
+  }, [backendUrl]);
+
+  // subscribe for waitlist
+  // const subscribeToWaitlist = async (email) => {
+  //   if (!campaign || !campaign._id) {
+  //     toast.error("No active campaign to subscribe to.");
+  //     return;
+  //   }
+  //   try {
+  //     const response = await axios.post(
+  //       backendUrl + `/api/campaigns/subscribe/${campaign._id}`,
+  //       { email },
+  //     );
+  //     return response.data;
+  //   } catch (error) {
+  //     toast.error("Failed to subscribe to waitlist.");
+  //     console.error("Waitlist subscription error:", error);
+  //   }
+  // };
+
   const isPlusSize = (size) => {
     const numericSize = parseInt(size);
     return !isNaN(numericSize) && numericSize >= PLUS_SIZE_THRESHOLD;
@@ -869,6 +918,23 @@ const ShopContextProvider = (props) => {
     }
   }, []);
 
+  const subscribeToWaitlist = async (campaignId, email) => {
+    try {
+      const response = await axios.post(
+        backendUrl + `/api/campaigns/subscribe/${campaignId}`,
+        { email },
+      );
+      if (response.status === 201) {
+        // Store the code in localStorage for future reference
+        localStorage.setItem("aest_waitlist_code", response.data.code);
+        return response.data;
+      }
+    } catch (error) {
+      console.error("Error subscribing to waitlist:", error);
+      throw error;
+    }
+  };
+
   const value = {
     products,
     collection,
@@ -925,6 +991,12 @@ const ShopContextProvider = (props) => {
     PLUS_SIZE_FEE,
     PLUS_SIZE_THRESHOLD,
     isPlusSize,
+    subscribeToWaitlist,
+
+    campaign,
+    showPopup,
+    setShowPopup,
+    subscribeToWaitlist,
   };
 
   return (

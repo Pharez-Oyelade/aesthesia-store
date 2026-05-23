@@ -82,8 +82,7 @@ export async function sendWaitlistEmail({
   expiresAt,
 }) {
   if (!isEmailNotificationsEnabled()) return;
-  const subject =
-    "You're on the waitlist - your ${discountValue}% discount code inside!";
+  const subject = `You're on the waitlist - your ${discountValue}% discount code inside!`;
   const html = waitlistEmailTemplate({ code, discountValue, expiresAt });
   return sendEmail({ to, subject, html });
 }
@@ -969,7 +968,7 @@ function waitlistEmailTemplate({ code, discountValue, expiresAt }) {
             <tr>
               <td style("background": "#f9fafb", "padding": "30px", "text-align": "center", "border-top": "1px solid #e5e7eb")>
                 <p style("margin": "0", "color": "#111827", "font-size": "16px", "font-weight": "600")>Aesthesia Haven</p>
-                <p style("margin": "0", "color": "#6b7280", "font-size": "13px")>Curating beauty, delivering excellence</p>
+                <p style("margin": "0", "color": "#6b7280", "font-size": "13px")>Embrace Your Beautiful</p>
                 <p style("margin": "0", "color": "#9ca3af", "font-size": "12px")>
                   © ${new Date().getFullYear()} Aesthesia Haven. All rights reserved.
                 </p>

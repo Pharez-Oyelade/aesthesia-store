@@ -21,6 +21,15 @@ export const getActiveWaitlist = async (req, res) => {
     return res.status(200).json({
       isOpen,
       remainingSpots,
+      campaign: {
+        _id: campaign._id,
+        title: campaign.name,
+        description: `Join our waitlist and get ${campaign.discountValue}${campaign.discountType === "percentage" ? "%" : ""} off`,
+        // code: campaign.codePrefix,
+        discountValue: campaign.discountValue,
+        discountType: campaign.discountType,
+        expiresAt: campaign.expiresAt,
+      },
       campaignId: campaign._id,
       discountValue: campaign.discountValue,
       discountType: campaign.discountType,
