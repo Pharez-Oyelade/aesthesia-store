@@ -67,7 +67,10 @@ const WaitlistPopup = () => {
       setSubscribed(true);
     } catch (error) {
       if (error.response?.status === 409) {
-        setError("This email is already subscribed to the waitlist.");
+        setError(
+          "This email is already subscribed to the waitlist. Your code is: " +
+            error.response.data.code,
+        );
       } else {
         setError("An error occurred. Please try again later.");
       }
