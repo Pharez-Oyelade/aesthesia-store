@@ -89,11 +89,11 @@ const WaitlistPopup = () => {
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-full bg-black/50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl">
+      <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl relative">
         {/* Close Button */}
         <button
           onClick={closePopup}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-light cursor-pointer"
+          className="absolute top-4 right-5 text-gray-500 hover:text-gray-700 text-3xl font-light cursor-pointer"
           aria-label="Close"
         >
           ×
