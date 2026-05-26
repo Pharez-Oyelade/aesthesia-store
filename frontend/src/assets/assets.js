@@ -67,6 +67,11 @@ import first_bloom2 from "./first_bloom2.webp";
 import first_bloom3 from "./first_bloom3.webp";
 import peace4 from "./peace4.webp";
 
+// review images
+// import user_color_code from "./user_color_code.webp";
+
+import verify from "./verify.png";
+
 export const assets = {
   logo,
   logo_light,
@@ -135,4 +140,6 @@ export const assets = {
   first_bloom2,
   first_bloom3,
   peace4,
+  // user_color_code
+  verify,
 };
