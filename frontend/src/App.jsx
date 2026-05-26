@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -41,11 +41,12 @@ const LoadingFallback = () => (
 );
 
 const App = () => {
-  const isHome = location.pathname === "/";
-  const isClothing = location.pathname === "/clothing";
-  const isWig = location.pathname === "/wigs";
-  const isRere = location.pathname === "/rere-collection";
-  const isJewelry = location.pathname === "/jewelry";
+  const { pathname } = useLocation();
+  const isHome = pathname === "/";
+  const isClothing = pathname === "/clothing";
+  const isWig = pathname === "/wigs";
+  const isRere = pathname === "/rere-collection";
+  const isJewelry = pathname === "/jewelry";
 
   useEffect(() => {
     // Defer Clarity until browser is idle to keep it off the critical path.
