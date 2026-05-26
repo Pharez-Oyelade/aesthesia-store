@@ -6,6 +6,8 @@ import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
 import { trackAddToCart, trackViewContent } from "../utils/metaPixel";
 import { getOptimizedUrl } from "../utils/cloudinaryHelper";
+import { productReviews } from "../../data/productReview";
+import ProductReview from "../components/ProductReview";
 
 // import { RxCaretLeft } from "react-icons/rx";
 // import { RxCaretRight } from "react-icons/rx";
@@ -43,6 +45,7 @@ const Product = () => {
     sleeveLength: "",
   });
   const trackedProductId = useRef(null);
+  const [displayedReviews, setDisplayedReviews] = useState([]);
 
   const [activeTab, setActiveTab] = useState("description");
   // const [isImageModal, setIsImageModal] = useState(false);
@@ -171,6 +174,25 @@ const Product = () => {
     });
     navigate("/cart");
   };
+
+  // show reviews for this product only
+  // const displayedReviews = productReviews.filter(
+  //   (review) =>
+  //     (review.product === productData && productData.name) ||
+  //     (review.product === productData && productData.section),
+  // );
+  useEffect(() => {
+    if (productData) {
+      const filtered = productReviews.filter((review) => {
+        return (
+          review.product === productData.name ||
+          review.product === productData.section
+        );
+      });
+
+      setDisplayedReviews(filtered);
+    }
+  }, [productData]);
 
   // Loading state
   if (!products || products.length === 0) {
@@ -634,6 +656,12 @@ const Product = () => {
             <div>{renderTabContent()}</div>
           </div>
         </div>
+
+        {/* Reviews */}
+        <div className="max-w-6xl mx-auto px-4 mt-12">
+          <ProductReview reviews={displayedReviews} />
+        </div>
+
         {/* Related Products */}
         <div className="max-w-6xl mx-auto px-4 mt-12">
           <RelatedProducts section={productData.section} />

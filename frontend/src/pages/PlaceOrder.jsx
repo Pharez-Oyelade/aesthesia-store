@@ -6,6 +6,7 @@ import { shopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { trackOrderPlaced } from "../utils/metaPixel";
 
 const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_KEY;
 
@@ -15,6 +16,12 @@ const PlaceOrder = () => {
   const [showModal, setShowModal] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isGuestMode, setIsGuestMode] = useState(false);
+
+  // Discount code state
+  const [discountCode, setDiscountCode] = useState("");
+  const [discountData, setDiscountData] = useState(null);
+  const [discountLoading, setDiscountLoading] = useState(false);
+  const [discountError, setDiscountError] = useState("");
 
   const {
     navigate,
@@ -28,12 +35,13 @@ const PlaceOrder = () => {
     setSelectedLocation,
     selectedLocation,
     localDelivery,
-    delivery_fee,
     locationToState,
     getShippingCost,
     selectedCountry,
     setSelectedCountry,
     getPlusSizeFee,
+    convertPrice,
+    isDiscountWaitlistEnabled,
   } = useContext(shopContext);
 
   // Check authentication on component mount - show modal but don't block
@@ -241,7 +249,71 @@ const PlaceOrder = () => {
     return true;
   };
 
-  // Paystack Inline Handler
+  // Validate discount code
+  const validateDiscount = async () => {
+    if (!isDiscountWaitlistEnabled) {
+      setDiscountData(null);
+      setDiscountError("Discount codes are not available right now.");
+      return;
+    }
+
+    if (!discountCode.trim()) {
+      setDiscountError("Please enter a discount code.");
+      return;
+    }
+
+    setDiscountLoading(true);
+    setDiscountError("");
+
+    try {
+      const response = await axios.post(
+        backendUrl + "/api/discounts/validate",
+        {
+          code: discountCode.trim(),
+          cartTotal: getDiscountBaseAmount(),
+        },
+      );
+
+      if (response.data.success) {
+        setDiscountData(response.data);
+        setDiscountError("");
+        toast.success("Discount code applied successfully!");
+      } else {
+        setDiscountData(null);
+        setDiscountError(response.data.message || "Invalid discount code.");
+      }
+    } catch (error) {
+      setDiscountData(null);
+      setDiscountError(
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "Failed to validate discount code.",
+      );
+    } finally {
+      setDiscountLoading(false);
+    }
+  };
+
+  // Clear discount
+  const clearDiscount = () => {
+    setDiscountCode("");
+    setDiscountData(null);
+    setDiscountError("");
+  };
+
+  const getOrderSubtotal = () =>
+    getCartAmount() + getShippingCost() + getPlusSizeFee();
+
+  const getDiscountBaseAmount = () => getCartAmount();
+
+  const getDiscountAmount = () =>
+    isDiscountWaitlistEnabled
+      ? Math.min(discountData?.discountAmount || 0, getDiscountBaseAmount())
+      : 0;
+
+  const getPayableAmount = () =>
+    Math.max(getOrderSubtotal() - getDiscountAmount(), 0);
+
   const payWithPaystack = () => {
     if (!validateForm()) {
       toast.error("Please fill in all delivery information fields.");
@@ -253,7 +325,7 @@ const PlaceOrder = () => {
       return;
     }
 
-    const amount = getCartAmount() + getShippingCost() + getPlusSizeFee();
+    const amount = getPayableAmount();
     const handler = window.PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
       email: formData.email,
@@ -264,6 +336,13 @@ const PlaceOrder = () => {
         items: buildOrderItems(),
         address: formData,
         isGuest: !token,
+        discountCode: isDiscountWaitlistEnabled
+          ? discountData?.code || null
+          : null,
+        discountAmount: getDiscountAmount(),
+        preDiscountAmount: getOrderSubtotal(),
+        discountBaseAmount: getDiscountBaseAmount(),
+        payableAmount: amount,
       },
       callback: function (response) {
         handlePaystackSuccess(response);
@@ -285,9 +364,17 @@ const PlaceOrder = () => {
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + getShippingCost() + (getPlusSizeFee() || 0),
+        amount: getPayableAmount(),
+        preDiscountAmount: getOrderSubtotal(),
+        discountBaseAmount: getDiscountBaseAmount(),
+        discountAmount: getDiscountAmount(),
         reference: response.reference,
       };
+
+      // Add discount code if applied
+      if (isDiscountWaitlistEnabled && discountData && discountData.code) {
+        orderData.discountCode = discountData.code;
+      }
 
       // Only include token header if user is authenticated
       const headers = token ? { token } : {};
@@ -301,6 +388,20 @@ const PlaceOrder = () => {
       );
 
       if (res.data.success) {
+        if (!res.data.isDuplicate) {
+          trackOrderPlaced(orderItems, getPayableAmount(), {
+            orderId: res.data.orderId,
+            reference: response.reference,
+            paymentMethod: "paystack",
+          });
+        }
+
+        // Clear waitlist code and set dismissed flag
+        if (discountData && discountData.code) {
+          localStorage.removeItem("aest_waitlist_code");
+          localStorage.setItem("aest_waitlist_dismissed", "true");
+        }
+
         // Save guest order to localStorage if guest
         if ((isGuestMode || !token) && res.data.orderId) {
           try {
@@ -386,8 +487,17 @@ const PlaceOrder = () => {
       let orderData = {
         address: formData,
         items: orderItems,
-        amount: getCartAmount() + getShippingCost(),
+        amount: getPayableAmount(),
+        preDiscountAmount: getOrderSubtotal(),
+        discountBaseAmount: getDiscountBaseAmount(),
+        discountAmount: getDiscountAmount(),
       };
+
+      // Add discount code if applied
+      if (isDiscountWaitlistEnabled && discountData && discountData.code) {
+        orderData.discountCode = discountData.code;
+      }
+
       // Only include token header if user is authenticated
       const headers = token ? { token } : {};
       const response = await axios.post(
@@ -396,6 +506,12 @@ const PlaceOrder = () => {
         { headers },
       );
       if (response.data.success) {
+        // Clear waitlist code and set dismissed flag
+        if (discountData && discountData.code) {
+          localStorage.removeItem("aest_waitlist_code");
+          localStorage.setItem("aest_waitlist_dismissed", "true");
+        }
+
         // Save guest order to localStorage if guest
         if ((isGuestMode || !token) && response.data.orderId) {
           try {
@@ -639,14 +755,86 @@ const PlaceOrder = () => {
 
         {/* RIGHT SIDE */}
         <div className="mt-8">
+          {/* Discount Code Section */}
+          {isDiscountWaitlistEnabled && (
+            <div className="mt-8 min-w-80 bg-gray-50 p-5 rounded-lg border border-gray-200 mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                Apply Discount Code
+              </h3>
+
+              {discountData ? (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <div>
+                      <p className="text-sm text-gray-600">Applied Code</p>
+                      <p className="text-lg font-bold text-green-700">
+                        {discountData.code || discountCode.toUpperCase()}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600">Discount</p>
+                      <p className="text-xl font-bold text-green-700">
+                        -{currency}
+                        {convertPrice(discountData.discountAmount)}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={clearDiscount}
+                    className="w-full text-sm text-red-600 hover:text-red-700 font-medium py-2"
+                  >
+                    Remove Discount
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={discountCode}
+                      onChange={(e) => setDiscountCode(e.target.value)}
+                      placeholder="Enter discount code"
+                      className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                      disabled={discountLoading}
+                    />
+                    <button
+                      type="button"
+                      onClick={validateDiscount}
+                      disabled={discountLoading || !discountCode.trim()}
+                      className="bg-gray-800 text-white px-4 py-2 rounded text-sm font-medium hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                    >
+                      {discountLoading ? (
+                        <span className="flex items-center gap-2">
+                          <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                          Validating...
+                        </span>
+                      ) : (
+                        "Apply"
+                      )}
+                    </button>
+                  </div>
+
+                  {discountError && (
+                    <p className="text-sm text-red-600 bg-red-50 p-3 rounded border border-red-200">
+                      {discountError}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
           <div className="mt-8 min-w-80">
-            <CartTotal />
+            <CartTotal
+              discountAmount={getDiscountAmount()}
+            />
           </div>
 
           <div className="mt-12">
             <Title text1={"PAYMENT"} text2={"METHOD"} />
 
-            <div className="flex gap-3 flex-col lg:flex:row">
+            <div className="flex gap-3 flex-col lg:flex-row">
               <div
                 onClick={() => setMethod("paystack")}
                 className={`flex items-center gap-3 border p-2 px-3 cursor-pointer ${

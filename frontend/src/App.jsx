@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -8,6 +8,8 @@ import { ToastContainer } from "react-toastify";
 import NotFound from "./pages/NotFound";
 import MetaPageTracker from "./components/MetaPageTracker";
 import InstagramIcon from "./components/InstagramIcon";
+import WaitlistPopup from "./components/waitlistPopup";
+import { isDiscountWaitlistEnabled } from "./config/features";
 
 // Lazy load all page components for code splitting
 const Home = lazy(() => import("./pages/Home"));
@@ -39,7 +41,6 @@ const LoadingFallback = () => (
 );
 
 const App = () => {
-  const navigate = useNavigate();
   const isHome = location.pathname === "/";
   const isClothing = location.pathname === "/clothing";
   const isWig = location.pathname === "/wigs";
@@ -77,6 +78,7 @@ const App = () => {
 
   return (
     <div className="overflow-x-hidden">
+      {isDiscountWaitlistEnabled && <WaitlistPopup />}
       <InstagramIcon />
       <ToastContainer />
       <ScrollToTop />

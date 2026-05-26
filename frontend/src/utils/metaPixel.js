@@ -102,6 +102,36 @@ export const buildCartPayload = (cartItems, products) => {
   });
 };
 
+export const buildOrderPayload = (orderItems, amount, options = {}) => {
+  const contents = orderItems.map((item) => {
+    const itemPrice = Number(item.price) || 0;
+    const itemQuantity = Number(item.quantity) || 1;
+
+    return cleanPayload({
+      id: item._id,
+      quantity: itemQuantity,
+      item_price: itemPrice,
+    });
+  });
+
+  return cleanPayload({
+    ...getPagePayload(),
+    content_ids: orderItems.map((item) => item._id).filter(Boolean),
+    contents,
+    content_type: "product",
+    content_name: orderItems.map((item) => item.name).filter(Boolean).join(", "),
+    value: Number(amount) || 0,
+    currency: META_CURRENCY,
+    num_items: orderItems.reduce(
+      (total, item) => total + (Number(item.quantity) || 0),
+      0,
+    ),
+    order_id: options.orderId,
+    transaction_id: options.reference,
+    payment_method: options.paymentMethod,
+  });
+};
+
 export const initMetaPixel = () => {
   if (META_PIXEL_ID) {
     ReactPixel.init(META_PIXEL_ID, {}, { autoConfig: true, debug: false });
@@ -133,4 +163,13 @@ export const trackInitiateCheckout = (cartItems, products) => {
   if (!META_PIXEL_ID) return;
 
   ReactPixel.track("InitiateCheckout", buildCartPayload(cartItems, products));
+};
+
+export const trackOrderPlaced = (orderItems, amount, options) => {
+  if (!META_PIXEL_ID || !orderItems?.length) return;
+
+  const orderPayload = buildOrderPayload(orderItems, amount, options);
+
+  ReactPixel.track("Purchase", orderPayload);
+  ReactPixel.trackCustom("OrderPlaced", orderPayload);
 };
