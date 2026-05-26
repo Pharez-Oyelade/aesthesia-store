@@ -28,9 +28,9 @@ const ProductReview = ({ reviews }) => {
     }
   }, [currentIndex]);
 
-  if (!REVIEW_FEATURE_ENABLED) {
-    return null;
-  }
+  // if (!REVIEW_FEATURE_ENABLED) {
+  //   return null;
+  // }
 
   if (!reviews || reviews.length === 0) {
     return;
