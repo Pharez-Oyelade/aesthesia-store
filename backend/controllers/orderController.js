@@ -7,6 +7,7 @@ import { sendNewOrderAdminNotification } from "../services/emailService.js";
 import subscriberModel from "../models/subscriberModel.js";
 import "../models/campaignModel.js";
 import { resolveDiscountAmount } from "./discountController.js";
+import { isDiscountWaitlistEnabled } from "../config/features.js";
 
 import crypto from "crypto";
 
@@ -55,13 +56,20 @@ const placeOrder = async (req, res) => {
       });
     }
 
+    const appliedDiscountCode = isDiscountWaitlistEnabled
+      ? discountCode || null
+      : null;
+    const appliedDiscountAmount = isDiscountWaitlistEnabled
+      ? discountAmount
+      : 0;
+
     const orderData = {
       userId: isGuest ? null : userId,
       items,
       address,
       amount,
-      discountCode: discountCode || null,
-      discountAmount,
+      discountCode: appliedDiscountCode,
+      discountAmount: appliedDiscountAmount,
       paymentMethod: "cod",
       payment: false,
       date: Date.now(),
@@ -72,10 +80,10 @@ const placeOrder = async (req, res) => {
     newOrder = new orderModel(orderData);
     await newOrder.save();
 
-    if (discountCode) {
+    if (appliedDiscountCode) {
       try {
         await subscriberModel.findOneAndUpdate(
-          { code: discountCode },
+          { code: appliedDiscountCode },
           { status: "used", usedAt: new Date() },
         );
       } catch (discountError) {
@@ -305,7 +313,7 @@ const placeOrderPaystack = async (req, res) => {
 
     // const { discountCode } = req.body;
 
-    if (discountCode) {
+    if (isDiscountWaitlistEnabled && discountCode) {
       const subscriber = await subscriberModel
         .findOne({
           code: discountCode.toUpperCase(),
@@ -328,7 +336,11 @@ const placeOrderPaystack = async (req, res) => {
       }
     }
 
-    if (!discountAmount && Number(submittedDiscountAmount) > 0) {
+    if (
+      isDiscountWaitlistEnabled &&
+      !discountAmount &&
+      Number(submittedDiscountAmount) > 0
+    ) {
       discountAmount = Number(submittedDiscountAmount);
     }
 
@@ -662,13 +674,20 @@ const paystackWebhook = async (req, res) => {
     }
 
     // CREATE FULL ORDER FROM METADATA
+    const metadataDiscountCode = isDiscountWaitlistEnabled
+      ? metadata.discountCode || null
+      : null;
+    const metadataDiscountAmount = isDiscountWaitlistEnabled
+      ? metadata.discountAmount || 0
+      : 0;
+
     const orderData = {
       userId: metadata.isGuest ? null : metadata.userId || null,
       items: metadata.items,
       address: metadata.address,
       amount: verifiedAmount,
-      discountCode: metadata.discountCode || null,
-      discountAmount: metadata.discountAmount || 0,
+      discountCode: metadataDiscountCode,
+      discountAmount: metadataDiscountAmount,
       paymentMethod: "paystack",
       payment: true,
       paymentReference: reference,
@@ -689,10 +708,10 @@ const paystackWebhook = async (req, res) => {
     await newOrder.save();
 
     // ====== MARK DISCOUNT CODE AS USED ======
-    if (metadata.discountCode) {
+    if (metadataDiscountCode) {
       try {
         await subscriberModel.findOneAndUpdate(
-          { code: metadata.discountCode },
+          { code: metadataDiscountCode },
           { status: "used", usedAt: new Date() },
         );
       } catch (dsicountError) {
