@@ -7,6 +7,9 @@ const ProductReview = ({ reviews }) => {
   // handle next and prev buttons to scroll cards
   const scrollRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const REVIEW_FEATURE_ENABLED =
+    import.meta.env.VITE_REVIEWS_ENABLED === "true";
+
   const handleNext = () => {
     if (currentIndex < reviews.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -24,6 +27,10 @@ const ProductReview = ({ reviews }) => {
       scrollRef.current.scrollTo({ left: scrollAmount, behavior: "smooth" });
     }
   }, [currentIndex]);
+
+  if (!REVIEW_FEATURE_ENABLED) {
+    return null;
+  }
 
   if (!reviews || reviews.length === 0) {
     return;

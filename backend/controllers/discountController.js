@@ -1,9 +1,17 @@
 import subscriberModel from "../models/subscriberModel.js";
 import "../models/campaignModel.js";
+import { isDiscountWaitlistEnabled } from "../config/features.js";
 
 // POST validate discount code - called at checkout
 export const validateDiscountCode = async (req, res) => {
   const { code, cartTotal } = req.body;
+
+  if (!isDiscountWaitlistEnabled) {
+    return res.status(200).json({
+      success: false,
+      message: "Discount codes are not available right now",
+    });
+  }
 
   if (!code || !cartTotal) {
     return res.status(400).json({

@@ -41,6 +41,7 @@ const PlaceOrder = () => {
     setSelectedCountry,
     getPlusSizeFee,
     convertPrice,
+    isDiscountWaitlistEnabled,
   } = useContext(shopContext);
 
   // Check authentication on component mount - show modal but don't block
@@ -250,6 +251,12 @@ const PlaceOrder = () => {
 
   // Validate discount code
   const validateDiscount = async () => {
+    if (!isDiscountWaitlistEnabled) {
+      setDiscountData(null);
+      setDiscountError("Discount codes are not available right now.");
+      return;
+    }
+
     if (!discountCode.trim()) {
       setDiscountError("Please enter a discount code.");
       return;
@@ -300,7 +307,9 @@ const PlaceOrder = () => {
   const getDiscountBaseAmount = () => getCartAmount();
 
   const getDiscountAmount = () =>
-    Math.min(discountData?.discountAmount || 0, getDiscountBaseAmount());
+    isDiscountWaitlistEnabled
+      ? Math.min(discountData?.discountAmount || 0, getDiscountBaseAmount())
+      : 0;
 
   const getPayableAmount = () =>
     Math.max(getOrderSubtotal() - getDiscountAmount(), 0);
@@ -327,7 +336,9 @@ const PlaceOrder = () => {
         items: buildOrderItems(),
         address: formData,
         isGuest: !token,
-        discountCode: discountData?.code || null,
+        discountCode: isDiscountWaitlistEnabled
+          ? discountData?.code || null
+          : null,
         discountAmount: getDiscountAmount(),
         preDiscountAmount: getOrderSubtotal(),
         discountBaseAmount: getDiscountBaseAmount(),
@@ -361,7 +372,7 @@ const PlaceOrder = () => {
       };
 
       // Add discount code if applied
-      if (discountData && discountData.code) {
+      if (isDiscountWaitlistEnabled && discountData && discountData.code) {
         orderData.discountCode = discountData.code;
       }
 
@@ -483,7 +494,7 @@ const PlaceOrder = () => {
       };
 
       // Add discount code if applied
-      if (discountData && discountData.code) {
+      if (isDiscountWaitlistEnabled && discountData && discountData.code) {
         orderData.discountCode = discountData.code;
       }
 
@@ -745,72 +756,74 @@ const PlaceOrder = () => {
         {/* RIGHT SIDE */}
         <div className="mt-8">
           {/* Discount Code Section */}
-          <div className="mt-8 min-w-80 bg-gray-50 p-5 rounded-lg border border-gray-200 mb-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Apply Discount Code
-            </h3>
+          {isDiscountWaitlistEnabled && (
+            <div className="mt-8 min-w-80 bg-gray-50 p-5 rounded-lg border border-gray-200 mb-8">
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                Apply Discount Code
+              </h3>
 
-            {discountData ? (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-                <div className="flex justify-between items-center mb-3">
-                  <div>
-                    <p className="text-sm text-gray-600">Applied Code</p>
-                    <p className="text-lg font-bold text-green-700">
-                      {discountData.code || discountCode.toUpperCase()}
-                    </p>
+              {discountData ? (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                  <div className="flex justify-between items-center mb-3">
+                    <div>
+                      <p className="text-sm text-gray-600">Applied Code</p>
+                      <p className="text-lg font-bold text-green-700">
+                        {discountData.code || discountCode.toUpperCase()}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-gray-600">Discount</p>
+                      <p className="text-xl font-bold text-green-700">
+                        -{currency}
+                        {convertPrice(discountData.discountAmount)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm text-gray-600">Discount</p>
-                    <p className="text-xl font-bold text-green-700">
-                      -{currency}
-                      {convertPrice(discountData.discountAmount)}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={clearDiscount}
-                  className="w-full text-sm text-red-600 hover:text-red-700 font-medium py-2"
-                >
-                  Remove Discount
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={discountCode}
-                    onChange={(e) => setDiscountCode(e.target.value)}
-                    placeholder="Enter discount code"
-                    className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    disabled={discountLoading}
-                  />
                   <button
                     type="button"
-                    onClick={validateDiscount}
-                    disabled={discountLoading || !discountCode.trim()}
-                    className="bg-gray-800 text-white px-4 py-2 rounded text-sm font-medium hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                    onClick={clearDiscount}
+                    className="w-full text-sm text-red-600 hover:text-red-700 font-medium py-2"
                   >
-                    {discountLoading ? (
-                      <span className="flex items-center gap-2">
-                        <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                        Validating...
-                      </span>
-                    ) : (
-                      "Apply"
-                    )}
+                    Remove Discount
                   </button>
                 </div>
+              ) : (
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={discountCode}
+                      onChange={(e) => setDiscountCode(e.target.value)}
+                      placeholder="Enter discount code"
+                      className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                      disabled={discountLoading}
+                    />
+                    <button
+                      type="button"
+                      onClick={validateDiscount}
+                      disabled={discountLoading || !discountCode.trim()}
+                      className="bg-gray-800 text-white px-4 py-2 rounded text-sm font-medium hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                    >
+                      {discountLoading ? (
+                        <span className="flex items-center gap-2">
+                          <span className="inline-block h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                          Validating...
+                        </span>
+                      ) : (
+                        "Apply"
+                      )}
+                    </button>
+                  </div>
 
-                {discountError && (
-                  <p className="text-sm text-red-600 bg-red-50 p-3 rounded border border-red-200">
-                    {discountError}
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
+                  {discountError && (
+                    <p className="text-sm text-red-600 bg-red-50 p-3 rounded border border-red-200">
+                      {discountError}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           <div className="mt-8 min-w-80">
             <CartTotal
