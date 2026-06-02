@@ -92,9 +92,9 @@ const ProductReview = ({ reviews }) => {
         </div>
 
         {/* Navigation buttons */}
-        {/* <div className="absolute top-1/2 transform -translate-y-1/2 left-0">
+        <div className="absolute top-1/2 transform -translate-y-1/2 left-0">
           <button
-            className="bg-gray-300 p-3 rounded-full shadow-md hover:bg-gray-400 transition-colors duration-300"
+            className="bg-gray-300/20 p-3 rounded-full shadow-md hover:bg-gray-400/20 transition-colors duration-300"
             onClick={handlePrev}
           >
             &#8592;
@@ -102,12 +102,12 @@ const ProductReview = ({ reviews }) => {
         </div>
         <div className="absolute top-1/2 transform -translate-y-1/2 right-0">
           <button
-            className="bg-gray-300 p-3 rounded-full shadow-md hover:bg-gray-400 transition-colors duration-300"
+            className="bg-gray-300/20 p-3 rounded-full shadow-md hover:bg-gray-400/20 transition-colors duration-300"
             onClick={handleNext}
           >
             &#8594;
           </button>
-        </div> */}
+        </div>
       </div>
     </div>
   );

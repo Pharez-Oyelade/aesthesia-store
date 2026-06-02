@@ -97,7 +97,7 @@ export const productReviews = [
     id: 13,
     name: "Mrs Olu Mustapha",
     rating: 5,
-    comment: "Thank you. I hae received it and it's nice. God bless.",
+    comment: "Thank you. I have received it and it's nice. God bless.",
     product: "Blush Verse",
   },
   {
