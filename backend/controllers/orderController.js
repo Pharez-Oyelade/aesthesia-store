@@ -6,7 +6,7 @@ import { sendOrderStatusEmail } from "../services/emailService.js";
 import { sendNewOrderAdminNotification } from "../services/emailService.js";
 import subscriberModel from "../models/subscriberModel.js";
 import "../models/campaignModel.js";
-import { resolveDiscountAmount } from "./discountController.js";
+import { resolveDiscountForCode } from "../services/discountService.js";
 
 import crypto from "crypto";
 
@@ -32,9 +32,9 @@ const placeOrder = async (req, res) => {
       userId,
       items,
       amount,
+      preDiscountAmount,
       address,
       discountCode,
-      discountAmount = 0,
     } = req.body;
     const isGuest = req.isGuest || false;
 
@@ -55,13 +55,27 @@ const placeOrder = async (req, res) => {
       });
     }
 
+    const discount = discountCode
+      ? await resolveDiscountForCode({ code: discountCode, items })
+      : null;
+    const resolvedDiscountAmount = discount?.success
+      ? discount.discountAmount
+      : 0;
+    const resolvedCode = discount?.success ? discount.code : null;
+    const resolvedCampaignId = discount?.success ? discount.campaignId : null;
+    const resolvedAmount =
+      Number(preDiscountAmount) > 0
+        ? Math.max(Number(preDiscountAmount) - resolvedDiscountAmount, 0)
+        : Number(amount) || 0;
+
     const orderData = {
       userId: isGuest ? null : userId,
       items,
       address,
-      amount,
-      discountCode: discountCode || null,
-      discountAmount,
+      amount: resolvedAmount,
+      discountCode: resolvedCode,
+      discountAmount: resolvedDiscountAmount,
+      discountCampaignId: resolvedCampaignId,
       paymentMethod: "cod",
       payment: false,
       date: Date.now(),
@@ -72,10 +86,10 @@ const placeOrder = async (req, res) => {
     newOrder = new orderModel(orderData);
     await newOrder.save();
 
-    if (discountCode) {
+    if (resolvedCode) {
       try {
         await subscriberModel.findOneAndUpdate(
-          { code: discountCode },
+          { code: resolvedCode },
           { status: "used", usedAt: new Date() },
         );
       } catch (discountError) {
@@ -142,7 +156,6 @@ const placeOrderPaystack = async (req, res) => {
       items,
       amount,
       preDiscountAmount,
-      discountBaseAmount,
       discountAmount: submittedDiscountAmount = 0,
       address,
       reference,
@@ -297,39 +310,29 @@ const placeOrderPaystack = async (req, res) => {
     // }
 
     // ===== RESOLVE DISCOUNT =====
-    let discountAmount = 0;
-    let discountCampaignId = null;
-    let resolvedCode = null;
-    const resolvedDiscountBaseAmount =
-      Number(discountBaseAmount) || Number(preDiscountAmount) || verifiedAmount;
+    const discount = discountCode
+      ? await resolveDiscountForCode({ code: discountCode, items })
+      : null;
+    const discountAmount = discount?.success ? discount.discountAmount : 0;
+    const discountCampaignId = discount?.success ? discount.campaignId : null;
+    const resolvedCode = discount?.success ? discount.code : null;
+    const resolvedPreDiscountAmount =
+      Number(preDiscountAmount) ||
+      Number(amount) + Number(submittedDiscountAmount || 0) ||
+      verifiedAmount + discountAmount;
+    const expectedPayableAmount = Math.max(
+      resolvedPreDiscountAmount - discountAmount,
+      0,
+    );
 
-    // const { discountCode } = req.body;
-
-    if (discountCode) {
-      const subscriber = await subscriberModel
-        .findOne({
-          code: discountCode.toUpperCase(),
-          status: "active",
-        })
-        .populate("campaignId");
-
-      if (
-        subscriber &&
-        subscriber.campaignId?.status === "active" &&
-        new Date() <= new Date(subscriber.campaignId.expiresAt)
-      ) {
-        discountAmount = resolveDiscountAmount(
-          resolvedDiscountBaseAmount,
-          subscriber.campaignId.discountType,
-          subscriber.campaignId.discountValue,
-        );
-        discountCampaignId = subscriber.campaignId._id;
-        resolvedCode = subscriber.code;
-      }
-    }
-
-    if (!discountAmount && Number(submittedDiscountAmount) > 0) {
-      discountAmount = Number(submittedDiscountAmount);
+    if (paymentData.amount < Math.round(expectedPayableAmount * 100)) {
+      console.error(
+        `Underpayment detected after discount resolution! Expected: ${Math.round(expectedPayableAmount * 100)}, Paid: ${paymentData.amount}`,
+      );
+      return res.json({
+        success: false,
+        message: "Payment amount mismatch. Please contact support.",
+      });
     }
 
     // ===== CREATE ORDER =====
@@ -661,14 +664,31 @@ const paystackWebhook = async (req, res) => {
       // return res.sendStatus(200);
     }
 
+    const webhookDiscount = metadata.discountCode
+      ? await resolveDiscountForCode({
+          code: metadata.discountCode,
+          items: metadata.items,
+        })
+      : null;
+    const webhookDiscountAmount = webhookDiscount?.success
+      ? webhookDiscount.discountAmount
+      : 0;
+    const webhookDiscountCode = webhookDiscount?.success
+      ? webhookDiscount.code
+      : null;
+    const webhookDiscountCampaignId = webhookDiscount?.success
+      ? webhookDiscount.campaignId
+      : null;
+
     // CREATE FULL ORDER FROM METADATA
     const orderData = {
       userId: metadata.isGuest ? null : metadata.userId || null,
       items: metadata.items,
       address: metadata.address,
       amount: verifiedAmount,
-      discountCode: metadata.discountCode || null,
-      discountAmount: metadata.discountAmount || 0,
+      discountCode: webhookDiscountCode,
+      discountAmount: webhookDiscountAmount,
+      discountCampaignId: webhookDiscountCampaignId,
       paymentMethod: "paystack",
       payment: true,
       paymentReference: reference,
@@ -689,10 +709,10 @@ const paystackWebhook = async (req, res) => {
     await newOrder.save();
 
     // ====== MARK DISCOUNT CODE AS USED ======
-    if (metadata.discountCode) {
+    if (webhookDiscountCode) {
       try {
         await subscriberModel.findOneAndUpdate(
-          { code: metadata.discountCode },
+          { code: webhookDiscountCode },
           { status: "used", usedAt: new Date() },
         );
       } catch (dsicountError) {
