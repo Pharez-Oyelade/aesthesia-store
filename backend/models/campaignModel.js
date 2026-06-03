@@ -8,9 +8,23 @@ const campaignSchema = new mongoose.Schema({
   subscriberCount: { type: Number, required: true, default: 0 },
   discountType: { type: String, required: true, default: "percentage" },
   discountValue: { type: Number, required: true, default: 0 },
+  discountScope: {
+    type: String,
+    enum: ["all", "collection"],
+    required: true,
+    default: "all",
+  },
+  eligibleCollections: {
+    type: [String],
+    default: [],
+  },
   codePrefix: { type: String, required: true, default: "AEST" },
   startsAt: { type: Date, required: true },
   expiresAt: { type: Date, required: true },
+  subscriptionStartsAt: { type: Date, required: false },
+  subscriptionEndsAt: { type: Date, required: false },
+  discountStartsAt: { type: Date, required: false },
+  discountExpiresAt: { type: Date, required: false },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
