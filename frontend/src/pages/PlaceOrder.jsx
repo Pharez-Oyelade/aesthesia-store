@@ -206,6 +206,14 @@ const PlaceOrder = () => {
     return orderItems;
   };
 
+  useEffect(() => {
+    setDiscountData((currentDiscount) => {
+      if (!currentDiscount) return currentDiscount;
+      setDiscountError("Your cart changed. Please reapply your discount code.");
+      return null;
+    });
+  }, [cartItems]);
+
   // Validate delivery info fields
   const validateForm = () => {
     for (const key in formData) {
@@ -270,17 +278,22 @@ const PlaceOrder = () => {
         backendUrl + "/api/discounts/validate",
         {
           code: discountCode.trim(),
-          cartTotal: getDiscountBaseAmount(),
+          items: buildOrderItems(),
         },
       );
 
       if (response.data.success) {
         setDiscountData(response.data);
         setDiscountError("");
-        toast.success("Discount code applied successfully!");
+        toast.success(
+          response.data.message || "Discount code applied successfully!",
+        );
       } else {
         setDiscountData(null);
         setDiscountError(response.data.message || "Invalid discount code.");
+        if (response.data.validCode) {
+          toast.info(response.data.message);
+        }
       }
     } catch (error) {
       setDiscountData(null);
@@ -304,7 +317,8 @@ const PlaceOrder = () => {
   const getOrderSubtotal = () =>
     getCartAmount() + getShippingCost() + getPlusSizeFee();
 
-  const getDiscountBaseAmount = () => getCartAmount();
+  const getDiscountBaseAmount = () =>
+    discountData?.eligibleSubtotal ?? getCartAmount();
 
   const getDiscountAmount = () =>
     isDiscountWaitlistEnabled
@@ -342,6 +356,8 @@ const PlaceOrder = () => {
         discountAmount: getDiscountAmount(),
         preDiscountAmount: getOrderSubtotal(),
         discountBaseAmount: getDiscountBaseAmount(),
+        discountScope: discountData?.discountScope || null,
+        eligibleCollections: discountData?.eligibleCollections || [],
         payableAmount: amount,
       },
       callback: function (response) {
@@ -368,6 +384,8 @@ const PlaceOrder = () => {
         preDiscountAmount: getOrderSubtotal(),
         discountBaseAmount: getDiscountBaseAmount(),
         discountAmount: getDiscountAmount(),
+        discountScope: discountData?.discountScope || null,
+        eligibleCollections: discountData?.eligibleCollections || [],
         reference: response.reference,
       };
 
@@ -491,6 +509,8 @@ const PlaceOrder = () => {
         preDiscountAmount: getOrderSubtotal(),
         discountBaseAmount: getDiscountBaseAmount(),
         discountAmount: getDiscountAmount(),
+        discountScope: discountData?.discountScope || null,
+        eligibleCollections: discountData?.eligibleCollections || [],
       };
 
       // Add discount code if applied
@@ -779,6 +799,40 @@ const PlaceOrder = () => {
                       </p>
                     </div>
                   </div>
+                </div>
+                {discountData.discountScope === "collection" && (
+                  <div className="mb-3 rounded border border-green-200 bg-white p-3 text-sm text-gray-700">
+                    <p>
+                      Applies only to:{" "}
+                      <span className="font-medium">
+                        {discountData.eligibleCollections?.join(", ")}
+                      </span>
+                    </p>
+                    <p className="mt-1">
+                      Eligible subtotal: {currency}
+                      {convertPrice(discountData.eligibleSubtotal || 0)}
+                    </p>
+                  </div>
+                )}
+                <button
+                  type="button"
+                  onClick={clearDiscount}
+                  className="w-full text-sm text-red-600 hover:text-red-700 font-medium py-2"
+                >
+                  Remove Discount
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={discountCode}
+                    onChange={(e) => setDiscountCode(e.target.value)}
+                    placeholder="Enter discount code"
+                    className="flex-1 border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    disabled={discountLoading}
+                  />
                   <button
                     type="button"
                     onClick={clearDiscount}
@@ -815,15 +869,14 @@ const PlaceOrder = () => {
                     </button>
                   </div>
 
-                  {discountError && (
-                    <p className="text-sm text-red-600 bg-red-50 p-3 rounded border border-red-200">
-                      {discountError}
-                    </p>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
+                {discountError && (
+                  <p className="text-sm text-red-700 bg-red-50 p-3 rounded border border-red-200">
+                    {discountError}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
 
           <div className="mt-8 min-w-80">
             <CartTotal

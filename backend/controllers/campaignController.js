@@ -2,7 +2,12 @@ import campaignModel from "../models/campaignModel.js";
 import subscriberModel from "../models/subscriberModel.js";
 import { generateUniqueCode } from "../services/codeService.js";
 import { sendWaitlistEmail } from "../services/emailService.js";
-import { isDiscountWaitlistEnabled } from "../config/features.js";
+import {
+  getDiscountWindow,
+  getRemainingSubscriptionSpots,
+  getSubscriptionWindow,
+  isCampaignSubscriptionOpen,
+} from "../services/discountService.js";
 
 // GET active waitlist campaign
 export const getActiveWaitlist = async (req, res) => {
@@ -20,8 +25,10 @@ export const getActiveWaitlist = async (req, res) => {
       return res.status(200).json({ isOpen: false });
     }
 
-    const isOpen = campaign.subscriberCount < campaign.subscriberLimit;
-    const remainingSpots = campaign.subscriberLimit - campaign.subscriberCount;
+    const isOpen = isCampaignSubscriptionOpen(campaign);
+    const remainingSpots = getRemainingSubscriptionSpots(campaign);
+    const subscriptionWindow = getSubscriptionWindow(campaign);
+    const discountWindow = getDiscountWindow(campaign);
 
     return res.status(200).json({
       isOpen,
@@ -33,12 +40,24 @@ export const getActiveWaitlist = async (req, res) => {
         // code: campaign.codePrefix,
         discountValue: campaign.discountValue,
         discountType: campaign.discountType,
-        expiresAt: campaign.expiresAt,
+        discountScope: campaign.discountScope || "all",
+        eligibleCollections: campaign.eligibleCollections || [],
+        subscriptionStartsAt: subscriptionWindow.startsAt,
+        subscriptionEndsAt: subscriptionWindow.endsAt,
+        discountStartsAt: discountWindow.startsAt,
+        discountExpiresAt: discountWindow.expiresAt,
+        expiresAt: discountWindow.expiresAt,
       },
       campaignId: campaign._id,
       discountValue: campaign.discountValue,
       discountType: campaign.discountType,
-      expiresAt: campaign.expiresAt,
+      discountScope: campaign.discountScope || "all",
+      eligibleCollections: campaign.eligibleCollections || [],
+      subscriptionStartsAt: subscriptionWindow.startsAt,
+      subscriptionEndsAt: subscriptionWindow.endsAt,
+      discountStartsAt: discountWindow.startsAt,
+      discountExpiresAt: discountWindow.expiresAt,
+      expiresAt: discountWindow.expiresAt,
     });
   } catch (error) {
     console.error("Error fetching active waitlist:", error);
@@ -69,20 +88,34 @@ export const subscribeToWaitlist = async (req, res) => {
       });
     }
 
+    const campaignConfig = await campaignModel.findById(id);
+
+    if (!isCampaignSubscriptionOpen(campaignConfig)) {
+      return res.status(410).json({ error: "Waitlist is closed" });
+    }
+
+    const limit = Number(campaignConfig.subscriberLimit);
+    const capacityFilter =
+      Number.isFinite(limit) && limit > 0
+        ? { $expr: { $lt: ["$subscriberCount", "$subscriberLimit"] } }
+        : {};
+
     // claim spot atomically
     const campaign = await campaignModel.findOneAndUpdate(
       {
         _id: id,
         status: "active",
-        $expr: { $lt: ["$subscriberCount", "$subscriberLimit"] },
+        ...capacityFilter,
       },
       { $inc: { subscriberCount: 1 } },
       { new: true },
     );
 
     if (!campaign) {
-      return res.status(410).json({ error: "Waitlist is full" });
+      return res.status(410).json({ error: "Waitlist is full or closed" });
     }
+
+    const discountWindow = getDiscountWindow(campaign);
 
     const code = await generateUniqueCode(campaign.codePrefix);
 
@@ -98,7 +131,7 @@ export const subscribeToWaitlist = async (req, res) => {
       to: subscriber.email,
       code: subscriber.code,
       discountValue: campaign.discountValue,
-      expiresAt: campaign.expiresAt,
+      expiresAt: discountWindow.expiresAt,
     }).catch((err) => console.error("Error sending waitlist email:", err));
 
     return res.status(201).json({
@@ -106,7 +139,11 @@ export const subscribeToWaitlist = async (req, res) => {
       code: subscriber.code,
       discountType: campaign.discountType,
       discountValue: campaign.discountValue,
-      expiresAt: campaign.expiresAt,
+      discountScope: campaign.discountScope || "all",
+      eligibleCollections: campaign.eligibleCollections || [],
+      discountStartsAt: discountWindow.startsAt,
+      discountExpiresAt: discountWindow.expiresAt,
+      expiresAt: discountWindow.expiresAt,
     });
   } catch (error) {
     console.error("Error subscribing to waitlist:", error);
