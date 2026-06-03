@@ -5,15 +5,17 @@ export const productReviews = [
     rating: 5,
     comment:
       "Hiya! I'm wearing your dress at the premiere of The Serpent's Gift movie. I'm a star tonight o😂. They want interviews, pictures etc. I know it's the dress😂. I want to order one for a friend pls. She wants a pink one",
-    product: "The Color Code Collection",
+    product: "Soft Echo",
+    image: "/bioye_davies.webp",
   },
   {
     id: 2,
     name: "Mrs Owode",
-    rating: 4,
+    rating: 5,
     comment:
       "Received with thanks. I am still admiring the package. It's so beautiful and neat. Keep it up. It even smells nice. You deseerve the accolade. I will send you pictures when I do the photoshoot. Thanks for keeping to the time. You are the best. I endorse you.",
-    // product: "The Color Code Collection",
+    product: "Rouge Muse",
+    image: "/mrs_owode.webp",
   },
   {
     id: 3,
@@ -24,10 +26,12 @@ export const productReviews = [
   },
   {
     id: 4,
-    name: "Mrs Davies",
-    rating: 4,
+    name: "Mrs Elo Okeke",
+    rating: 5,
     comment:
-      "Hiya! I'm wearing your dress at the premiere of The Serpent's Gift movie. I'm a star tonight o😂. They want interviews, pictures etc. I know it's the dress😂",
+      "Good morning, I got it, it's gorgeous. When I saw it, I said this is the dress! You don't know how excited I am. Thank you so much.",
+    product: "First Bloom",
+    image: "/elo_okeke.webp",
   },
   {
     id: 5,
@@ -39,16 +43,18 @@ export const productReviews = [
   {
     id: 6,
     name: "Lynda",
-    rating: 5,
+    rating: 4,
     comment:
-      "Wore the outfit last Friday for an event although it was big. I gave a number of people your contact because they like the design",
+      "I wore the outfit last Friday. I gave a number of people your contact because they like the design",
+    product: "Soft Echo",
   },
   {
     id: 7,
     name: "Helen",
     rating: 5,
     comment:
-      "It's so beautiful - thank you. I will be back again. Smells good too and sits perfectly on my body. ",
+      "It's so beautiful - thank you. I will be back again. Smells good too and sits perfectly on my body. Your customer service is top notch.",
+    product: "The Africana Mini Piece",
   },
   {
     id: 8,
@@ -59,10 +65,11 @@ export const productReviews = [
   },
   {
     id: 9,
-    name: "Chichi",
+    name: "Chichi Expechi",
     rating: 5,
     comment:
-      "Thank you so much! I got my package. Love the presentation and the fragrance! I am also happy with my set and kudos for your great customer service. Please keep it up, it made me take notice. I am keeping an eye on your pager for different styles, will definitely be ordering more pieces. Thank you",
+      "Thank you so much! I got my package. Love the presentation and the fragrance! I am also happy with my set and kudos for your great customer service. Please keep it up, it made me take notice. I am keeping an eye on your page for different styles, will definitely be ordering more pieces. Thank you",
+    product: "Blush Verse",
   },
   {
     id: 10,
@@ -76,5 +83,38 @@ export const productReviews = [
     name: "Bidemi",
     rating: 4,
     comment: "Hi, I tried it on once, it looked lovely. Thank you.",
+  },
+  {
+    id: 12,
+    name: "Chacha",
+    rating: 5,
+    comment:
+      "Over 10 people took your contact, I was the best dressed, won some cool cash. Thank you for this dress. Y'all did a thing.",
+    product: "First Bloom",
+    image: "/chacha.webp",
+  },
+  {
+    id: 13,
+    name: "Mrs Olu Mustapha",
+    rating: 5,
+    comment: "Thank you. I hae received it and it's nice. God bless.",
+    product: "Blush Verse",
+  },
+  {
+    id: 14,
+    name: "Mrs Oluwatobi",
+    rating: 5,
+    comment:
+      "I have rocked my dress ooo, just that I am not a good photographer. Lot's of compliments, keep up the good work.",
+    product: "Soft Echo",
+    image: "/mrs_oluwatobi.webp",
+  },
+  {
+    id: 15,
+    name: "Jemimah",
+    rating: 5,
+    comment:
+      "You're the best! I don't regret buying. It is such a beautiful outfit, God have mercy! and the packaging was amazing, it was neat and then when I opened it, the smell that came out from the dress, trust me I am coming back again and when I wear it and people ask me, I am gonna refer them to you.",
+    product: "Blush Verse",
   },
 ];

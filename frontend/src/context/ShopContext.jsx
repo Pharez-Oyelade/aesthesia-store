@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import api from "../utils/axiosConfig";
 import authService from "../services/authService";
+import { isDiscountWaitlistEnabled } from "../config/features";
 
 import {
   calculateCartWeight,
@@ -213,6 +214,12 @@ const ShopContextProvider = (props) => {
 
   // get campaigns on mount
   useEffect(() => {
+    if (!isDiscountWaitlistEnabled) {
+      setCampaign(null);
+      setShowPopup(false);
+      return;
+    }
+
     // check localStorage for cached waitlist code
     const cachedWaitlistCode = localStorage.getItem("aest_waitlist_code");
     const waitlistDismissed = localStorage.getItem("aest_waitlist_dismissed");
@@ -919,6 +926,10 @@ const ShopContextProvider = (props) => {
   }, []);
 
   const subscribeToWaitlist = async (campaignId, email) => {
+    if (!isDiscountWaitlistEnabled) {
+      throw new Error("Discount waitlist is disabled");
+    }
+
     try {
       const response = await axios.post(
         backendUrl + `/api/campaigns/subscribe/${campaignId}`,
@@ -992,6 +1003,7 @@ const ShopContextProvider = (props) => {
     PLUS_SIZE_THRESHOLD,
     isPlusSize,
     subscribeToWaitlist,
+    isDiscountWaitlistEnabled,
 
     campaign,
     showPopup,

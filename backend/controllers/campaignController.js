@@ -11,6 +11,10 @@ import {
 
 // GET active waitlist campaign
 export const getActiveWaitlist = async (req, res) => {
+  if (!isDiscountWaitlistEnabled) {
+    return res.status(200).json({ isOpen: false });
+  }
+
   try {
     const campaign = await campaignModel.findOne({
       type: "waitlist",
@@ -65,6 +69,10 @@ export const getActiveWaitlist = async (req, res) => {
 export const subscribeToWaitlist = async (req, res) => {
   const { id } = req.params;
   const { email } = req.body;
+
+  if (!isDiscountWaitlistEnabled) {
+    return res.status(404).json({ error: "Waitlist is not available" });
+  }
 
   try {
     // check if email already subscribed

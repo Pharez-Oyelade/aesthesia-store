@@ -681,6 +681,13 @@ const paystackWebhook = async (req, res) => {
       : null;
 
     // CREATE FULL ORDER FROM METADATA
+    const metadataDiscountCode = isDiscountWaitlistEnabled
+      ? metadata.discountCode || null
+      : null;
+    const metadataDiscountAmount = isDiscountWaitlistEnabled
+      ? metadata.discountAmount || 0
+      : 0;
+
     const orderData = {
       userId: metadata.isGuest ? null : metadata.userId || null,
       items: metadata.items,
