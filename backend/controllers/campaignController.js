@@ -2,6 +2,7 @@ import campaignModel from "../models/campaignModel.js";
 import subscriberModel from "../models/subscriberModel.js";
 import { generateUniqueCode } from "../services/codeService.js";
 import { sendWaitlistEmail } from "../services/emailService.js";
+import { isDiscountWaitlistEnabled } from "../config/features.js";
 import {
   getDiscountWindow,
   getRemainingSubscriptionSpots,

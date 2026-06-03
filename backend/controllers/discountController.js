@@ -2,6 +2,7 @@ import {
   resolveDiscountAmount,
   resolveDiscountForCode,
 } from "../services/discountService.js";
+import { isDiscountWaitlistEnabled } from "../config/features.js";
 
 // POST validate discount code - called at checkout
 export const validateDiscountCode = async (req, res) => {
@@ -11,6 +12,13 @@ export const validateDiscountCode = async (req, res) => {
     return res.status(400).json({
       success: false,
       message: "Discount code is required",
+    });
+  }
+
+  if (!isDiscountWaitlistEnabled) {
+    return res.status(404).json({
+      success: false,
+      message: "Discount codes are not available right now.",
     });
   }
 

@@ -6,6 +6,7 @@ import { sendOrderStatusEmail } from "../services/emailService.js";
 import { sendNewOrderAdminNotification } from "../services/emailService.js";
 import subscriberModel from "../models/subscriberModel.js";
 import "../models/campaignModel.js";
+import { isDiscountWaitlistEnabled } from "../config/features.js";
 import { resolveDiscountForCode } from "../services/discountService.js";
 
 import crypto from "crypto";
@@ -55,7 +56,7 @@ const placeOrder = async (req, res) => {
       });
     }
 
-    const discount = discountCode
+    const discount = isDiscountWaitlistEnabled && discountCode
       ? await resolveDiscountForCode({ code: discountCode, items })
       : null;
     const resolvedDiscountAmount = discount?.success
@@ -310,7 +311,7 @@ const placeOrderPaystack = async (req, res) => {
     // }
 
     // ===== RESOLVE DISCOUNT =====
-    const discount = discountCode
+    const discount = isDiscountWaitlistEnabled && discountCode
       ? await resolveDiscountForCode({ code: discountCode, items })
       : null;
     const discountAmount = discount?.success ? discount.discountAmount : 0;
@@ -664,7 +665,7 @@ const paystackWebhook = async (req, res) => {
       // return res.sendStatus(200);
     }
 
-    const webhookDiscount = metadata.discountCode
+    const webhookDiscount = isDiscountWaitlistEnabled && metadata.discountCode
       ? await resolveDiscountForCode({
           code: metadata.discountCode,
           items: metadata.items,
@@ -679,14 +680,6 @@ const paystackWebhook = async (req, res) => {
     const webhookDiscountCampaignId = webhookDiscount?.success
       ? webhookDiscount.campaignId
       : null;
-
-    // CREATE FULL ORDER FROM METADATA
-    const metadataDiscountCode = isDiscountWaitlistEnabled
-      ? metadata.discountCode || null
-      : null;
-    const metadataDiscountAmount = isDiscountWaitlistEnabled
-      ? metadata.discountAmount || 0
-      : 0;
 
     const orderData = {
       userId: metadata.isGuest ? null : metadata.userId || null,
