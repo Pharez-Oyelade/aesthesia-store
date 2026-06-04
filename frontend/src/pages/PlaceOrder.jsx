@@ -10,6 +10,14 @@ import { trackOrderPlaced } from "../utils/metaPixel";
 
 const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_KEY;
 
+const parseCartMeasurements = (mKey) => {
+  try {
+    return JSON.parse(mKey);
+  } catch {
+    return {};
+  }
+};
+
 const PlaceOrder = () => {
   const [method, setMethod] = useState("paystack");
   const [filteredLocations, setFilteredLocations] = useState([]);
@@ -40,6 +48,12 @@ const PlaceOrder = () => {
     selectedCountry,
     setSelectedCountry,
     getPlusSizeFee,
+    getCustomColorFee,
+    PLUS_SIZE_FEE,
+    CUSTOM_COLOR_FEE,
+    CUSTOM_COLOR_NOTE_KEY,
+    isPlusSize,
+    isCustomColor,
     convertPrice,
     isDiscountWaitlistEnabled,
   } = useContext(shopContext);
@@ -187,15 +201,36 @@ const PlaceOrder = () => {
             if (cartItems[itemId][size][colorKey][mKey] > 0) {
               const product = products.find((p) => p._id === itemId);
               if (product) {
+                const cartMeasurements = parseCartMeasurements(mKey);
+                const {
+                  [CUSTOM_COLOR_NOTE_KEY]: customColorNote,
+                  note,
+                  ...measurements
+                } = cartMeasurements;
+                const color = colorKey === "no-color" ? "" : colorKey;
+                const quantity = cartItems[itemId][size][colorKey][mKey];
+                const plusSizeFee = isPlusSize(size) ? PLUS_SIZE_FEE : 0;
+                const customColorFee = isCustomColor(color)
+                  ? CUSTOM_COLOR_FEE
+                  : 0;
+                const unitPrice = product.onSale
+                  ? product.salePrice
+                  : product.price;
+
                 orderItems.push({
                   _id: itemId,
                   name: product.name,
-                  price: product.price,
+                  price: unitPrice,
                   image: product.image,
                   size,
-                  color: colorKey === "no-color" ? "" : colorKey,
-                  measurements: JSON.parse(mKey),
-                  quantity: cartItems[itemId][size][colorKey][mKey],
+                  color,
+                  measurements,
+                  note: customColorNote || note || "",
+                  customColorNote: customColorNote || note || "",
+                  plusSizeFee,
+                  customColorFee,
+                  lineTotal: (unitPrice + plusSizeFee + customColorFee) * quantity,
+                  quantity,
                 });
               }
             }
@@ -315,7 +350,7 @@ const PlaceOrder = () => {
   };
 
   const getOrderSubtotal = () =>
-    getCartAmount() + getShippingCost() + getPlusSizeFee();
+    getCartAmount() + getShippingCost() + getPlusSizeFee() + getCustomColorFee();
 
   const getDiscountBaseAmount = () =>
     discountData?.eligibleSubtotal ?? getCartAmount();
@@ -862,9 +897,7 @@ const PlaceOrder = () => {
           )}
 
           <div className="mt-8 min-w-80">
-            <CartTotal
-              discountAmount={getDiscountAmount()}
-            />
+            <CartTotal discountAmount={getDiscountAmount()} />
           </div>
 
           <div className="mt-12">
