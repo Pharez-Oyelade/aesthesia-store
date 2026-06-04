@@ -426,14 +426,15 @@ const Product = () => {
                       Custom color attracts an additional fee of {currency}
                       {convertPrice(CUSTOM_COLOR_FEE)}.
                     </p>
-                    <textarea
+                    <input
+                      type="text"
                       name="customColorNote"
                       id="custom-color-note"
                       placeholder="In what stunning color do you want your piece?"
-                      className="px-5 py-2 rounded-lg border-2 transition-all duration-200 font-semibold text-gray-700 focus:outline-none border-gray-300 w-full"
+                      className="px-5 py-2 rounded-lg border-2 transition-all duration-200 font-semibold text-gray-700 focus:outline-none border-gray-300 w-full mb-8"
                       value={note}
                       onChange={(e) => setNote(e.target.value)}
-                    ></textarea>
+                    ></input>
                   </div>
                 )}
 
