@@ -24,6 +24,11 @@ const Cart = () => {
     navigate,
     formatPrice,
     convertPrice,
+    PLUS_SIZE_FEE,
+    CUSTOM_COLOR_FEE,
+    CUSTOM_COLOR_NOTE_KEY,
+    isPlusSize,
+    isCustomColor,
   } = useContext(shopContext);
 
   // Tracking selected image for each cart item
@@ -36,11 +41,19 @@ const Cart = () => {
       for (const colorKey in cartItems[itemId][size]) {
         for (const mKey in cartItems[itemId][size][colorKey]) {
           if (cartItems[itemId][size][colorKey][mKey] > 0) {
+            const cartMeasurements = parseMeasurements(mKey);
+            const {
+              [CUSTOM_COLOR_NOTE_KEY]: customColorNote,
+              note,
+              ...measurements
+            } = cartMeasurements;
             cartData.push({
               _id: itemId,
               size,
               color: colorKey === "no-color" ? "" : colorKey,
-              measurements: parseMeasurements(mKey),
+              measurements,
+              cartMeasurements,
+              customColorNote: customColorNote || note || "",
               quantity: cartItems[itemId][size][colorKey][mKey],
               mKey,
             });
@@ -77,8 +90,15 @@ const Cart = () => {
         {cartData.map((item, idx) => {
           const product = products.find((p) => p._id === item._id);
           if (!product) return null;
-          const cartKey = item._id + item.size + item.mKey;
+          const cartKey = item._id + item.size + item.color + item.mKey;
           const mainImage = selectedImages[cartKey] || product.image[0].url;
+          const basePrice = product.onSale ? product.salePrice : product.price;
+          const plusSizeFee = isPlusSize(item.size) ? PLUS_SIZE_FEE : 0;
+          const customColorFee = isCustomColor(item.color)
+            ? CUSTOM_COLOR_FEE
+            : 0;
+          const itemTotal =
+            (basePrice + plusSizeFee + customColorFee) * item.quantity;
           return (
             <div
               key={cartKey}
@@ -95,22 +115,43 @@ const Cart = () => {
                 <h3 className="font-medium text-lg">{product.name}</h3>
                 <p className="text-sm text-gray-500">Size: {item.size}</p>
                 {item.color && (
-                  <p className="text-sm text-gray-500">Color: {item.color}</p>
+                  <p className="text-sm text-gray-500">
+                    Color: {item.color}
+                  </p>
+                )}
+                {item.customColorNote && (
+                  <p className="text-sm text-gray-500">
+                    Custom color note: {item.customColorNote}
+                  </p>
                 )}
                 <div className="flex flex-wrap gap-2 text-xs text-gray-600 mt-1">
-                  {Object.entries(item.measurements).map(([key, value]) => (
-                    <span key={key} className="bg-gray-100 px-2 py-1 rounded">
-                      {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
-                    </span>
-                  ))}
+                  {Object.entries(item.measurements)
+                    .filter(([, value]) => value)
+                    .map(([key, value]) => (
+                      <span key={key} className="bg-gray-100 px-2 py-1 rounded">
+                        {key.charAt(0).toUpperCase() + key.slice(1)}: {value}
+                      </span>
+                    ))}
                 </div>
                 <p className="text-md text-gray-500 flex items-center gap-1 mt-2">
-                  Price: {""}
-                  {/* {product.price} */}
-                  {product.onSale
-                    ? formatPrice(product.salePrice * item.quantity)
-                    : formatPrice(product.price * item.quantity)}
+                  Price: {formatPrice(itemTotal)}
                 </p>
+                {(plusSizeFee > 0 || customColorFee > 0) && (
+                  <div className="mt-1 space-y-1 text-xs text-gray-500">
+                    {plusSizeFee > 0 && (
+                      <p>
+                        Includes plus size fee: {formatPrice(plusSizeFee)} per
+                        item
+                      </p>
+                    )}
+                    {customColorFee > 0 && (
+                      <p>
+                        Includes custom color fee:{" "}
+                        {formatPrice(customColorFee)} per item
+                      </p>
+                    )}
+                  </div>
+                )}
                 <div className="flex items-center gap-2 mt-2">
                   <label htmlFor={`qty-${idx}`}>Qty:</label>
                   <input
@@ -124,7 +165,7 @@ const Cart = () => {
                         item._id,
                         item.size,
                         item.color,
-                        item.measurements,
+                        item.cartMeasurements,
                         qty,
                       );
                     }}
@@ -135,9 +176,7 @@ const Cart = () => {
               <div className="font-semibold flex items-center gap-1 mt-2 md:mt-0">
                 {/* {product.price * item.quantity} */}
                 {currency}
-                {product.onSale
-                  ? convertPrice(product.salePrice * item.quantity)
-                  : convertPrice(product.price * item.quantity)}
+                {convertPrice(itemTotal)}
               </div>
 
               <img
@@ -146,7 +185,7 @@ const Cart = () => {
                     item._id,
                     item.size,
                     item.color,
-                    item.measurements,
+                    item.cartMeasurements,
                     0,
                   )
                 }

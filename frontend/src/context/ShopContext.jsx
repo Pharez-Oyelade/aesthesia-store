@@ -176,6 +176,9 @@ const CACHE_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 const PLUS_SIZE_FEE = 20000; // Fee for sizes 18 and above
 const PLUS_SIZE_THRESHOLD = 18;
+const CUSTOM_COLOR_OPTION = "Custom Color";
+const CUSTOM_COLOR_FEE = 20000;
+const CUSTOM_COLOR_NOTE_KEY = "customColorNote";
 
 const formatPrice = (amount) => {
   return amount.toLocaleString("en-NG", {
@@ -269,6 +272,23 @@ const ShopContextProvider = (props) => {
     return !isNaN(numericSize) && numericSize >= PLUS_SIZE_THRESHOLD;
   };
 
+  const isCustomColor = (color) =>
+    typeof color === "string" &&
+    color.trim().toLowerCase() === CUSTOM_COLOR_OPTION.toLowerCase();
+
+  const withCustomColorNote = (measurements, color, note = "") => {
+    const nextMeasurements = { ...(measurements || {}) };
+    const trimmedNote = note.toString().trim();
+
+    if (isCustomColor(color) && trimmedNote) {
+      nextMeasurements[CUSTOM_COLOR_NOTE_KEY] = trimmedNote;
+    } else {
+      delete nextMeasurements[CUSTOM_COLOR_NOTE_KEY];
+    }
+
+    return nextMeasurements;
+  };
+
   // function to calculate plus size fees
   const getPlusSizeFee = () => {
     let totalFee = 0;
@@ -285,6 +305,27 @@ const ShopContextProvider = (props) => {
                 }
               } catch (error) {}
             }
+          }
+        }
+      }
+    }
+    return totalFee;
+  };
+
+  const getCustomColorFee = () => {
+    let totalFee = 0;
+    for (const items in cartItems) {
+      for (const size in cartItems[items]) {
+        for (const colorKey in cartItems[items][size]) {
+          if (!isCustomColor(colorKey)) continue;
+
+          for (const mKey in cartItems[items][size][colorKey]) {
+            try {
+              if (cartItems[items][size][colorKey][mKey] > 0) {
+                totalFee +=
+                  CUSTOM_COLOR_FEE * cartItems[items][size][colorKey][mKey];
+              }
+            } catch (error) {}
           }
         }
       }
@@ -476,7 +517,14 @@ const ShopContextProvider = (props) => {
     });
   };
 
-  const addToCart = async (itemId, size, color, measurements, quantity = 1) => {
+  const addToCart = async (
+    itemId,
+    size,
+    color,
+    measurements,
+    quantity = 1,
+    note = "",
+  ) => {
     if (quantity < 1) {
       toast.error("Quantity must be at least 1");
       return;
@@ -485,7 +533,8 @@ const ShopContextProvider = (props) => {
 
     setCartItems((prevCart) => {
       let cartData = structuredClone(prevCart);
-      const mKey = getMeasurementsKey(measurements);
+      const cartMeasurements = withCustomColorNote(measurements, color, note);
+      const mKey = getMeasurementsKey(cartMeasurements);
       const colorKey = color || "no-color";
       if (!cartData[itemId]) cartData[itemId] = {};
       if (!cartData[itemId][size]) cartData[itemId][size] = {};
@@ -509,7 +558,14 @@ const ShopContextProvider = (props) => {
       try {
         await axios.post(
           backendUrl + "/api/cart/add",
-          { itemId, size, color, measurements, quantity },
+          {
+            itemId,
+            size,
+            color,
+            measurements: withCustomColorNote(measurements, color, note),
+            quantity,
+            note: note.toString().trim(),
+          },
           {
             headers: { token },
           },
@@ -991,6 +1047,7 @@ const ShopContextProvider = (props) => {
     locationToState,
     getCartWeight,
     getShippingCost,
+    getCustomColorFee,
     selectedCountry,
     setSelectedCountry,
     isInternational,
@@ -1002,6 +1059,10 @@ const ShopContextProvider = (props) => {
     PLUS_SIZE_FEE,
     PLUS_SIZE_THRESHOLD,
     isPlusSize,
+    CUSTOM_COLOR_OPTION,
+    CUSTOM_COLOR_FEE,
+    CUSTOM_COLOR_NOTE_KEY,
+    isCustomColor,
     subscribeToWaitlist,
     isDiscountWaitlistEnabled,
 
