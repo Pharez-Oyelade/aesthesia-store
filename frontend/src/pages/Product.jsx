@@ -27,6 +27,8 @@ const Product = () => {
     navigate,
     PLUS_SIZE_FEE,
     PLUS_SIZE_THRESHOLD,
+    CUSTOM_COLOR_FEE,
+    CUSTOM_COLOR_OPTION,
   } = useContext(shopContext);
 
   // Find product after products are loaded
@@ -48,6 +50,20 @@ const Product = () => {
   const [displayedReviews, setDisplayedReviews] = useState([]);
 
   const [activeTab, setActiveTab] = useState("description");
+
+  const [isCustom, setIsCustom] = useState(false);
+  const [note, setNote] = useState("");
+
+  // Show the note field only while the custom color option is selected.
+  useEffect(() => {
+    const selectedCustomColor = color === CUSTOM_COLOR_OPTION;
+    setIsCustom(selectedCustomColor);
+
+    if (!selectedCustomColor) {
+      setNote("");
+    }
+  }, [color, CUSTOM_COLOR_OPTION]);
+
   // const [isImageModal, setIsImageModal] = useState(false);
   // const [modalIndex, setModalIndex] = useState(0);
 
@@ -152,6 +168,11 @@ const Product = () => {
       alert("Please select a fit length");
       return;
     }
+
+    if (color === CUSTOM_COLOR_OPTION && !note.trim()) {
+      alert("Please enter a custom color");
+      return;
+    }
     // if (productData.length && productData.length.length > 0 && !length) {
     //   alert("Please select a length");
     //   return;
@@ -166,12 +187,14 @@ const Product = () => {
       color,
       { ...measurements, fitLength },
       quantity,
+      note,
     );
     trackAddToCart(productData, quantity, {
       size,
       color,
       fitLength,
     });
+
     navigate("/cart");
   };
 
@@ -386,12 +409,31 @@ const Product = () => {
                             item === color
                               ? "border-red-600 bg-red-50 text-red-700"
                               : "border-gray-300 bg-white hover:bg-gray-100"
-                          }`}
+                          } ${item === CUSTOM_COLOR_OPTION ? "italic border-[#691110]" : ""}`}
                         >
                           {item}
                         </button>
                       ))}
                     </div>
+                  </div>
+                )}
+
+                {/* Add Custom color note if custom color */}
+                {isCustom && (
+                  <div className="">
+                    <label htmlFor="custom-color-note">Custom Color</label>
+                    <p className="mb-2 text-sm text-gray-600">
+                      Custom color attracts an additional fee of {currency}
+                      {convertPrice(CUSTOM_COLOR_FEE)}.
+                    </p>
+                    <textarea
+                      name="customColorNote"
+                      id="custom-color-note"
+                      placeholder="In what stunning color do you want your piece?"
+                      className="px-5 py-2 rounded-lg border-2 transition-all duration-200 font-semibold text-gray-700 focus:outline-none border-gray-300 w-full"
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                    ></textarea>
                   </div>
                 )}
 

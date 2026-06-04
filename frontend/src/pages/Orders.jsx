@@ -19,6 +19,20 @@ function formatDate(date) {
   return `${day}/${month}/${year}`;
 }
 
+const CUSTOM_COLOR_NOTE_KEY = "customColorNote";
+
+const getCustomColorNote = (item) =>
+  item.customColorNote || item.note || item.measurements?.[CUSTOM_COLOR_NOTE_KEY] || "";
+
+const formatMeasurements = (measurements = {}) =>
+  Object.entries(measurements)
+    .filter(
+      ([key, value]) =>
+        key !== CUSTOM_COLOR_NOTE_KEY && key !== "note" && value,
+    )
+    .map(([k, v]) => `${k}: ${v}`)
+    .join(", ");
+
 const Orders = () => {
   const { currency, delivery_fee, backendUrl, token, formatPrice } =
     useContext(shopContext);
@@ -172,12 +186,19 @@ const Orders = () => {
                 <div className="text-gray-500 text-sm mb-2">
                   Quantity: <span className="font-medium">{item.quantity}</span>
                 </div>
-                {item.measurements && (
+                {item.color && (
+                  <div className="text-xs text-gray-500 mb-2">
+                    Color: {item.color}
+                  </div>
+                )}
+                {getCustomColorNote(item) && (
+                  <div className="text-xs text-red-700 mb-2">
+                    Custom color note: {getCustomColorNote(item)}
+                  </div>
+                )}
+                {formatMeasurements(item.measurements) && (
                   <div className="text-xs text-gray-400 mb-2">
-                    Measurements:{" "}
-                    {Object.entries(item.measurements)
-                      .map(([k, v]) => `${k}: ${v}`)
-                      .join(", ")}
+                    Measurements: {formatMeasurements(item.measurements)}
                   </div>
                 )}
                 <div className="flex items-center gap-2 sm:gap-4 mt-2">

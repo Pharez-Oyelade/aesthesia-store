@@ -14,6 +14,20 @@ function formatDate(date) {
   return `${day}/${month}/${year}`;
 }
 
+const CUSTOM_COLOR_NOTE_KEY = "customColorNote";
+
+const getCustomColorNote = (item) =>
+  item.customColorNote || item.note || item.measurements?.[CUSTOM_COLOR_NOTE_KEY] || "";
+
+const formatMeasurements = (measurements = {}) =>
+  Object.entries(measurements)
+    .filter(
+      ([key, value]) =>
+        key !== CUSTOM_COLOR_NOTE_KEY && key !== "note" && value,
+    )
+    .map(([k, v]) => `${k}: ${v}`)
+    .join(", ");
+
 const Orders = ({ token }) => {
   const [orders, setOrders] = useState([]);
 
@@ -26,7 +40,7 @@ const Orders = ({ token }) => {
       const response = await axios.post(
         backendUrl + "/api/order/list",
         {},
-        { headers: { token } }
+        { headers: { token } },
       );
       if (response.data.success) {
         setOrders(response.data.orders);
@@ -46,7 +60,7 @@ const Orders = ({ token }) => {
           orderId,
           status: event.target.value,
         },
-        { headers: { token } }
+        { headers: { token } },
       );
       if (response.data.success) {
         await fetchAllOrders();
@@ -88,12 +102,14 @@ const Orders = ({ token }) => {
                         <span className="text-gray-500"> - {item.color}</span>
                       )}
                     </p>
-                    {item.measurements && (
+                    {getCustomColorNote(item) && (
+                      <p className="text-xs font-medium text-red-700">
+                        Custom color note: {getCustomColorNote(item)}
+                      </p>
+                    )}
+                    {formatMeasurements(item.measurements) && (
                       <p className="text-xs text-gray-500">
-                        Measurements:{" "}
-                        {Object.entries(item.measurements)
-                          .map(([k, v]) => `${k}: ${v}`)
-                          .join(", ")}
+                        Measurements: {formatMeasurements(item.measurements)}
                       </p>
                     )}
                   </div>

@@ -12,11 +12,15 @@ const CartTotal = ({ discountAmount = 0 }) => {
     getShippingCost,
     isInternational,
     getPlusSizeFee,
+    getCustomColorFee,
     PLUS_SIZE_FEE,
+    CUSTOM_COLOR_FEE,
   } = useContext(shopContext);
 
   const plusSizeFee = getPlusSizeFee();
-  const subtotal = getCartAmount() + getShippingCost() + plusSizeFee;
+  const customColorFee = getCustomColorFee();
+  const subtotal =
+    getCartAmount() + getShippingCost() + plusSizeFee + customColorFee;
   const finalTotal = subtotal - discountAmount;
 
   return (
@@ -58,6 +62,26 @@ const CartTotal = ({ discountAmount = 0 }) => {
               <p>
                 {currency}
                 {convertPrice(plusSizeFee)}
+              </p>
+            </div>
+            <hr />
+          </>
+        )}
+
+        {/* Custom Color Fee - Only show if applicable */}
+        {customColorFee > 0 && (
+          <>
+            <div className="flex justify-between">
+              <p className="flex items-center gap-1">
+                Custom Color Fee
+                <span className="text-xs text-gray-500">
+                  ({currency}
+                  {convertPrice(CUSTOM_COLOR_FEE)} per item)
+                </span>
+              </p>
+              <p>
+                {currency}
+                {convertPrice(customColorFee)}
               </p>
             </div>
             <hr />
