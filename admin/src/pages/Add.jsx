@@ -3,11 +3,11 @@ import { assets } from "../assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+const createEmptyProductImages = () =>
+  Array(parseInt(import.meta.env.VITE_MAX_PRODUCT_IMAGES)).fill(false);
+
 const Add = ({ token }) => {
-  const [image1, setImage1] = useState(false);
-  const [image2, setImage2] = useState(false);
-  const [image3, setImage3] = useState(false);
-  const [image4, setImage4] = useState(false);
+  const [images, setImages] = useState(createEmptyProductImages);
 
   const [name, setName] = useState("");
   const [tagline, setTagline] = useState("");
@@ -53,8 +53,8 @@ const Add = ({ token }) => {
       setLoading(false);
       return;
     }
-    if (!image1) {
-      toast.error("Please upload at least the first product image");
+    if (!images.some(Boolean)) {
+      toast.error("Please upload at least one product image");
       setLoading(false);
       return;
     }
@@ -74,14 +74,15 @@ const Add = ({ token }) => {
       formData.append("sizes", JSON.stringify(sizes.length > 0 ? sizes : []));
       formData.append(
         "colors",
-        JSON.stringify(colors.length > 0 ? colors : [])
+        JSON.stringify(colors.length > 0 ? colors : []),
       );
       formData.append("weight", weight || "0");
 
-      image1 && formData.append("image1", image1);
-      image2 && formData.append("image2", image2);
-      image3 && formData.append("image3", image3);
-      image4 && formData.append("image4", image4);
+      images.forEach((image, index) => {
+        if (image) {
+          formData.append(`image${index + 1}`, image);
+        }
+      });
 
       const response = await axios.post(
         backendUrl + "/api/product/add",
@@ -91,7 +92,7 @@ const Add = ({ token }) => {
             "Content-Type": "multipart/form-data",
             token,
           },
-        }
+        },
       );
 
       if (response.data.success) {
@@ -109,10 +110,7 @@ const Add = ({ token }) => {
         setColors([]);
         setNewColor("");
         setWeight("");
-        setImage1(false);
-        setImage2(false);
-        setImage3(false);
-        setImage4(false);
+        setImages(createEmptyProductImages());
         setLoading(false);
       } else {
         toast.error(response.data.message);
@@ -128,6 +126,14 @@ const Add = ({ token }) => {
     fetchSections();
   }, []);
 
+  const updateImage = (index, file) => {
+    setImages((currentImages) =>
+      currentImages.map((image, imageIndex) =>
+        imageIndex === index ? file : image,
+      ),
+    );
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -135,59 +141,23 @@ const Add = ({ token }) => {
     >
       <div>
         <p className="mb-2 font-semibold text-gray-700">Upload Image</p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <label htmlFor="image1">
-            <img
-              className="w-24 sm:w-32 h-24 sm:h-32 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
-              src={!image1 ? assets.upload_area : URL.createObjectURL(image1)}
-              alt=""
-            />
-            <input
-              onChange={(e) => setImage1(e.target.files[0])}
-              type="file"
-              id="image1"
-              hidden
-            />
-          </label>
-          <label htmlFor="image2">
-            <img
-              className="w-24 sm:w-32 h-24 sm:h-32 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
-              src={!image2 ? assets.upload_area : URL.createObjectURL(image2)}
-              alt=""
-            />
-            <input
-              onChange={(e) => setImage2(e.target.files[0])}
-              type="file"
-              id="image2"
-              hidden
-            />
-          </label>
-          <label htmlFor="image3">
-            <img
-              className="w-24 sm:w-32 h-24 sm:h-32 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
-              src={!image3 ? assets.upload_area : URL.createObjectURL(image3)}
-              alt=""
-            />
-            <input
-              onChange={(e) => setImage3(e.target.files[0])}
-              type="file"
-              id="image3"
-              hidden
-            />
-          </label>
-          <label htmlFor="image4">
-            <img
-              className="w-24 sm:w-32 h-24 sm:h-32 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
-              src={!image4 ? assets.upload_area : URL.createObjectURL(image4)}
-              alt=""
-            />
-            <input
-              onChange={(e) => setImage4(e.target.files[0])}
-              type="file"
-              id="image4"
-              hidden
-            />
-          </label>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {images.map((image, index) => (
+            <label key={index} htmlFor={`image${index + 1}`}>
+              <img
+                className="w-24 sm:w-32 h-24 sm:h-32 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
+                src={!image ? assets.upload_area : URL.createObjectURL(image)}
+                alt={`Product upload ${index + 1}`}
+              />
+              <input
+                onChange={(e) => updateImage(index, e.target.files[0])}
+                type="file"
+                id={`image${index + 1}`}
+                accept="image/*"
+                hidden
+              />
+            </label>
+          ))}
         </div>
       </div>
       <div>
@@ -308,7 +278,7 @@ const Add = ({ token }) => {
                 setSizes((prev) =>
                   prev.includes(sz)
                     ? prev.filter((item) => item !== sz)
-                    : [...prev, sz]
+                    : [...prev, sz],
                 )
               }
               className={`cursor-pointer px-4 py-2 rounded-lg border-2 font-semibold transition ${

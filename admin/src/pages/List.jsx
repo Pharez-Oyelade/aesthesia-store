@@ -6,6 +6,10 @@ import { FaSearch } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import ArrayInput from "../components/ArrayInput";
 import { getOptimizedUrl } from "../utils/cloudinaryHelper";
+import { assets } from "../assets/assets";
+
+const MAX_PRODUCT_IMAGES = parseInt(import.meta.env.VITE_MAX_PRODUCT_IMAGES);
+const createEmptyProductImages = () => Array(MAX_PRODUCT_IMAGES).fill(false);
 
 const List = ({ token }) => {
   const [list, setList] = useState([]);
@@ -27,8 +31,11 @@ const List = ({ token }) => {
     fitLength: [],
     colors: [],
   });
+  const [editImages, setEditImages] = useState(createEmptyProductImages);
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+
+  const [isSaving, setIsSaving] = useState(false);
 
   const FEATURE_EDIT_PRODUCTS = true;
 
@@ -36,7 +43,7 @@ const List = ({ token }) => {
     try {
       const response = await axios.get(backendUrl + "/api/product/list");
       if (response.data.success) {
-        setList(response.data.products);
+        setList(response.data.products.reverse());
       } else {
         toast.error(response.data.message);
       }
@@ -77,6 +84,27 @@ const List = ({ token }) => {
   const cancelDelete = () => {
     setShowConfirm(false);
     setSelectedProduct(null);
+  };
+
+  const updateEditImage = (index, file) => {
+    setEditImages((currentImages) =>
+      currentImages.map((image, imageIndex) =>
+        imageIndex === index ? file : image,
+      ),
+    );
+  };
+
+  const getEditImagePreview = (index) => {
+    const replacementImage = editImages[index];
+    const existingImageUrl = editProduct?.image?.[index]?.url;
+
+    if (replacementImage) {
+      return URL.createObjectURL(replacementImage);
+    }
+
+    return existingImageUrl
+      ? getOptimizedUrl(existingImageUrl, 180)
+      : assets.upload_area;
   };
 
   useEffect(() => {
@@ -151,6 +179,7 @@ const List = ({ token }) => {
                   <button
                     onClick={() => {
                       setEditProduct(item);
+                      setEditImages(createEmptyProductImages());
                       setEditFields({
                         name: item.name || "",
                         description: item.description || "",
@@ -191,7 +220,7 @@ const List = ({ token }) => {
           className="fixed inset-0 z-100 flex items-center justify-center bg-transparent bg-opacity-50 overflow-auto"
           style={{ backdropFilter: "blur(2px)" }}
         >
-          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative my-auto">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-2xl relative my-auto">
             <button
               className="absolute top-3 right-3 text-gray-400 hover:text-red-600 text-2xl font-bold"
               onClick={() => setEditProduct(null)}
@@ -203,34 +232,90 @@ const List = ({ token }) => {
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
+                setIsSaving(true);
                 try {
-                  // ensure colors and sizes are sent as JSON strings (backend expects JSON strings)
+                  const formData = new FormData();
+
+                  formData.append("id", editProduct._id);
+                  formData.append("name", editFields.name || "");
+                  formData.append("description", editFields.description || "");
+                  formData.append(
+                    "specificDetails",
+                    editFields.specificDetails || "",
+                  );
+                  formData.append("price", editFields.price || "");
+                  formData.append("section", editFields.section || "");
+                  formData.append("weight", editFields.weight || "0");
+                  formData.append("bestseller", editFields.bestseller);
+                  formData.append("preorder", editFields.preorder);
+                  formData.append("soldOut", editFields.soldOut);
+                  formData.append("onSale", editFields.onSale);
+                  formData.append("salePrice", editFields.salePrice || "0");
+                  formData.append("sizes", JSON.stringify(editFields.sizes));
+                  formData.append("colors", JSON.stringify(editFields.colors));
+                  formData.append(
+                    "fitLength",
+                    JSON.stringify(editFields.fitLength),
+                  );
+
+                  editImages.forEach((image, index) => {
+                    if (image) {
+                      formData.append(`image${index + 1}`, image);
+                    }
+                  });
 
                   const response = await axios.post(
                     backendUrl + "/api/product/update",
+                    formData,
                     {
-                      id: editProduct._id,
-                      ...editFields,
-                      sizes: JSON.stringify(editFields.sizes),
-                      colors: JSON.stringify(editFields.colors),
-                      // length: JSON.stringify(editFields.length),
-                      fitLength: JSON.stringify(editFields.fitLength),
+                      headers: {
+                        "Content-Type": "multipart/form-data",
+                        token,
+                      },
                     },
-                    { headers: { token } },
                   );
                   if (response.data.success) {
                     toast.success("Product updated successfully");
+                    setIsSaving(false);
                     setEditProduct(null);
+                    setEditImages(createEmptyProductImages());
                     await fetchList();
                   } else {
                     toast.error(response.data.message);
                   }
                 } catch (error) {
                   toast.error(error.message);
+                  setIsSaving(false);
                 }
               }}
               className="flex flex-col gap-4"
             >
+              <div>
+                <p className="mb-2 font-semibold text-gray-700">
+                  Product Images
+                </p>
+                <div className="grid grid-cols-3 gap-3">
+                  {Array.from({ length: MAX_PRODUCT_IMAGES }, (_, index) => (
+                    <label key={index} htmlFor={`edit-image${index + 1}`}>
+                      <img
+                        className="w-24 h-24 object-cover rounded-xl border-2 border-gray-200 cursor-pointer"
+                        src={getEditImagePreview(index)}
+                        alt={`Product image ${index + 1}`}
+                      />
+                      <input
+                        onChange={(e) =>
+                          updateEditImage(index, e.target.files[0])
+                        }
+                        type="file"
+                        id={`edit-image${index + 1}`}
+                        accept="image/*"
+                        hidden
+                      />
+                    </label>
+                  ))}
+                </div>
+              </div>
+
               {/* Example fields */}
               <label className="font-medium">
                 Name
@@ -424,8 +509,9 @@ const List = ({ token }) => {
                 <button
                   type="submit"
                   className="flex-1 bg-red-700 hover:bg-red-800 text-white font-bold py-2 rounded-lg transition"
+                  disabled={isSaving}
                 >
-                  Save
+                  {isSaving ? "Saving..." : "Save Changes"}
                 </button>
                 <button
                   type="button"
