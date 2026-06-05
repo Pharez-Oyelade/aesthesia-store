@@ -4,6 +4,39 @@ import productModel from "../models/productModel.js";
 import sectionModel from "../models/sectionModel.js";
 import mongoose from "mongoose";
 
+const MAX_PRODUCT_IMAGES = 6;
+const PRODUCT_IMAGE_FIELDS = Array.from(
+  { length: MAX_PRODUCT_IMAGES },
+  (_, index) => `image${index + 1}`
+);
+
+const parseArrayField = (value) => {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  return JSON.parse(value);
+};
+
+const parseBooleanField = (value) => value === true || value === "true";
+
+const uploadProductImage = async (file) => {
+  const result = await cloudinary.uploader.upload(file.path, {
+    resource_type: "image",
+  });
+
+  return {
+    url: result.secure_url,
+    public_id: result.public_id,
+  };
+};
+
+const getProductImagesFromRequest = async (files = {}) => {
+  const images = PRODUCT_IMAGE_FIELDS.map((field) => files[field]?.[0]).filter(
+    Boolean
+  );
+
+  return Promise.all(images.map(uploadProductImage));
+};
+
 // add a new product
 const addProduct = async (req, res) => {
   try {
@@ -23,7 +56,7 @@ const addProduct = async (req, res) => {
       salePrice,
       preorder,
       weight,
-      fitLength
+      fitLength,
     } = req.body;
 
     // Validate price
@@ -33,34 +66,18 @@ const addProduct = async (req, res) => {
         message: "Price is required and must be greater than 0",
       });
     }
-    // Validate image1
-    if (!req.files.image1 || !req.files.image1[0]) {
+    const hasProductImage = PRODUCT_IMAGE_FIELDS.some(
+      (field) => req.files?.[field]?.[0]
+    );
+
+    if (!hasProductImage) {
       return res.json({
         success: false,
         message: "At least one product image is required",
       });
     }
 
-    const image1 = req.files.image1 && req.files.image1[0];
-    const image2 = req.files.image2 && req.files.image2[0];
-    const image3 = req.files.image3 && req.files.image3[0];
-    const image4 = req.files.image4 && req.files.image4[0];
-
-    const images = [image1, image2, image3, image4].filter(
-      (item) => item !== undefined
-    );
-
-    let imagesData = await Promise.all(
-      images.map(async (item) => {
-        let result = await cloudinary.uploader.upload(item.path, {
-          resource_type: "image",
-        });
-        return {
-          url: result.secure_url,
-          public_id: result.public_id,
-        };
-      })
-    );
+    let imagesData = await getProductImagesFromRequest(req.files);
 
     // If section is an ObjectId, look up the section name
     let sectionName = section;
@@ -83,11 +100,11 @@ const addProduct = async (req, res) => {
       section: sectionName,
       bestseller: bestseller === true || bestseller === "true" ? true : false,
       preorder: preorder === true || preorder === "true" ? true : false,
-      sizes: JSON.parse(sizes),
-      colors: colors ? JSON.parse(colors) : [],
+      sizes: parseArrayField(sizes),
+      colors: parseArrayField(colors),
       image: imagesData,
       weight: Number(weight) || 0,
-      fitLength: JSON.parse(fitLength),
+      fitLength: parseArrayField(fitLength),
       date: Date.now(),
     };
 
@@ -126,24 +143,71 @@ const updateProduct = async (req, res) => {
       fitLength,
     } = req.body;
 
+    const product = await productModel.findById(id);
+
+    if (!product) {
+      return res.json({ success: false, message: "Product not found" });
+    }
+
     const updateFields = {
       ...(name && { name }),
       ...(description && { description }),
+      ...(tagline && { tagline }),
       ...(specificDetails && { specificDetails }),
       ...(price && { price: Number(price) }),
       ...(section && { section }),
-      ...(sizes && { sizes: JSON.parse(sizes) }),
-      ...(colors && { colors: JSON.parse(colors) }),
-      ...(typeof bestseller !== "undefined" && { bestseller }),
-      ...(typeof preorder !== "undefined" && { preorder }),
-      ...(typeof soldOut !== "undefined" && { soldOut }),
-      ...(typeof onSale !== "undefined" && { onSale }),
+      ...(sizes && { sizes: parseArrayField(sizes) }),
+      ...(colors && { colors: parseArrayField(colors) }),
+      ...(typeof bestseller !== "undefined" && {
+        bestseller: parseBooleanField(bestseller),
+      }),
+      ...(typeof preorder !== "undefined" && {
+        preorder: parseBooleanField(preorder),
+      }),
+      ...(typeof soldOut !== "undefined" && {
+        soldOut: parseBooleanField(soldOut),
+      }),
+      ...(typeof onSale !== "undefined" && {
+        onSale: parseBooleanField(onSale),
+      }),
       ...(typeof salePrice !== "undefined" && { salePrice: Number(salePrice) }),
       ...(typeof weight !== "undefined" && { weight: Number(weight) }),
-      ...(fitLength && { fitLength: JSON.parse(fitLength) }),
+      ...(fitLength && { fitLength: parseArrayField(fitLength) }),
     };
 
+    const currentImages = Array.isArray(product.image)
+      ? product.image.slice(0, MAX_PRODUCT_IMAGES)
+      : [];
+    const updatedImages = [...currentImages];
+    const replacedPublicIds = [];
+    let imagesWereUpdated = false;
+
+    for (const [index, field] of PRODUCT_IMAGE_FIELDS.entries()) {
+      const file = req.files?.[field]?.[0];
+      if (!file) continue;
+
+      const existingImage = updatedImages[index];
+      const uploadedImage = await uploadProductImage(file);
+
+      if (existingImage?.public_id) {
+        replacedPublicIds.push(existingImage.public_id);
+      }
+
+      updatedImages[index] = uploadedImage;
+      imagesWereUpdated = true;
+    }
+
+    if (imagesWereUpdated) {
+      updateFields.image = updatedImages.filter(Boolean).slice(0, MAX_PRODUCT_IMAGES);
+    }
+
     await productModel.findByIdAndUpdate(id, updateFields);
+
+    if (replacedPublicIds.length > 0) {
+      await Promise.allSettled(
+        replacedPublicIds.map((publicId) => cloudinary.uploader.destroy(publicId))
+      );
+    }
 
     res.json({ success: true, message: "Product updated successfully" });
   } catch (error) {
