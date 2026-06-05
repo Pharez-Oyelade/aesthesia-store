@@ -56,7 +56,8 @@ const Product = () => {
 
   // Show the note field only while the custom color option is selected.
   useEffect(() => {
-    const selectedCustomColor = color === CUSTOM_COLOR_OPTION;
+    const selectedCustomColor =
+      color.toLowerCase() === CUSTOM_COLOR_OPTION.toLowerCase();
     setIsCustom(selectedCustomColor);
 
     if (!selectedCustomColor) {
