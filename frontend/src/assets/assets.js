@@ -20,6 +20,8 @@ import size_chart from "./size_chart_new.webp";
 
 import alaafia_bg from "./alaafia-bg.webp";
 import alaafia_bg_mobile from "./alaafia_bg_mobile.webp";
+import alaafia_bg_mobile_2 from "./alaafia_bg_mobile_2.webp";
+
 import first_bg from "./FIRST.webp";
 import bloom_bg from "./bloom-main.webp";
 import bloom_bg_mobile from "./bloom-bg-mobile.webp";
@@ -71,6 +73,7 @@ import peace4 from "./peace4.webp";
 // import user_color_code from "./user_color_code.webp";
 
 import verify from "./verify.png";
+import waitlist_bg from "./waitlist_bg.webp";
 
 export const assets = {
   logo,
@@ -112,6 +115,8 @@ export const assets = {
 
   alaafia_bg,
   alaafia_bg_mobile,
+  alaafia_bg_mobile_2,
+
   first_bg,
   bloom_bg,
   bloom_bg_mobile,
@@ -142,4 +147,5 @@ export const assets = {
   peace4,
   // user_color_code
   verify,
+  waitlist_bg,
 };

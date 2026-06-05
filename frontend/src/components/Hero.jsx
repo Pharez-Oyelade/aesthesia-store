@@ -100,8 +100,8 @@ const mobileAdditionalSlides = [
     link: "/product/6928eb30d56b7f9f684dd2cf",
   },
   {
-    image: assets.peace4,
-    image_mobile: assets.peace4,
+    image: assets.alaafia_bg_mobile_2,
+    image_mobile: assets.alaafia_bg_mobile_2,
     title: "Àlàáfíà - Peace",
     subtitle:
       "Experience the signature Àlàáfíà, reimagined in Green and Purple",
