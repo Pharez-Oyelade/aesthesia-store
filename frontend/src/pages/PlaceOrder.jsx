@@ -229,7 +229,8 @@ const PlaceOrder = () => {
                   customColorNote: customColorNote || note || "",
                   plusSizeFee,
                   customColorFee,
-                  lineTotal: (unitPrice + plusSizeFee + customColorFee) * quantity,
+                  lineTotal:
+                    (unitPrice + plusSizeFee + customColorFee) * quantity,
                   quantity,
                 });
               }
@@ -350,7 +351,10 @@ const PlaceOrder = () => {
   };
 
   const getOrderSubtotal = () =>
-    getCartAmount() + getShippingCost() + getPlusSizeFee() + getCustomColorFee();
+    getCartAmount() +
+    getShippingCost() +
+    getPlusSizeFee() +
+    getCustomColorFee();
 
   const getDiscountBaseAmount = () =>
     discountData?.eligibleSubtotal ?? getCartAmount();
@@ -795,7 +799,7 @@ const PlaceOrder = () => {
             name="phone"
             value={formData.phone}
             className="border border-gray-300 rounded py-1.5 px-3.5 w-full"
-            type="number"
+            type="tel"
             placeholder="Phone"
             required
           />
