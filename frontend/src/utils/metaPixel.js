@@ -132,9 +132,29 @@ export const buildOrderPayload = (orderItems, amount, options = {}) => {
   });
 };
 
-export const initMetaPixel = () => {
+export const updateMetaAdvancedMatching = (userData) => {
+  if (!META_PIXEL_ID || !userData) return;
+
+  const advancedMatching = cleanPayload({
+    em: userData.email?.toLowerCase(),
+    ph: userData.phone,
+    fn: userData.firstName || (userData.name ? userData.name.split(" ")[0] : undefined),
+    ln: userData.lastName || (userData.name ? userData.name.split(" ").slice(1).join(" ") : undefined),
+    ct: userData.city,
+    st: userData.state,
+    country: userData.country,
+    zp: userData.zipcode,
+    external_id: userData._id || userData.id,
+  });
+
+  if (Object.keys(advancedMatching).length > 0) {
+    ReactPixel.init(META_PIXEL_ID, advancedMatching, { autoConfig: true, debug: false });
+  }
+};
+
+export const initMetaPixel = (advancedMatching = {}) => {
   if (META_PIXEL_ID) {
-    ReactPixel.init(META_PIXEL_ID, {}, { autoConfig: true, debug: false });
+    ReactPixel.init(META_PIXEL_ID, advancedMatching, { autoConfig: true, debug: false });
   }
 };
 
