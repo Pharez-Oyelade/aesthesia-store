@@ -6,7 +6,7 @@ import { shopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { trackOrderPlaced } from "../utils/metaPixel";
+import { trackOrderPlaced, updateMetaAdvancedMatching } from "../utils/metaPixel";
 
 const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_KEY;
 
@@ -373,6 +373,8 @@ const PlaceOrder = () => {
       return;
     }
 
+    updateMetaAdvancedMatching(formData);
+
     if (!window.PaystackPop) {
       toast.error("Paystack is still loading, please try again in a moment.");
       return;
@@ -539,6 +541,8 @@ const PlaceOrder = () => {
       payWithPaystack();
       return;
     }
+    
+    updateMetaAdvancedMatching(formData);
     try {
       const orderItems = buildOrderItems();
       let orderData = {

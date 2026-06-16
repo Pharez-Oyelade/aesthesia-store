@@ -7,6 +7,7 @@ import axios from "axios";
 import api from "../utils/axiosConfig";
 import authService from "../services/authService";
 import { isDiscountWaitlistEnabled } from "../config/features";
+import { updateMetaAdvancedMatching } from "../utils/metaPixel";
 
 import {
   calculateCartWeight,
@@ -770,6 +771,7 @@ const ShopContextProvider = (props) => {
       const response = await api.post("/api/user/details", {});
       if (response.data.success && response.data.user) {
         setUserData(response.data.user);
+        updateMetaAdvancedMatching(response.data.user);
       }
     } catch (error) {
       console.log(error);
