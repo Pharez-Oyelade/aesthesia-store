@@ -10,11 +10,19 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 import { initMetaPixel } from "./utils/metaPixel.js";
 
-if ("requestIdleCallback" in window) {
-  requestIdleCallback(() => initMetaPixel(), { timeout: 3000 });
-} else {
-  setTimeout(() => initMetaPixel(), 3000);
-}
+let pixelInitialized = false;
+const initPixelOnInteraction = () => {
+  if (pixelInitialized) return;
+  pixelInitialized = true;
+  initMetaPixel();
+  ["scroll", "mousemove", "touchstart"].forEach((e) =>
+    window.removeEventListener(e, initPixelOnInteraction)
+  );
+};
+
+["scroll", "mousemove", "touchstart"].forEach((e) =>
+  window.addEventListener(e, initPixelOnInteraction, { passive: true })
+);
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>

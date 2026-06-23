@@ -67,14 +67,16 @@ const App = () => {
       })(window, document, "clarity", "script", "vq4h0d3qnn");
     };
 
-    if ("requestIdleCallback" in window) {
-      const idleId = requestIdleCallback(loadClarity, { timeout: 3000 });
-      return () => cancelIdleCallback(idleId);
-    } else {
-      // Fallback for Safari which doesn't support requestIdleCallback
-      const timerId = setTimeout(loadClarity, 3000);
-      return () => clearTimeout(timerId);
-    }
+    const loadClarityOnInteraction = () => {
+      loadClarity();
+      ["scroll", "mousemove", "touchstart"].forEach((e) =>
+        window.removeEventListener(e, loadClarityOnInteraction)
+      );
+    };
+
+    ["scroll", "mousemove", "touchstart"].forEach((e) =>
+      window.addEventListener(e, loadClarityOnInteraction, { passive: true })
+    );
   }, []);
 
   return (
