@@ -821,9 +821,7 @@ const ShopContextProvider = (props) => {
     }
   };
 
-  useEffect(() => {
-    getCollectionData();
-  }, [backendUrl]);
+  // getCollectionData is now staggered in the combined useEffect
 
   // useEffect(() => {
   //   if (selectedLocation && deliveryFees[selectedLocation] !== undefined) {
@@ -873,9 +871,7 @@ const ShopContextProvider = (props) => {
     }
   }, [selectedLocation, selectedCountry, localDelivery]);
 
-  useEffect(() => {
-    getProductsData();
-  }, []);
+  // getProductsData is now handled in the combined useEffect
 
   // // Polling for order status changes
   // useEffect(() => {
@@ -943,45 +939,61 @@ const ShopContextProvider = (props) => {
   // }, []);
 
   useEffect(() => {
-    const { token: storedToken } = authService.getTokens();
+    // 1. Fetch products immediately (critical for rendering)
+    getProductsData();
 
-    if (storedToken && !authService.isTokenExpired(storedToken)) {
-      setToken(storedToken);
-      getUserCart(storedToken);
-      getUserWishlist(storedToken);
-      getUserDetails(storedToken);
-      // Sync pending cart items from localStorage
-      syncLocalStorageCartToDatabase(storedToken);
-    } else if (storedToken) {
-      // Token is expired, try to refresh
-      authService
-        .refreshToken()
-        .then((newToken) => {
-          setToken(newToken);
-          getUserCart(newToken);
-          getUserWishlist(newToken);
-          getUserDetails(newToken);
-          // Sync pending cart items from localStorage
-          syncLocalStorageCartToDatabase(newToken);
-        })
-        .catch(() => {
-          // Refresh failed, clear tokens
-          authService.clearTokens();
-          setToken("");
-          // Load cart from localStorage if available
-          const savedCart = loadCartFromLocalStorage();
-          if (Object.keys(savedCart).length > 0) {
-            setCartItems(savedCart);
-          }
-        });
-    } else {
-      // No token, load cart from localStorage if available
-      const savedCart = loadCartFromLocalStorage();
-      if (Object.keys(savedCart).length > 0) {
-        setCartItems(savedCart);
+    // 2. Defer collection data loading
+    const timer1 = setTimeout(() => {
+      getCollectionData();
+    }, 500);
+
+    // 3. Defer auth and user data loading
+    const timer2 = setTimeout(() => {
+      const { token: storedToken } = authService.getTokens();
+
+      if (storedToken && !authService.isTokenExpired(storedToken)) {
+        setToken(storedToken);
+        getUserCart(storedToken);
+        getUserWishlist(storedToken);
+        getUserDetails(storedToken);
+        // Sync pending cart items from localStorage
+        syncLocalStorageCartToDatabase(storedToken);
+      } else if (storedToken) {
+        // Token is expired, try to refresh
+        authService
+          .refreshToken()
+          .then((newToken) => {
+            setToken(newToken);
+            getUserCart(newToken);
+            getUserWishlist(newToken);
+            getUserDetails(newToken);
+            // Sync pending cart items from localStorage
+            syncLocalStorageCartToDatabase(newToken);
+          })
+          .catch(() => {
+            // Refresh failed, clear tokens
+            authService.clearTokens();
+            setToken("");
+            // Load cart from localStorage if available
+            const savedCart = loadCartFromLocalStorage();
+            if (Object.keys(savedCart).length > 0) {
+              setCartItems(savedCart);
+            }
+          });
+      } else {
+        // No token, load cart from localStorage if available
+        const savedCart = loadCartFromLocalStorage();
+        if (Object.keys(savedCart).length > 0) {
+          setCartItems(savedCart);
+        }
       }
-    }
-  }, []);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, [backendUrl]);
 
   const subscribeToWaitlist = async (campaignId, email) => {
     if (!isDiscountWaitlistEnabled) {

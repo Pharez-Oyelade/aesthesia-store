@@ -64,6 +64,8 @@ const Banner = ({
           style={{
             objectPosition: `50% ${verticalPosition}`,
           }}
+          width={1920}
+          height={1080}
           onLoad={() => setIsLoaded(true)}
         />
         {/* Gradient/Dark overlay */}

@@ -21,7 +21,7 @@ export default defineConfig({
           // Framer Motion can be large
           motion: ["framer-motion"],
           // UI libraries
-          ui: ["react-toastify", "react-icons", "react-spinners"],
+          ui: ["react-toastify"],
           // Utils
           utils: ["axios"],
         },

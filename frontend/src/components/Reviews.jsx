@@ -93,7 +93,6 @@ import React, { useState } from "react";
 import { reviews } from "../../data/review";
 import Title from "./Title";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 
 const Reviews = () => {
   const [index, setIndex] = useState(0);
@@ -148,14 +147,9 @@ const Reviews = () => {
           const isCenter = i === 1;
 
           return (
-            <motion.div
+            <div
               key={review.id}
-              animate={{
-                scale: isCenter ? 1.05 : 0.85,
-                opacity: isCenter ? 1 : 0.6,
-              }}
-              transition={{ duration: 0.4 }}
-              className="flex items-center justify-center"
+              className={`flex items-center justify-center transition-all duration-400 ease-in-out ${isCenter ? 'scale-105 opacity-100' : 'scale-[0.85] opacity-60'}`}
             >
               <div className="mx-2 w-72 transition-all duration-300 border p-4 rounded-xl shadow-xl bg-[#fffaf0]">
                 <h3 className="text-lg font-semibold mb-2">{review.name}</h3>
@@ -165,7 +159,7 @@ const Reviews = () => {
                 </p>
                 <p className="text-gray-700">{review.comment}</p>
               </div>
-            </motion.div>
+            </div>
           );
         })}
       </div>

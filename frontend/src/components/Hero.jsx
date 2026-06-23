@@ -1,20 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
-  // {
-  //   image: assets.aesthesia_sale,
-  // },
-  // {
-  //   image: assets.bg_main_4,
-  //   image_mobile: assets.bg_main_4_mobile,
-  //   title: "UNFOLD -  A Celebration of Quiet Evolution",
-  //   subtitle: "Explore our Latest Collection",
-  //   b_text: "UNFOLD",
-  //   link: "/collection/unfold",
-  // },
   {
     image: assets.first_bloom2,
     image_mobile: assets.first_bloom2,
@@ -27,18 +15,15 @@ const slides = [
     image: assets.peace4,
     image_mobile: assets.peace4,
     title: "Àlàáfíà - Peace",
-    subtitle:
-      "Experience the signature Àlàáfíà, reimagined in Green and Purple",
+    subtitle: "Experience the signature Àlàáfíà, reimagined in Green and Purple",
     b_text: "SHOP NOW",
     link: "/product/6928e4a7d56b7f9f684dd04e",
   },
-
   {
     image: assets.first_bloom3,
     image_mobile: assets.first_bloom3,
     title: "FIRST BLOOM RETURNS",
-    subtitle:
-      "Where confidence blossoms in every shade - Magenta & Onion and Soft Blue & Pastel Yellow",
+    subtitle: "Where confidence blossoms in every shade - Magenta & Onion and Soft Blue & Pastel Yellow",
     b_text: "SHOP NOW",
     link: "/product/6928eb30d56b7f9f684dd2cf",
   },
@@ -52,14 +37,12 @@ const slides = [
   },
   {
     image: assets.bg_1_main,
-    // image: assets.alaafia_bg,
     image_mobile: assets.bg_1_main_mobile,
     title: "EMBRACE YOUR BEAUTIFUL",
     subtitle: "Browse our Collection",
     b_text: "SHOP NOW",
     link: "/collection",
   },
-
   {
     image: assets.bg_3_main,
     image_mobile: assets.bg_3_main_mobile,
@@ -70,27 +53,7 @@ const slides = [
   },
 ];
 
-// Additional slides for mobile only
 const mobileAdditionalSlides = [
-  // {
-  //   image: assets.aesthesia_sale_mobile,
-  // },
-  // {
-  //   image: assets.bg_main_4_mobile,
-  //   image_mobile: assets.bg_main_4_mobile,
-  //   title: "UNFOLD -  A Celebration of Quiet Evolution",
-  //   subtitle: "Explore our Latest Collection",
-  //   b_text: "UNFOLD",
-  //   link: "/collection/unfold",
-  // },
-  // {
-  //   image: assets.peace4,
-  //   image_mobile: assets.peace4,
-  //   title: "Àlàáfíà - Peace",
-  //   subtitle: "Ease is her new luxury",
-  //   b_text: "SHOP NOW",
-  //   link: "/product/6928e4a7d56b7f9f684dd04e",
-  // },
   {
     image: assets.first_bloom2,
     image_mobile: assets.first_bloom2,
@@ -103,8 +66,7 @@ const mobileAdditionalSlides = [
     image: assets.alaafia_bg_mobile_2,
     image_mobile: assets.alaafia_bg_mobile_2,
     title: "Àlàáfíà - Peace",
-    subtitle:
-      "Experience the signature Àlàáfíà, reimagined in Green and Purple",
+    subtitle: "Experience the signature Àlàáfíà, reimagined in Green and Purple",
     b_text: "SHOP NOW",
     link: "/product/6928e4a7d56b7f9f684dd04e",
   },
@@ -112,8 +74,7 @@ const mobileAdditionalSlides = [
     image: assets.first_bloom3,
     image_mobile: assets.first_bloom3,
     title: "FIRST BLOOM RETURNS",
-    subtitle:
-      "Where confidence blossoms in every shade - Magenta & Onion and Soft Blue & Pastel Yellow",
+    subtitle: "Where confidence blossoms in every shade - Magenta & Onion and Soft Blue & Pastel Yellow",
     b_text: "SHOP NOW",
     link: "/product/6928eb30d56b7f9f684dd2cf",
   },
@@ -125,14 +86,6 @@ const mobileAdditionalSlides = [
     b_text: "SHOP NOW",
     link: "/product/6928eb30d56b7f9f684dd2cf",
   },
-  // {
-  //   image: assets.bloom_bg,
-  //   image_mobile: assets.bloom_bg,
-  //   title: "FIRST BLOOM",
-  //   subtitle: "The courage to begin - softly, yet surely",
-  //   b_text: "SHOP NOW",
-  //   link: "/product/6928eb30d56b7f9f684dd2cf",
-  // },
   {
     image: assets.bg_main_4_mobile,
     image_mobile: assets.bg_main_4_mobile,
@@ -143,21 +96,12 @@ const mobileAdditionalSlides = [
   },
   {
     image: assets.bg_1_main,
-    // image: assets.alaafia_bg,
     image_mobile: assets.bg_1_main_mobile,
     title: "EMBRACE YOUR BEAUTIFUL",
     subtitle: "Browse our Collection",
     b_text: "SHOP NOW",
     link: "/collection",
   },
-  // {
-  //   image: assets.the_chronicle_bg,
-  //   image_mobile: assets.the_chronicle_bg,
-  //   title: "THE CHRONICLE",
-  //   subtitle: "Every stage tells a story",
-  //   b_text: "SHOP NOW",
-  //   link: "/product/6928e6c3d56b7f9f684dd0e6",
-  // },
 ];
 
 const Hero = () => {
@@ -167,7 +111,6 @@ const Hero = () => {
     typeof window !== "undefined" ? window.innerWidth <= 768 : false,
   );
 
-  // Get the appropriate slide array based on device type
   const getSlideArray = (mobile) => {
     return mobile ? mobileAdditionalSlides : slides;
   };
@@ -178,9 +121,8 @@ const Hero = () => {
     const mql = window.matchMedia("(max-width: 768px)");
     const handler = (e) => {
       setIsMobile(e.matches);
-      setCurrent(0); // Reset to first slide when switching between mobile/desktop
+      setCurrent(0);
     };
-    // set initial state
     try {
       handler(mql);
     } catch (e) {
@@ -201,21 +143,7 @@ const Hero = () => {
     return () => clearInterval(interval);
   }, [currentSlides.length]);
 
-  // preload cache to avoid re-creating Image objects repeatedly
   const preloadCache = useRef(new Map());
-
-  // useEffect(() => {
-  //   // Preload all slide images (desktop + mobile) in background on mount.
-  //   slides.forEach((s) => {
-  //     [s.image, s.image_mobile].forEach((src) => {
-  //       if (!src) return;
-  //       if (preloadCache.current.has(src)) return;
-  //       const img = new Image();
-  //       img.src = src;
-  //       preloadCache.current.set(src, img);
-  //     });
-  //   });
-  // }, []);
 
   useEffect(() => {
     const nextIndex = (current + 1) % currentSlides.length;
@@ -226,7 +154,6 @@ const Hero = () => {
     if (!preloadCache.current.has(nextSrc)) {
       const img = new Image();
       img.src = nextSrc;
-      // store immediately so we don't create duplicates
       preloadCache.current.set(nextSrc, img);
     }
   }, [current, isMobile, currentSlides]);
@@ -244,103 +171,48 @@ const Hero = () => {
   const srcSet = `${imageMobile} 600w, ${imageDesktop} 1200w`;
   const sizes = `(max-width: 768px) 100vw, 100vw`;
 
-  // Variants for staggered text animation
-  const containerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { staggerChildren: 0.2, duration: 0.6, ease: "easeOut" },
-    },
-    exit: { opacity: 0, y: -30, transition: { duration: 0.4 } },
-  };
-
-  const childVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  };
+  const imgWidth = isMobile ? 600 : 1200;
+  const imgHeight = isMobile ? 800 : 800;
 
   return (
-    <div className="relative w-full h-dvh flex items-center justify-center overflow-hidden pt-0">
-      {/* Background transition */}
-      <AnimatePresence mode="wait">
-        <motion.img
-          key={bgImage}
-          src={bgImage}
-          srcSet={srcSet}
-          sizes={sizes}
-          alt={title}
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ willChange: "transform, opacity" }}
-          initial={{ scale: 1.05 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1, ease: "easeInOut" }}
-        />
-      </AnimatePresence>
-
-      {/* <div>
-        <motion.img
-          key={bgImage}
-          src={bgImage}
-          srcSet={srcSet}
-          sizes={sizes}
-          alt={title}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      </div> */}
+    <div className="relative w-full h-dvh flex items-center justify-center overflow-hidden pt-0 bg-black">
+      {/* Background image */}
+      <img
+        key={bgImage}
+        src={bgImage}
+        srcSet={srcSet}
+        sizes={sizes}
+        alt={title}
+        width={imgWidth}
+        height={imgHeight}
+        className="absolute inset-0 w-full h-full object-cover animate-hero-zoom"
+        fetchpriority="high"
+        loading="eager"
+      />
 
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/40 z-10" />
 
       {/* Slide Content */}
       <div className="relative z-20 flex items-center justify-center w-full h-full">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current}
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="flex flex-col items-center text-center text-white px-4"
-          >
-            <motion.h1
-              variants={childVariants}
-              className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg outfit-bold"
-            >
-              {title}
-            </motion.h1>
-            <motion.p
-              variants={childVariants}
-              className="text-md w-[75%] sm:w-[100%] sm:text-lg font-medium drop-shadow-md"
-            >
-              {subtitle}
-            </motion.p>
+        <div
+          key={current}
+          className="flex flex-col items-center text-center text-white px-4 animate-fade-in-up"
+        >
+          <h1 className="text-3xl sm:text-5xl font-medium mb-4 drop-shadow-lg outfit-bold animate-stagger-1">
+            {title}
+          </h1>
+          <p className="text-md w-[75%] sm:w-[100%] sm:text-lg font-medium drop-shadow-md animate-stagger-2">
+            {subtitle}
+          </p>
 
-            <Link to={link}>
-              <motion.button
-                variants={childVariants}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300"
-              >
-                {b_text}
-              </motion.button>
-            </Link>
-          </motion.div>
-        </AnimatePresence>
+          <Link to={link}>
+            <button className="mt-10 px-10 py-3 rounded-full bg-gradient-to-r from-[#691110] to-pink-800 hover:from-red-900 hover:to-pink-800 text-white text-lg font-bold shadow-lg tracking-wide transition-all duration-300 border-2 border-white/20 focus:outline-none focus:ring-2 focus:ring-red-300 animate-stagger-3 hover:scale-105 active:scale-95">
+              {b_text}
+            </button>
+          </Link>
+        </div>
       </div>
-
-      {/* Dots */}
-      {/* <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-30">
-        {slides.map((_, idx) => (
-          <span
-            key={idx}
-            className={`w-3 h-3 rounded-full bg-white transition-all duration-300 ${
-              current === idx ? "opacity-100" : "opacity-40"
-            }`}
-          />
-        ))}
-      </div> */}
     </div>
   );
 };

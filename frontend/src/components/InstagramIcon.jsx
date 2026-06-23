@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaInstagram } from "react-icons/fa";
 
 const InstagramIcon = () => {
   const [isHelpVisible, setIsHelpVisible] = useState(false);
@@ -26,13 +27,10 @@ const InstagramIcon = () => {
         href="https://ig.me/m/aesthesia_haven"
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-white/80 rounded-full shadow-xl hover:shadow-2xl transition-shadow duration-300"
+        className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] rounded-full shadow-xl hover:shadow-2xl transition-shadow duration-300 text-white"
+        aria-label="Instagram"
       >
-        <img
-          src="/Instagram_Glyph_Gradient.svg"
-          alt="Instagram Icon"
-          className="w-7 h-7 sm:w-8 sm:h-8"
-        />
+        <FaInstagram className="w-7 h-7 sm:w-8 sm:h-8" />
       </a>
 
       {isHelpVisible && (
