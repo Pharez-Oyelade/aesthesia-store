@@ -95,6 +95,8 @@ const Navbar = () => {
             }
             className="w-30 sm:w-60"
             alt="Aesthesia Logo"
+            width={240}
+            height={40}
           />
         </Link>
 
@@ -266,6 +268,8 @@ const Navbar = () => {
                 src={assets.dropdown_icon}
                 alt=""
                 className="h-4 rotate-180"
+                width={16}
+                height={16}
               />
               <p>Back</p>
             </div>

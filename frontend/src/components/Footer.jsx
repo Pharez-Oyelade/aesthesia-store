@@ -12,6 +12,8 @@ const Footer = () => {
             src={assets.aesthesia_logo_footer}
             alt=""
             className="mb-5 w-20"
+            width={80}
+            height={80}
           />
           <p className="w-full md:w-2/3 text-gray-600">
             Aesthesia…Where women see themselves again.

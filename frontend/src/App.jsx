@@ -4,7 +4,6 @@ import ScrollToTop from "./components/ScrollToTop";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import SearchBar from "./components/SearchBar";
-import { ToastContainer } from "react-toastify";
 import NotFound from "./pages/NotFound";
 import MetaPageTracker from "./components/MetaPageTracker";
 import InstagramIcon from "./components/InstagramIcon";
@@ -12,6 +11,7 @@ import WaitlistPopup from "./components/waitlistPopup";
 import { isDiscountWaitlistEnabled } from "./config/features";
 
 // Lazy load all page components for code splitting
+const ToastContainer = lazy(() => import("react-toastify").then(module => ({ default: module.ToastContainer })));
 const Home = lazy(() => import("./pages/Home"));
 const Collection = lazy(() => import("./pages/Collection"));
 const About = lazy(() => import("./pages/About"));
@@ -81,9 +81,9 @@ const App = () => {
     <div className="overflow-x-hidden">
       {isDiscountWaitlistEnabled && <WaitlistPopup />}
       <InstagramIcon />
-      <ToastContainer />
       <ScrollToTop />
       <Suspense fallback={<LoadingFallback />}>
+        <ToastContainer />
         <PreNav />
         <Navbar />
         <SearchBar />

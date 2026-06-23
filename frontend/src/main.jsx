@@ -10,7 +10,11 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Analytics } from "@vercel/analytics/react";
 import { initMetaPixel } from "./utils/metaPixel.js";
 
-initMetaPixel();
+if ("requestIdleCallback" in window) {
+  requestIdleCallback(() => initMetaPixel(), { timeout: 3000 });
+} else {
+  setTimeout(() => initMetaPixel(), 3000);
+}
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>

@@ -2,7 +2,6 @@ import React from "react";
 import Title from "./Title";
 import { assets } from "../assets/assets";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 
 const FeaturedGrid = () => {
   const images = [
@@ -10,8 +9,6 @@ const FeaturedGrid = () => {
     assets.bg_3_main,
     assets.bg_1_main,
     assets.bg_2_main,
-    // assets.jewelry_bg,
-    // assets.hair_bg,
   ];
 
   const overlays = [
@@ -37,17 +34,7 @@ const FeaturedGrid = () => {
     },
   ];
   return (
-    // <motion.div
-    //   initial={{ opacity: 0, y: 100 }}
-    //   whileInView={{ opacity: 1, y: 0 }}
-    //   transition={{ duration: 1.5, ease: "easeIn" }}
-    //   viewport={{ once: true, amount: 0.2 }}
-    //   className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]  pt-10"
-    // >
     <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]  pt-10">
-      {/* <div className="flex items-center justify-center mb-6 text-3xl">
-        <Title text1="FEATURED" text2="SECTIONS" />
-      </div> */}
 
       <div className="grid grid-row sm:grid-cols-2 gap-4 gap-y-3 mb-20">
         {images.map((img, idx) => (
