@@ -186,7 +186,7 @@ const Hero = () => {
         width={imgWidth}
         height={imgHeight}
         className="absolute inset-0 w-full h-full object-cover animate-hero-zoom"
-        fetchpriority="high"
+        fetchPriority="high"
         loading="eager"
       />
 
