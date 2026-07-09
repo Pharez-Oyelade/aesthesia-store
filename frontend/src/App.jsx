@@ -11,7 +11,11 @@ import WaitlistPopup from "./components/waitlistPopup";
 import { isDiscountWaitlistEnabled } from "./config/features";
 
 // Lazy load all page components for code splitting
-const ToastContainer = lazy(() => import("react-toastify").then(module => ({ default: module.ToastContainer })));
+const ToastContainer = lazy(() =>
+  import("react-toastify").then((module) => ({
+    default: module.ToastContainer,
+  })),
+);
 const Home = lazy(() => import("./pages/Home"));
 const Collection = lazy(() => import("./pages/Collection"));
 const About = lazy(() => import("./pages/About"));
@@ -32,6 +36,7 @@ const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const PreNav = lazy(() => import("./components/Prenav"));
 const CollectionPage = lazy(() => import("./pages/CollectionPage"));
 const ShippingPolicy = lazy(() => import("./pages/ShippingPolicy"));
+const Showroom = lazy(() => import("./pages/Showroom"));
 
 // Loading component for fallback
 const LoadingFallback = () => (
@@ -47,6 +52,7 @@ const App = () => {
   const isWig = pathname === "/wigs";
   const isRere = pathname === "/rere-collection";
   const isJewelry = pathname === "/jewelry";
+  const isShowroom = pathname === "/showroom";
 
   useEffect(() => {
     // Defer Clarity until browser is idle to keep it off the critical path.
@@ -70,12 +76,12 @@ const App = () => {
     const loadClarityOnInteraction = () => {
       loadClarity();
       ["scroll", "mousemove", "touchstart"].forEach((e) =>
-        window.removeEventListener(e, loadClarityOnInteraction)
+        window.removeEventListener(e, loadClarityOnInteraction),
       );
     };
 
     ["scroll", "mousemove", "touchstart"].forEach((e) =>
-      window.addEventListener(e, loadClarityOnInteraction, { passive: true })
+      window.addEventListener(e, loadClarityOnInteraction, { passive: true }),
     );
   }, []);
 
@@ -118,6 +124,7 @@ const App = () => {
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/shipping-policy" element={<ShippingPolicy />} />
+              <Route path="/showroom" element={<Showroom />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
