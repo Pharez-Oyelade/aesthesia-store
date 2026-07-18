@@ -36,6 +36,7 @@ const placeOrder = async (req, res) => {
       preDiscountAmount,
       address,
       discountCode,
+      visitorId,
     } = req.body;
     const isGuest = req.isGuest || false;
 
@@ -77,6 +78,7 @@ const placeOrder = async (req, res) => {
       discountCode: resolvedCode,
       discountAmount: resolvedDiscountAmount,
       discountCampaignId: resolvedCampaignId,
+      visitorId: visitorId || null,
       paymentMethod: "cod",
       payment: false,
       date: Date.now(),
@@ -161,6 +163,7 @@ const placeOrderPaystack = async (req, res) => {
       address,
       reference,
       discountCode,
+      visitorId,
     } = req.body;
     const isGuest = req.isGuest || false;
 
@@ -345,6 +348,7 @@ const placeOrderPaystack = async (req, res) => {
       discountCode: resolvedCode,
       discountAmount,
       discountCampaignId,
+      visitorId: visitorId || null,
       paymentMethod: "paystack",
       payment: true,
       paymentReference: reference,
@@ -618,6 +622,7 @@ const paystackWebhook = async (req, res) => {
           payment: true,
           paymentReference: reference,
           status: "NEEDS_RECOVERY", // Flags it clearly on admin panel
+          visitorId: metadata?.visitorId || null,
           paystackData: {
             reference: paymentData.reference,
             amount: paymentData.amount,
@@ -689,6 +694,7 @@ const paystackWebhook = async (req, res) => {
       discountCode: webhookDiscountCode,
       discountAmount: webhookDiscountAmount,
       discountCampaignId: webhookDiscountCampaignId,
+      visitorId: metadata?.visitorId || null,
       paymentMethod: "paystack",
       payment: true,
       paymentReference: reference,

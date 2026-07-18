@@ -9,6 +9,7 @@ import MetaPageTracker from "./components/MetaPageTracker";
 import InstagramIcon from "./components/InstagramIcon";
 import WaitlistPopup from "./components/waitlistPopup";
 import { isDiscountWaitlistEnabled } from "./config/features";
+import { logSession } from "./utils/sessionTracker";
 
 // Lazy load all page components for code splitting
 const ToastContainer = lazy(() => import("react-toastify").then(module => ({ default: module.ToastContainer })));
@@ -49,6 +50,9 @@ const App = () => {
   const isJewelry = pathname === "/jewelry";
 
   useEffect(() => {
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+    logSession(backendUrl);
+
     // Defer Clarity until browser is idle to keep it off the critical path.
     // This prevents it from affecting LCP / FID on Lighthouse audits.
     const loadClarity = () => {

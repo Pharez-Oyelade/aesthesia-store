@@ -20,6 +20,7 @@ import productModel from "./models/productModel.js";
 import { paystackWebhook } from "./controllers/orderController.js";
 import campaignRouter from "./routes/campaignRoute.js";
 import discountRouter from "./routes/discountRoute.js";
+import sessionRouter from "./routes/sessionRoute.js";
 
 const app = express();
 
@@ -329,6 +330,8 @@ app.use("/api/section", sectionRouter);
 
 app.use("/api/campaigns", campaignRouter);
 app.use("/api/discounts", discountRouter);
+
+app.use("/api/session", sessionRouter);
 
 // 6. MongoDB injection protection
 

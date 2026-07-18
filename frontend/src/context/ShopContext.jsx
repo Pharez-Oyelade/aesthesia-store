@@ -8,6 +8,7 @@ import api from "../utils/axiosConfig";
 import authService from "../services/authService";
 import { isDiscountWaitlistEnabled } from "../config/features";
 import { updateMetaAdvancedMatching } from "../utils/metaPixel";
+import { getVisitorId } from "../utils/sessionTracker";
 
 import {
   calculateCartWeight,
@@ -994,6 +995,19 @@ const ShopContextProvider = (props) => {
       clearTimeout(timer2);
     };
   }, [backendUrl]);
+
+  useEffect(() => {
+    if (token) {
+      const visitorId = getVisitorId();
+      axios
+        .post(
+          backendUrl + "/api/session/link",
+          { visitorId },
+          { headers: { token } }
+        )
+        .catch((err) => console.error("Failed to link session:", err));
+    }
+  }, [token, backendUrl]);
 
   const subscribeToWaitlist = async (campaignId, email) => {
     if (!isDiscountWaitlistEnabled) {

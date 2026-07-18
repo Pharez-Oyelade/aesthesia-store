@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { trackOrderPlaced, updateMetaAdvancedMatching } from "../utils/metaPixel";
+import { getVisitorIdValue } from "../utils/sessionTracker";
 
 const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_KEY;
 
@@ -428,6 +429,7 @@ const PlaceOrder = () => {
         discountScope: discountData?.discountScope || null,
         eligibleCollections: discountData?.eligibleCollections || [],
         reference: response.reference,
+        visitorId: getVisitorIdValue(),
       };
 
       // Add discount code if applied
@@ -554,6 +556,7 @@ const PlaceOrder = () => {
         discountAmount: getDiscountAmount(),
         discountScope: discountData?.discountScope || null,
         eligibleCollections: discountData?.eligibleCollections || [],
+        visitorId: getVisitorIdValue(),
       };
 
       // Add discount code if applied

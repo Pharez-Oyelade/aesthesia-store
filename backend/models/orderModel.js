@@ -20,6 +20,7 @@ const orderSchema = new mongoose.Schema({
     ref: "Campaign",
     default: null,
   },
+  visitorId: { type: String, default: null, index: true },
 });
 
 const orderModel =

@@ -35,9 +35,15 @@ const seed = async () => {
     subscriberCount: 0,
     discountType: "percentage",
     discountValue: 15,
+    discountScope: "collection",
+    eligibleCollections: ["The RERE Collection"],
     codePrefix: "AEST",
     startsAt: new Date(),
-    expiresAt: new Date("2025-12-31"),
+    expiresAt: new Date("2026-12-31"),
+    subscriptionStartsAt: new Date(),
+    subscriptionEndsAt: new Date("2026-10-31"),
+    discountStartsAt: new Date(),
+    discountExpiresAt: new Date("2026-12-31"),
   });
 
   console.log("Campaign created:", campaign._id);
