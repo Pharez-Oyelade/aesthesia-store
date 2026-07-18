@@ -5,6 +5,7 @@ import { shopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
 import { trackAddToCart, trackViewContent } from "../utils/metaPixel";
+import { trackAddToCart as trackAddToCartTT, trackViewContent as trackViewContentTT } from "../utils/tiktokPixel";
 import { getOptimizedUrl } from "../utils/cloudinaryHelper";
 import { productReviews } from "../../data/productReview";
 import ProductReview from "../components/ProductReview";
@@ -130,6 +131,7 @@ const Product = () => {
     if (!productData || trackedProductId.current === productData._id) return;
 
     trackViewContent(productData);
+    trackViewContentTT(productData);
     trackedProductId.current = productData._id;
   }, [productData]);
 
@@ -195,6 +197,7 @@ const Product = () => {
       color,
       fitLength,
     });
+    trackAddToCartTT(productData, quantity);
 
     navigate("/cart");
   };
