@@ -4,6 +4,7 @@ import { shopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 import CartTotal from "../components/CartTotal";
 import { trackInitiateCheckout } from "../utils/metaPixel";
+import { trackInitiateCheckout as trackInitiateCheckoutTT } from "../utils/tiktokPixel";
 
 // parse measurements key
 const parseMeasurements = (mKey) => {
@@ -69,6 +70,7 @@ const Cart = () => {
 
   const handleCheckout = () => {
     trackInitiateCheckout(cartData, products);
+    trackInitiateCheckoutTT(cartData, products);
     navigate("/place-order");
   };
 

@@ -7,6 +7,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { trackOrderPlaced, updateMetaAdvancedMatching } from "../utils/metaPixel";
+import { trackOrderPlaced as trackOrderPlacedTT } from "../utils/tiktokPixel";
 
 const PAYSTACK_PUBLIC_KEY = import.meta.env.VITE_PAYSTACK_KEY;
 
@@ -453,6 +454,7 @@ const PlaceOrder = () => {
             reference: response.reference,
             paymentMethod: "paystack",
           });
+          trackOrderPlacedTT(orderItems, getPayableAmount());
         }
 
         // Clear waitlist code and set dismissed flag
