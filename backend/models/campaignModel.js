@@ -3,6 +3,13 @@ import mongoose from "mongoose";
 const campaignSchema = new mongoose.Schema({
   name: { type: String, required: true },
   type: { type: String, required: true, default: "waitlist" },
+  code: { type: String, required: false },
+  usageType: {
+    type: String,
+    enum: ["single-use", "multi-use"],
+    default: "single-use",
+  },
+  usageCount: { type: Number, default: 0 },
   status: { type: String, required: true, default: "active" },
   subscriberLimit: { type: Number, required: false },
   subscriberCount: { type: Number, required: true, default: 0 },
@@ -10,11 +17,15 @@ const campaignSchema = new mongoose.Schema({
   discountValue: { type: Number, required: true, default: 0 },
   discountScope: {
     type: String,
-    enum: ["all", "collection"],
+    enum: ["all", "collection", "product"],
     required: true,
     default: "all",
   },
   eligibleCollections: {
+    type: [String],
+    default: [],
+  },
+  eligibleProducts: {
     type: [String],
     default: [],
   },

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import productModel from "../models/productModel.js";
 import subscriberModel from "../models/subscriberModel.js";
-import "../models/campaignModel.js";
+import campaignModel from "../models/campaignModel.js";
 
 const normalizeText = (value = "") => value.toString().trim().toLowerCase();
 
@@ -111,6 +111,9 @@ export const calculateDiscountBaseFromItems = async (items = [], campaign) => {
     ? campaign.eligibleCollections
     : [];
   const normalizedCollections = eligibleCollections.map(normalizeText);
+  const eligibleProducts = Array.isArray(campaign?.eligibleProducts)
+    ? campaign.eligibleProducts.map(String)
+    : [];
 
   let cartSubtotal = 0;
   let eligibleSubtotal = 0;
@@ -129,7 +132,8 @@ export const calculateDiscountBaseFromItems = async (items = [], campaign) => {
     const productCollection = normalizeText(product.section);
     const isEligible =
       discountScope === "all" ||
-      normalizedCollections.includes(productCollection);
+      (discountScope === "collection" && normalizedCollections.includes(productCollection)) ||
+      (discountScope === "product" && eligibleProducts.includes(String(productId)));
 
     if (isEligible) {
       eligibleSubtotal += lineTotal;
@@ -155,35 +159,50 @@ export const resolveDiscountForCode = async ({ code, items = [] }) => {
     };
   }
 
-  const subscriber = await subscriberModel
+  let subscriber = await subscriberModel
     .findOne({ code: code.toUpperCase() })
     .populate("campaignId");
 
+  let campaign;
+
   if (!subscriber) {
-    return {
-      success: false,
-      reason: "INVALID_CODE",
-      message: "Invalid discount code",
-    };
-  }
+    campaign = await campaignModel.findOne({ code: code.toUpperCase() });
+    
+    if (!campaign || campaign.usageType !== "multi-use") {
+      return {
+        success: false,
+        reason: "INVALID_CODE",
+        message: "Invalid discount code",
+      };
+    }
 
-  if (subscriber.status === "used") {
-    return {
-      success: false,
-      reason: "USED_CODE",
-      message: "Discount code has already been used",
-    };
-  }
+    const limit = Number(campaign.subscriberLimit);
+    if (Number.isFinite(limit) && limit > 0 && campaign.usageCount >= limit) {
+      return {
+        success: false,
+        reason: "USED_CODE",
+        message: "Discount code usage limit has been reached",
+      };
+    }
+  } else {
+    campaign = subscriber.campaignId;
 
-  if (subscriber.status === "expired") {
-    return {
-      success: false,
-      reason: "EXPIRED_CODE",
-      message: "Discount code has expired",
-    };
-  }
+    if (subscriber.status === "used") {
+      return {
+        success: false,
+        reason: "USED_CODE",
+        message: "Discount code has already been used",
+      };
+    }
 
-  const campaign = subscriber.campaignId;
+    if (subscriber.status === "expired") {
+      return {
+        success: false,
+        reason: "EXPIRED_CODE",
+        message: "Discount code has expired",
+      };
+    }
+  }
 
   if (!campaign || campaign.status !== "active") {
     return {
@@ -205,9 +224,11 @@ export const resolveDiscountForCode = async ({ code, items = [] }) => {
   }
 
   if (expiresAt && now > new Date(expiresAt)) {
-    await subscriberModel.findByIdAndUpdate(subscriber._id, {
-      status: "expired",
-    });
+    if (subscriber) {
+      await subscriberModel.findByIdAndUpdate(subscriber._id, {
+        status: "expired",
+      });
+    }
 
     return {
       success: false,
@@ -224,7 +245,7 @@ export const resolveDiscountForCode = async ({ code, items = [] }) => {
       success: false,
       validCode: true,
       reason: "NOT_APPLICABLE_TO_CART",
-      code: subscriber.code,
+      code: subscriber ? subscriber.code : campaign.code,
       campaignId: campaign._id,
       discountScope: base.discountScope,
       eligibleCollections: base.eligibleCollections,
@@ -233,6 +254,8 @@ export const resolveDiscountForCode = async ({ code, items = [] }) => {
       message:
         base.discountScope === "collection" && collections
           ? `This code only applies to products in ${collections}. Add an eligible item to use it.`
+          : base.discountScope === "product"
+          ? "This code only applies to specific products. Add an eligible item to use it."
           : "This code does not apply to the items currently in your cart.",
     };
   }
@@ -246,7 +269,7 @@ export const resolveDiscountForCode = async ({ code, items = [] }) => {
   return {
     success: discountAmount > 0,
     reason: discountAmount > 0 ? "APPLIED" : "NO_DISCOUNT_VALUE",
-    code: subscriber.code,
+    code: subscriber ? subscriber.code : campaign.code,
     campaignId: campaign._id,
     discountAmount,
     finalAmount: Math.max(base.cartSubtotal - discountAmount, 0),

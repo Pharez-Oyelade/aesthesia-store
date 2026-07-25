@@ -5,7 +5,7 @@ import { sendOrderConfirmationEmail } from "../services/emailService.js";
 import { sendOrderStatusEmail } from "../services/emailService.js";
 import { sendNewOrderAdminNotification } from "../services/emailService.js";
 import subscriberModel from "../models/subscriberModel.js";
-import "../models/campaignModel.js";
+import campaignModel from "../models/campaignModel.js";
 import { isDiscountWaitlistEnabled } from "../config/features.js";
 import { resolveDiscountForCode } from "../services/discountService.js";
 
@@ -89,10 +89,16 @@ const placeOrder = async (req, res) => {
 
     if (resolvedCode) {
       try {
-        await subscriberModel.findOneAndUpdate(
+        const subscriber = await subscriberModel.findOneAndUpdate(
           { code: resolvedCode },
           { status: "used", usedAt: new Date() },
         );
+        if (!subscriber) {
+          await campaignModel.findOneAndUpdate(
+            { code: resolvedCode },
+            { $inc: { usageCount: 1 } },
+          );
+        }
       } catch (discountError) {
         console.error(
           "Failed to mark discount code as used:",
@@ -366,10 +372,16 @@ const placeOrderPaystack = async (req, res) => {
 
     if (resolvedCode) {
       try {
-        await subscriberModel.findOneAndUpdate(
+        const subscriber = await subscriberModel.findOneAndUpdate(
           { code: resolvedCode },
           { status: "used", usedAt: new Date() },
         );
+        if (!subscriber) {
+          await campaignModel.findOneAndUpdate(
+            { code: resolvedCode },
+            { $inc: { usageCount: 1 } },
+          );
+        }
       } catch (discountError) {
         console.error(
           "Failed to mark discount code as used:",
@@ -711,10 +723,16 @@ const paystackWebhook = async (req, res) => {
     // ====== MARK DISCOUNT CODE AS USED ======
     if (webhookDiscountCode) {
       try {
-        await subscriberModel.findOneAndUpdate(
+        const subscriber = await subscriberModel.findOneAndUpdate(
           { code: webhookDiscountCode },
           { status: "used", usedAt: new Date() },
         );
+        if (!subscriber) {
+          await campaignModel.findOneAndUpdate(
+            { code: webhookDiscountCode },
+            { $inc: { usageCount: 1 } },
+          );
+        }
       } catch (dsicountError) {
         console.error(
           "webhook: failed to mark discount code as used:",
