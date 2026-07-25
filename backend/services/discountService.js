@@ -105,7 +105,9 @@ export const calculateDiscountBaseFromItems = async (items = [], campaign) => {
   }
 
   const products = await productModel.find({ _id: { $in: ids } }).lean();
-  const productsById = new Map(products.map((product) => [String(product._id), product]));
+  const productsById = new Map(
+    products.map((product) => [String(product._id), product]),
+  );
   const discountScope = campaign?.discountScope || "all";
   const eligibleCollections = Array.isArray(campaign?.eligibleCollections)
     ? campaign.eligibleCollections
@@ -132,8 +134,10 @@ export const calculateDiscountBaseFromItems = async (items = [], campaign) => {
     const productCollection = normalizeText(product.section);
     const isEligible =
       discountScope === "all" ||
-      (discountScope === "collection" && normalizedCollections.includes(productCollection)) ||
-      (discountScope === "product" && eligibleProducts.includes(String(productId)));
+      (discountScope === "collection" &&
+        normalizedCollections.includes(productCollection)) ||
+      (discountScope === "product" &&
+        eligibleProducts.includes(String(productId)));
 
     if (isEligible) {
       eligibleSubtotal += lineTotal;
@@ -167,7 +171,7 @@ export const resolveDiscountForCode = async ({ code, items = [] }) => {
 
   if (!subscriber) {
     campaign = await campaignModel.findOne({ code: code.toUpperCase() });
-    
+
     if (!campaign || campaign.usageType !== "multi-use") {
       return {
         success: false,
@@ -253,10 +257,10 @@ export const resolveDiscountForCode = async ({ code, items = [] }) => {
       cartSubtotal: base.cartSubtotal,
       message:
         base.discountScope === "collection" && collections
-          ? `This code only applies to products in ${collections}. Add an eligible item to use it.`
+          ? `This code is not valid for this collection`
           : base.discountScope === "product"
-          ? "This code only applies to specific products. Add an eligible item to use it."
-          : "This code does not apply to the items currently in your cart.",
+            ? "This code is not valid for this product."
+            : "This code does not apply to the items currently in your cart.",
     };
   }
 
