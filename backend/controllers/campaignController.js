@@ -1,7 +1,7 @@
 import campaignModel from "../models/campaignModel.js";
 import subscriberModel from "../models/subscriberModel.js";
 import { generateUniqueCode } from "../services/codeService.js";
-import { sendWaitlistEmail } from "../services/emailService.js";
+import { sendWaitlistEmail, sendPromoEmail } from "../services/emailService.js";
 import { isDiscountWaitlistEnabled } from "../config/features.js";
 import {
   getDiscountWindow,
@@ -148,6 +148,124 @@ export const subscribeToWaitlist = async (req, res) => {
     });
   } catch (error) {
     console.error("Error subscribing to waitlist:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getPromo = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const campaign = await campaignModel.findOne({
+      _id: id,
+      type: "promo",
+      status: "active",
+    });
+
+    if (!campaign) {
+      return res.status(200).json({ isOpen: false });
+    }
+
+    const isOpen = isCampaignSubscriptionOpen(campaign);
+    const remainingSpots = getRemainingSubscriptionSpots(campaign);
+    const subscriptionWindow = getSubscriptionWindow(campaign);
+    const discountWindow = getDiscountWindow(campaign);
+
+    return res.status(200).json({
+      isOpen,
+      remainingSpots,
+      campaign: {
+        id: campaign._id,
+        name: campaign.name,
+        discountValue: campaign.discountValue,
+        discountType: campaign.discountType,
+        discountScope: campaign.discountScope || "all",
+        eligibleCollections: campaign.eligibleCollections || [],
+        eligibleProducts: campaign.eligibleProducts || [],
+        subscriptionStartsAt: subscriptionWindow.startsAt,
+        subscriptionEndsAt: subscriptionWindow.endsAt,
+        discountStartsAt: discountWindow.startsAt,
+        discountExpiresAt: discountWindow.expiresAt,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching promo:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const claimPromo = async (req, res) => {
+  const { id } = req.params;
+  const { email } = req.body;
+
+  try {
+    const existingSubscriber = await subscriberModel.findOne({
+      campaignId: id,
+      email: email.toLowerCase(),
+    });
+
+    if (existingSubscriber) {
+      return res.status(409).json({
+        error: "Email already subscribed",
+        code: existingSubscriber.code,
+      });
+    }
+
+    const campaignConfig = await campaignModel.findById(id);
+
+    if (!campaignConfig || !isCampaignSubscriptionOpen(campaignConfig)) {
+      return res.status(410).json({ error: "Promo is closed" });
+    }
+
+    const limit = Number(campaignConfig.subscriberLimit);
+    const capacityFilter =
+      Number.isFinite(limit) && limit > 0
+        ? { $expr: { $lt: ["$subscriberCount", "$subscriberLimit"] } }
+        : {};
+
+    const campaign = await campaignModel.findOneAndUpdate(
+      {
+        _id: id,
+        status: "active",
+        ...capacityFilter,
+      },
+      { $inc: { subscriberCount: 1 } },
+      { new: true },
+    );
+
+    if (!campaign) {
+      return res.status(410).json({ error: "Promo is full or closed" });
+    }
+
+    const discountWindow = getDiscountWindow(campaign);
+    const code = await generateUniqueCode(campaign.codePrefix);
+
+    const subscriber = await subscriberModel.create({
+      campaignId: id,
+      email: email.toLowerCase(),
+      code,
+      status: "active",
+    });
+
+    sendPromoEmail({
+      to: subscriber.email,
+      code: subscriber.code,
+      discountValue: campaign.discountValue,
+      expiresAt: discountWindow.expiresAt,
+    }).catch((err) => console.error("Error sending promo email:", err));
+
+    return res.status(201).json({
+      code: subscriber.code,
+      discountType: campaign.discountType,
+      discountValue: campaign.discountValue,
+      discountScope: campaign.discountScope || "all",
+      eligibleCollections: campaign.eligibleCollections || [],
+      eligibleProducts: campaign.eligibleProducts || [],
+      discountStartsAt: discountWindow.startsAt,
+      discountExpiresAt: discountWindow.expiresAt,
+    });
+  } catch (error) {
+    console.error("Error claiming promo:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
