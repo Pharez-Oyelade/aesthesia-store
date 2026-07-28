@@ -140,7 +140,7 @@ const PromoPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#faf8f6] via-[#f0ece8] to-[#e8e0da] mt-20 p-4 sm:p-6 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#faf8f6] via-[#f0ece8] to-[#e8e0da] pt-30 pb-6 sm:pb-8 px-4 sm:px-6 relative overflow-hidden">
       <style>{animationStyles}</style>
 
       {/* Decorative orbs */}
@@ -177,7 +177,7 @@ const PromoPage = () => {
               Aesthesia Haven
             </span>
             <h2 className="text-[clamp(32px,4vw,48px)] font-light text-white tracking-tight leading-none mb-5">
-              The Haven
+              Haven
             </h2>
             <div className="w-10 h-px bg-white/25 mb-5" />
             <p className="text-[13px] text-white/45 leading-relaxed max-w-[220px]">
@@ -234,7 +234,7 @@ const PromoPage = () => {
               {/* Benefit chips */}
               <div className="flex justify-center flex-wrap gap-2 mb-5">
                 <span className="text-[11px] text-black/50 bg-black/[0.03] border border-black/[0.06] rounded-full px-3.5 py-1.5 font-medium flex items-center gap-1.5">
-                  <LuTruck size={14} /> Free Delivery
+                  <LuTruck size={14} /> Doorstep Delivery
                 </span>
                 <span className="text-[11px] text-black/50 bg-black/[0.03] border border-black/[0.06] rounded-full px-3.5 py-1.5 font-medium flex items-center gap-1.5">
                   <LuSparkles size={14} /> First Batch
@@ -246,7 +246,7 @@ const PromoPage = () => {
 
               <Link
                 to="/"
-                className="promo-btn block w-full bg-gradient-to-br from-[#8b1a1a] to-[#6b0f0f] text-white py-3.5 rounded-xl text-sm font-semibold tracking-wide text-center no-underline shadow-[0_4px_20px_rgba(139,26,26,0.3)]"
+                className="promo-btn block w-full bg-gradient-to-br from-[#8b1a1a] to-[#6b0f0f] text-white py-3 rounded-xl text-sm font-semibold tracking-wide "
               >
                 Continue Shopping
               </Link>
@@ -279,7 +279,7 @@ const PromoPage = () => {
                       Complimentary Doorstep Delivery
                     </p>
                     <p className="text-xs text-black/40 leading-snug">
-                      Nationwide delivery at no extra cost
+                      Nationwide delivery
                     </p>
                   </div>
                 </div>
@@ -379,14 +379,6 @@ const PromoPage = () => {
       </div>
 
       {/* Brand Footer */}
-      <div className="mt-8 text-center">
-        <Link
-          to="/"
-          className="text-[11px] tracking-[4px] uppercase text-black/20 no-underline font-medium hover:text-black/35 transition-colors"
-        >
-          Aesthesia Haven
-        </Link>
-      </div>
     </div>
   );
 };
