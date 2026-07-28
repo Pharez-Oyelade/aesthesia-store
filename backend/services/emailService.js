@@ -82,7 +82,7 @@ export async function sendWaitlistEmail({
   expiresAt,
 }) {
   if (!isEmailNotificationsEnabled()) return;
-  const subject = `You're on the waitlist - your ${discountValue}% discount code inside!`;
+  const subject = `Your access code for Aesthesia Haven`;
   const html = waitlistEmailTemplate({ code, discountValue, expiresAt });
   return sendEmail({ to, subject, html });
 }
@@ -95,7 +95,7 @@ export async function sendPromoEmail({
   expiresAt,
 }) {
   if (!isEmailNotificationsEnabled()) return;
-  const subject = `Your exclusive ${discountValue}% discount code is here!`;
+  const subject = `Your access code for Aesthesia Haven`;
   const html = promoEmailTemplate({ code, discountValue, expiresAt });
   return sendEmail({ to, subject, html });
 }
@@ -943,55 +943,17 @@ function passwordResetTemplate(resetUrl) {
 function waitlistEmailTemplate({ code, discountValue, expiresAt }) {
   return `
   <!DOCTYPE html>
-  <html lang="en">
+  <html>
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Waitlist Confirmation</title>
   </head>
-  <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-      <tr>
-        <td style="padding: 20px;">
-          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden;">
-            <!-- Header -->
-            <tr>
-              <td style="background: #111827; padding: 30px; text-align: center;">
-                <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">Aesthesia Haven</h1>
-              </td>
-            </tr>
-
-            <!-- Main Content -->
-            <tr>
-              <td style="padding: 30px;">
-                <h2 style="margin: 0 0 20px; color: #111827; font-size: 20px; font-weight: 600;">You're on the Waitlist!</h2>
-                <p style="margin: 0 0 16px; color: #6b7280; font-size: 16px; line-height: 1.6;">
-                  Thank you for joining our waitlist! Here's your exclusive discount code:
-                </p>
-                <div style="background-color: #f9fafb; border-radius: 6px; padding: 24px; text-align: center;">
-                  <h3 style="margin: 0; color: #111827; font-size: 24px; font-weight: 700;">${code}</h3>
-                </div>
-                <p style="margin: 16px; color: #6b7280; font-size: 14px; line-height: 1.6;">
-                  This code is valid until ${formatExpiry(expiresAt)}.
-                </p>
-              </td>
-            </tr>
-
-            <!-- Footer -->
-            <tr>
-              <td style("background": "#f9fafb", "padding": "30px", "text-align": "center", "border-top": "1px solid #e5e7eb")>
-                <p style("margin": "0", "color": "#111827", "font-size": "16px", "font-weight": "600")>Aesthesia Haven</p>
-                <p style("margin": "0", "color": "#6b7280", "font-size": "13px")>Embrace Your Beautiful</p>
-                <p style("margin": "0", "color": "#9ca3af", "font-size": "12px")>
-                  © ${new Date().getFullYear()} Aesthesia Haven. All rights reserved.
-                </p>
-              </td>
-            </tr>
-
-          </table>
-        </td>
-      </tr>
-    </table>
+  <body style="font-family: sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <p>Hi there,</p>
+    <p>Thank you for joining the Aesthesia Haven waitlist. Here is your access code:</p>
+    <p style="font-size: 18px; font-weight: bold; padding: 10px 0;">${code}</p>
+    <p>You can use this code at checkout. It is valid until ${formatExpiry(expiresAt)}.</p>
+    <br>
+    <p>Best regards,<br>Aesthesia Haven Team</p>
   </body>
   </html>
   `;
@@ -1000,63 +962,23 @@ function waitlistEmailTemplate({ code, discountValue, expiresAt }) {
 function promoEmailTemplate({ code, discountValue, expiresAt }) {
   return `
   <!DOCTYPE html>
-  <html lang="en">
+  <html>
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exclusive Promo Code</title>
   </head>
-  <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f3f4f6;">
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-      <tr>
-        <td style="padding: 20px;">
-          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 8px; overflow: hidden;">
-            <!-- Header -->
-            <tr>
-              <td style="background: #111827; padding: 30px; text-align: center;">
-                <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 700;">Aesthesia Haven</h1>
-              </td>
-            </tr>
-
-            <!-- Main Content -->
-            <tr>
-              <td style="padding: 30px;">
-                <h2 style="margin: 0 0 20px; color: #111827; font-size: 20px; font-weight: 600;">Your Exclusive Code</h2>
-                <p style="margin: 0 0 16px; color: #6b7280; font-size: 16px; line-height: 1.6;">
-                  You've been granted exclusive access! Here's your personal discount code:
-                </p>
-                <div style="background-color: #f9fafb; border-radius: 6px; padding: 24px; text-align: center;">
-                  <h3 style="margin: 0; color: #111827; font-size: 24px; font-weight: 700;">${code}</h3>
-                </div>
-                <div style="margin: 16px 0; color: #374151; font-size: 15px;">
-                  <strong>Benefits include:</strong>
-                  <ul style="margin-top: 8px; padding-left: 20px; line-height: 1.6;">
-                    <li>Complimentary Doorstep Nationwide Delivery</li>
-                    <li>First Production Batch</li>
-                    <li>Priority Access Before Public Launch</li>
-                  </ul>
-                </div>
-                <p style="margin: 16px 0; color: #6b7280; font-size: 14px; line-height: 1.6;">
-                  This code is valid until ${formatExpiry(expiresAt)}.
-                </p>
-              </td>
-            </tr>
-
-            <!-- Footer -->
-            <tr>
-              <td style="background: #f9fafb; padding: 30px; text-align: center; border-top: 1px solid #e5e7eb;">
-                <p style="margin: 0 0 8px; color: #111827; font-size: 16px; font-weight: 600;">Aesthesia Haven</p>
-                <p style="margin: 0 0 8px; color: #6b7280; font-size: 13px;">Embrace Your Beautiful</p>
-                <p style="margin: 0; color: #9ca3af; font-size: 12px;">
-                  © ${new Date().getFullYear()} Aesthesia Haven. All rights reserved.
-                </p>
-              </td>
-            </tr>
-
-          </table>
-        </td>
-      </tr>
-    </table>
+  <body style="font-family: sans-serif; color: #333; line-height: 1.6; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <p>Hi there,</p>
+    <p>You have been granted exclusive access. Here is your personal code for Aesthesia Haven:</p>
+    <p style="font-size: 18px; font-weight: bold; padding: 10px 0;">${code}</p>
+    <p>Benefits included with this code:</p>
+    <ul style="padding-left: 20px; margin-top: 5px;">
+      <li>Complimentary Doorstep Nationwide Delivery</li>
+      <li>First Production Batch</li>
+      <li>Priority Access Before Public Launch</li>
+    </ul>
+    <p>You can apply this code at checkout. It is valid until ${formatExpiry(expiresAt)}.</p>
+    <br>
+    <p>Best regards,<br>Aesthesia Haven Team</p>
   </body>
   </html>
   `;
