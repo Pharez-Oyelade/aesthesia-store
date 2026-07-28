@@ -3,3 +3,6 @@ node_modules
 *.env
 
 .vscode/*
+
+seedMultiUseCampaign.js
+settings.json
