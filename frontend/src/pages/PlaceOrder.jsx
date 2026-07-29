@@ -870,7 +870,7 @@ const PlaceOrder = () => {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 flex-wrap">
                     <input
                       type="text"
                       value={discountCode}
