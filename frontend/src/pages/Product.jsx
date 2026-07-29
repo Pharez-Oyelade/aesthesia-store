@@ -144,7 +144,7 @@ const Product = () => {
   const requiresMeasurements =
     (productData && productData.section === "The RERE Collection") ||
     (productData && productData.section === "The Color Code Collection") ||
-    (productData && productData.section === "Unfold");
+    (productData && productData.section === "Unfold") || (productData && productData.section === "The Haven");
   const availableSizes =
     productData && productData.sizes
       ? productData.sizes.slice().sort((a, b) => Number(a) - Number(b))
