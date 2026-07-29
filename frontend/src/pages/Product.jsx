@@ -144,7 +144,8 @@ const Product = () => {
   const requiresMeasurements =
     (productData && productData.section === "The RERE Collection") ||
     (productData && productData.section === "The Color Code Collection") ||
-    (productData && productData.section === "Unfold") || (productData && productData.section === "The Haven");
+    (productData && productData.section === "Unfold") ||
+  (productData && productData.section === "The Haven");
   const availableSizes =
     productData && productData.sizes
       ? productData.sizes.slice().sort((a, b) => Number(a) - Number(b))
@@ -167,11 +168,10 @@ const Product = () => {
       alert("Please select a color");
       return;
     }
-    if (!fitLength) {
-      alert("Please select a fit length");
-      return;
+    if (productData.fitLength && productData.fitLength.length > 0 && !fitLength) {
+  alert("Please select a fit length");
+  return;
     }
-
     if (color === CUSTOM_COLOR_OPTION && !note.trim()) {
       alert("Please enter a custom color");
       return;
