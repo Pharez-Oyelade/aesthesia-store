@@ -181,8 +181,7 @@ const PromoPage = () => {
             </h2>
             <div className="w-10 h-px bg-white/25 mb-5" />
             <p className="text-[13px] text-white/45 leading-relaxed max-w-[220px]">
-              An exclusive piece crafted for those who appreciate the
-              extraordinary.
+              An exclusive piece crafted for those who appreciate comfort and elegance.
             </p>
           </div>
         </div>
@@ -245,10 +244,10 @@ const PromoPage = () => {
               </div>
 
               <Link
-                to="/"
+                to="/product/6a6a48abef6b304775cfc095"
                 className="promo-btn block w-full bg-gradient-to-br from-[#8b1a1a] to-[#6b0f0f] text-white py-3 rounded-xl text-sm font-semibold tracking-wide "
               >
-                Continue Shopping
+                Shop The Haven
               </Link>
             </div>
           ) : (
