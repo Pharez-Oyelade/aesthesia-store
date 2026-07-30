@@ -5,7 +5,10 @@ import { shopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
 import { trackAddToCart, trackViewContent } from "../utils/metaPixel";
-import { trackAddToCart as trackAddToCartTT, trackViewContent as trackViewContentTT } from "../utils/tiktokPixel";
+import {
+  trackAddToCart as trackAddToCartTT,
+  trackViewContent as trackViewContentTT,
+} from "../utils/tiktokPixel";
 import { getOptimizedUrl } from "../utils/cloudinaryHelper";
 import { productReviews } from "../../data/productReview";
 import ProductReview from "../components/ProductReview";
@@ -91,7 +94,9 @@ const Product = () => {
           <div>
             <p className="font-bold">{productData.name}</p>
             <p>{productData.tagline}</p>
-            <p className="mb-10">{productData.description}</p>
+            <p className="mb-10 whitespace-pre-wrap">
+              {productData.description}
+            </p>
             <p>{productData.specificDetails}</p>
           </div>
         );
@@ -145,7 +150,7 @@ const Product = () => {
     (productData && productData.section === "The RERE Collection") ||
     (productData && productData.section === "The Color Code Collection") ||
     (productData && productData.section === "Unfold") ||
-  (productData && productData.section === "The Haven");
+    (productData && productData.section === "The Haven");
   const availableSizes =
     productData && productData.sizes
       ? productData.sizes.slice().sort((a, b) => Number(a) - Number(b))
@@ -168,9 +173,13 @@ const Product = () => {
       alert("Please select a color");
       return;
     }
-    if (productData.fitLength && productData.fitLength.length > 0 && !fitLength) {
-  alert("Please select a fit length");
-  return;
+    if (
+      productData.fitLength &&
+      productData.fitLength.length > 0 &&
+      !fitLength
+    ) {
+      alert("Please select a fit length");
+      return;
     }
     if (color === CUSTOM_COLOR_OPTION && !note.trim()) {
       alert("Please enter a custom color");
