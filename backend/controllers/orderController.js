@@ -93,7 +93,11 @@ const placeOrder = async (req, res) => {
           { code: resolvedCode },
           { status: "used", usedAt: new Date() },
         );
-        if (!subscriber) {
+        if (subscriber) {
+          await campaignModel.findByIdAndUpdate(subscriber.campaignId, {
+            $inc: { usageCount: 1 },
+          });
+        } else {
           await campaignModel.findOneAndUpdate(
             { code: resolvedCode },
             { $inc: { usageCount: 1 } },
@@ -376,7 +380,11 @@ const placeOrderPaystack = async (req, res) => {
           { code: resolvedCode },
           { status: "used", usedAt: new Date() },
         );
-        if (!subscriber) {
+        if (subscriber) {
+          await campaignModel.findByIdAndUpdate(subscriber.campaignId, {
+            $inc: { usageCount: 1 },
+          });
+        } else {
           await campaignModel.findOneAndUpdate(
             { code: resolvedCode },
             { $inc: { usageCount: 1 } },
@@ -727,7 +735,11 @@ const paystackWebhook = async (req, res) => {
           { code: webhookDiscountCode },
           { status: "used", usedAt: new Date() },
         );
-        if (!subscriber) {
+        if (subscriber) {
+          await campaignModel.findByIdAndUpdate(subscriber.campaignId, {
+            $inc: { usageCount: 1 },
+          });
+        } else {
           await campaignModel.findOneAndUpdate(
             { code: webhookDiscountCode },
             { $inc: { usageCount: 1 } },
