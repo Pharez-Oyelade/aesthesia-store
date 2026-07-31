@@ -57,6 +57,7 @@ const PlaceOrder = () => {
     isCustomColor,
     convertPrice,
     isDiscountWaitlistEnabled,
+    isInternational,
   } = useContext(shopContext);
 
   // Check authentication on component mount - show modal but don't block
@@ -351,9 +352,16 @@ const PlaceOrder = () => {
     setDiscountError("");
   };
 
+  const getEffectiveShippingCost = () => {
+    if (discountData?.isDeliveryFree && !isInternational) {
+      return 0;
+    }
+    return getShippingCost();
+  };
+
   const getOrderSubtotal = () =>
     getCartAmount() +
-    getShippingCost() +
+    getEffectiveShippingCost() +
     getPlusSizeFee() +
     getCustomColorFee();
 
@@ -907,7 +915,7 @@ const PlaceOrder = () => {
           )}
 
           <div className="mt-8 min-w-80">
-            <CartTotal discountAmount={getDiscountAmount()} />
+            <CartTotal discountAmount={getDiscountAmount()} isDeliveryFree={!!(discountData?.isDeliveryFree && !isInternational)} />
           </div>
 
           <div className="mt-12">

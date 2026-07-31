@@ -29,6 +29,7 @@ const campaignSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+  isDeliveryFree: { type: Boolean, default: false },
   codePrefix: { type: String, required: true, default: "AEST" },
   startsAt: { type: Date, required: true },
   expiresAt: { type: Date, required: true },

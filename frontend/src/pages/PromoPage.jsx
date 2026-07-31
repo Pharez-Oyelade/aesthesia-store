@@ -232,9 +232,11 @@ const PromoPage = () => {
 
               {/* Benefit chips */}
               <div className="flex justify-center flex-wrap gap-2 mb-5">
-                <span className="text-[11px] text-black/50 bg-black/[0.03] border border-black/[0.06] rounded-full px-3.5 py-1.5 font-medium flex items-center gap-1.5">
-                  <LuTruck size={14} /> Doorstep Delivery
-                </span>
+                {campaign?.isDeliveryFree && (
+                  <span className="text-[11px] text-black/50 bg-black/[0.03] border border-black/[0.06] rounded-full px-3.5 py-1.5 font-medium flex items-center gap-1.5">
+                    <LuTruck size={14} /> Free Delivery
+                  </span>
+                )}
                 <span className="text-[11px] text-black/50 bg-black/[0.03] border border-black/[0.06] rounded-full px-3.5 py-1.5 font-medium flex items-center gap-1.5">
                   <LuSparkles size={14} /> First Batch
                 </span>
@@ -269,19 +271,21 @@ const PromoPage = () => {
 
               {/* Benefits */}
               <div className="flex flex-col gap-3.5 mb-5">
-                <div className="flex items-start gap-3">
-                  <div className="w-9 h-9 rounded-[10px] bg-[rgba(139,26,26,0.06)] flex items-center justify-center text-base shrink-0 text-[#8b1a1a]">
-                    <LuTruck size={18} />
+                {campaign?.isDeliveryFree && (
+                  <div className="flex items-start gap-3">
+                    <div className="w-9 h-9 rounded-[10px] bg-[rgba(139,26,26,0.06)] flex items-center justify-center text-base shrink-0 text-[#8b1a1a]">
+                      <LuTruck size={18} />
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-[#222] mb-0.5">
+                        Complimentary Doorstep Delivery
+                      </p>
+                      <p className="text-xs text-black/40 leading-snug">
+                        Nationwide delivery at no extra cost
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-[13px] font-semibold text-[#222] mb-0.5">
-                      Complimentary Doorstep Delivery
-                    </p>
-                    <p className="text-xs text-black/40 leading-snug">
-                      Nationwide delivery
-                    </p>
-                  </div>
-                </div>
+                )}
                 <div className="flex items-start gap-3">
                   <div className="w-9 h-9 rounded-[10px] bg-[rgba(139,26,26,0.06)] flex items-center justify-center text-base shrink-0 text-[#8b1a1a]">
                     <LuSparkles size={18} />

@@ -182,6 +182,7 @@ export const getPromo = async (req, res) => {
         discountScope: campaign.discountScope || "all",
         eligibleCollections: campaign.eligibleCollections || [],
         eligibleProducts: campaign.eligibleProducts || [],
+        isDeliveryFree: campaign.isDeliveryFree || false,
         subscriptionStartsAt: subscriptionWindow.startsAt,
         subscriptionEndsAt: subscriptionWindow.endsAt,
         discountStartsAt: discountWindow.startsAt,
