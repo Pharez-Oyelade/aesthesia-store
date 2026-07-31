@@ -19,7 +19,7 @@ const Footer = () => {
             Aesthesia…Where women see themselves again.
           </p>
           <p className="w-full md:w-2/3 text-gray-600">
-            a space where every woman can see herself again, in her color, in
+            A space where every woman can see herself again, in her color, in
             her confidence, in her truth.
           </p>
         </div>
