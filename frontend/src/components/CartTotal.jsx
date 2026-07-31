@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { shopContext } from "../context/ShopContext";
 import Title from "./Title";
 
-const CartTotal = ({ discountAmount = 0 }) => {
+const CartTotal = ({ discountAmount = 0, isDeliveryFree = false }) => {
   const {
     currency,
     delivery_fee,
@@ -19,8 +19,9 @@ const CartTotal = ({ discountAmount = 0 }) => {
 
   const plusSizeFee = getPlusSizeFee();
   const customColorFee = getCustomColorFee();
+  const effectiveShipping = isDeliveryFree ? 0 : getShippingCost();
   const subtotal =
-    getCartAmount() + getShippingCost() + plusSizeFee + customColorFee;
+    getCartAmount() + effectiveShipping + plusSizeFee + customColorFee;
   const finalTotal = subtotal - discountAmount;
 
   return (
@@ -40,11 +41,14 @@ const CartTotal = ({ discountAmount = 0 }) => {
         <hr />
         <div className="flex justify-between">
           <p>Shipping Fee {isInternational ? "(international)" : "(local)"}</p>
-          <p>
-            {currency}
-            {/* {convertPrice(delivery_fee)} */}
-            {convertPrice(getShippingCost())}
-          </p>
+          {isDeliveryFree ? (
+            <p className="text-green-600 font-medium">Free</p>
+          ) : (
+            <p>
+              {currency}
+              {convertPrice(getShippingCost())}
+            </p>
+          )}
         </div>
         <hr />
 

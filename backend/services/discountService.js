@@ -255,6 +255,7 @@ export const resolveDiscountForCode = async ({ code, items = [] }) => {
       eligibleCollections: base.eligibleCollections,
       eligibleSubtotal: base.eligibleSubtotal,
       cartSubtotal: base.cartSubtotal,
+      isDeliveryFree: campaign.isDeliveryFree || false,
       message:
         base.discountScope === "collection" && collections
           ? `This code is not valid for this collection`
@@ -284,6 +285,7 @@ export const resolveDiscountForCode = async ({ code, items = [] }) => {
     eligibleSubtotal: base.eligibleSubtotal,
     cartSubtotal: base.cartSubtotal,
     expiresAt,
+    isDeliveryFree: campaign.isDeliveryFree || false,
     message:
       discountAmount > 0
         ? "Discount code applied successfully"
