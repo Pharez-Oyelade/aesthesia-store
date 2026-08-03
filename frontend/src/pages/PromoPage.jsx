@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
-import { LuTruck, LuSparkles, LuZap } from "react-icons/lu";
+import { LuTruck, LuSparkles, LuZap, LuInstagram } from "react-icons/lu";
 
 const PromoPage = () => {
   const { campaignId } = useParams();
@@ -162,7 +162,7 @@ const PromoPage = () => {
       />
 
       {/* Main Card */}
-      <div className="promo-card flex flex-col sm:flex-row w-full max-w-[920px] sm:min-h-[560px] rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.04)] bg-white">
+      <div className="promo-card flex flex-col sm:flex-row w-full max-w-[920px] sm:min-h-[560px] rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.04)] bg-white mt-2 sm:mt-8">
         {/* Left Visual Panel */}
         <div className="promo-visual shrink-0 w-full sm:w-[42%] relative flex items-end justify-center overflow-hidden min-h-[200px] sm:min-h-0 bg-gradient-to-br from-[#1a0505] via-[#3d0e0e] to-[#5a1515]">
           <div
@@ -231,7 +231,7 @@ const PromoPage = () => {
               </div>
 
               {/* Benefit chips */}
-              <div className="flex justify-center flex-wrap gap-2 mb-5">
+              {/* <div className="flex justify-center flex-wrap gap-2 mb-5">
                 {campaign?.isDeliveryFree && (
                   <span className="text-[11px] text-black/50 bg-black/[0.03] border border-black/[0.06] rounded-full px-3.5 py-1.5 font-medium flex items-center gap-1.5">
                     <LuTruck size={14} /> Free Delivery
@@ -243,11 +243,42 @@ const PromoPage = () => {
                 <span className="text-[11px] text-black/50 bg-black/[0.03] border border-black/[0.06] rounded-full px-3.5 py-1.5 font-medium flex items-center gap-1.5">
                   <LuZap size={14} /> Priority Access
                 </span>
+              </div> */}
+
+              {/* Instagram Channel Card */}
+              <div className="relative bg-gradient-to-r from-[#fdfbfb] to-[#fbf7f7] border border-[rgba(139,26,26,0.15)] rounded-2xl p-5 mb-6 overflow-hidden group shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+                <div className="absolute -top-4 -right-4 text-[#8b1a1a] opacity-[0.03] pointer-events-none transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-12">
+                  <LuInstagram size={140} />
+                </div>
+                <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left gap-4 sm:flex-row">
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#f09433] via-[#e6683c] to-[#bc1888] flex items-center justify-center text-white shrink-0 shadow-md">
+                    <LuInstagram size={22} />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-[15px] font-bold text-[#111] mb-1.5 tracking-tight">
+                      Join the Haven Circle
+                    </h3>
+                    <p className="text-[13px] text-black/50 leading-relaxed mb-4 max-w-[320px] mx-auto sm:mx-0">
+                      Join our exclusive Instagram channel to connect with the
+                      community, get early previews of upcoming drops, and never
+                      miss an exclusive offer.
+                    </p>
+                    <a
+                      href="https://www.instagram.com/channel/AbZIbbk-9CDGZ5LC/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 bg-white border border-black/10 text-[#111] px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-200 hover:bg-gray-50 hover:border-black/20 hover:shadow-sm"
+                    >
+                      <LuInstagram size={16} className="text-[#e1306c]" />
+                      <span>Join Instagram Channel</span>
+                    </a>
+                  </div>
+                </div>
               </div>
 
               <Link
                 to="/product/6a6a48abef6b304775cfc095"
-                className="promo-btn block w-full bg-gradient-to-br from-[#8b1a1a] to-[#6b0f0f] text-white py-3 rounded-xl text-sm font-semibold tracking-wide "
+                className="promo-btn block w-full bg-gradient-to-br from-[#8b1a1a] to-[#6b0f0f] text-white py-3.5 rounded-xl text-sm font-semibold tracking-wide "
               >
                 Shop The Haven
               </Link>
