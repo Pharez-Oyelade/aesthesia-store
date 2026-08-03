@@ -256,7 +256,7 @@ const PromoPage = () => {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-[15px] font-bold text-[#111] mb-1.5 tracking-tight">
-                      Join the Inner Circle
+                      Join the Haven Circle
                     </h3>
                     <p className="text-[13px] text-black/50 leading-relaxed mb-4 max-w-[320px] mx-auto sm:mx-0">
                       Join our exclusive Instagram channel to connect with the
