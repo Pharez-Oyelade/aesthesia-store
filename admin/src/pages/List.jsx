@@ -365,7 +365,7 @@ const List = ({ token }) => {
                   }
                 />
               </label> */}
-              {/* <label className="font-medium">
+              <label className="font-medium">
                 Description
                 <textarea
                   className="w-full px-3 py-2 border rounded-lg mt-1"
@@ -377,7 +377,7 @@ const List = ({ token }) => {
                     }))
                   }
                 />
-              </label> */}
+              </label>
               <label className="font-medium">
                 Specific Details
                 <textarea

@@ -28,6 +28,7 @@ const seed = async () => {
     discountValue: 5,
     discountScope: "product",
     eligibleProducts: [],
+    isDeliveryFree: true,
     codePrefix: "HAVEN",
     startsAt: new Date(),
     expiresAt: new Date("2026-12-31"),
