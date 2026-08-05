@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { LuTruck, LuSparkles, LuZap, LuInstagram } from "react-icons/lu";
+import { assets } from "../assets/assets";
 
 const PromoPage = () => {
   const { campaignId } = useParams();
@@ -99,45 +100,7 @@ const PromoPage = () => {
     setTimeout(() => setCopySuccess(false), 2500);
   };
 
-  // ── Loading State ──
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#faf8f6] via-[#f0ece8] to-[#e8e0da] p-6">
-        <style>{animationStyles}</style>
-        <div className="promo-spinner w-9 h-9 border-[3px] border-[rgba(139,26,26,0.12)] border-t-[#8b1a1a] rounded-full" />
-        <p className="mt-4 text-sm text-black/35 tracking-wide">
-          Loading exclusive offer...
-        </p>
-      </div>
-    );
-  }
-
-  // ── Closed / Invalid State ──
-  if (!isOpen && !subscribed) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#faf8f6] via-[#f0ece8] to-[#e8e0da] p-6">
-        <style>{animationStyles}</style>
-        <div className="text-center max-w-[420px]">
-          <div className="text-5xl text-black/15 mb-4 flex justify-center">
-            <LuSparkles />
-          </div>
-          <h1 className="text-2xl font-bold text-[#222] mb-2.5">
-            Offer Unavailable
-          </h1>
-          <p className="text-sm text-black/40 leading-relaxed mb-6">
-            This exclusive offer is no longer available or has reached its
-            limit.
-          </p>
-          <Link
-            to="/"
-            className="text-[13px] font-semibold text-[#8b1a1a] no-underline tracking-wide hover:underline"
-          >
-            ← Back to Aesthesia Haven
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // The old full-screen loading and closed states have been moved inside the right panel
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[#faf8f6] via-[#f0ece8] to-[#e8e0da] pt-30 pb-6 sm:pb-8 px-4 sm:px-6 relative overflow-hidden">
@@ -162,25 +125,30 @@ const PromoPage = () => {
       />
 
       {/* Main Card */}
-      <div className="promo-card flex flex-col sm:flex-row w-full max-w-[920px] sm:min-h-[560px] rounded-3xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.1),0_0_0_1px_rgba(0,0,0,0.04)] bg-white mt-2 sm:mt-8">
+      <div className="promo-card flex flex-col sm:flex-row w-full max-w-[1000px] sm:min-h-[600px] rounded-[32px] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.12),0_0_0_1px_rgba(0,0,0,0.04)] bg-white mt-2 sm:mt-8">
         {/* Left Visual Panel */}
-        <div className="promo-visual shrink-0 w-full sm:w-[42%] relative flex items-end justify-center overflow-hidden min-h-[200px] sm:min-h-0 bg-gradient-to-br from-[#1a0505] via-[#3d0e0e] to-[#5a1515]">
+        <div className="promo-visual shrink-0 w-full sm:w-[48%] relative flex items-end justify-center overflow-hidden min-h-[220px] sm:min-h-0 bg-[#e8e0da]">
+          <img
+            src={assets.haven_img}
+            alt="The Haven"
+            className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
+          />
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "radial-gradient(ellipse at 30% 20%, rgba(139,26,26,0.3) 0%, transparent 60%)",
+                "linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)",
             }}
           />
           <div className="relative z-10 p-8 sm:p-10 text-left w-full">
-            <span className="block text-[10px] tracking-[4px] uppercase text-white/50 mb-4">
+            <span className="block text-[10px] tracking-[4px] uppercase text-white/70 mb-3">
               Aesthesia Haven
             </span>
-            <h2 className="text-[clamp(32px,4vw,48px)] font-light text-white tracking-tight leading-none mb-5">
-              Haven
+            <h2 className="text-[clamp(32px,4vw,48px)] font-light text-white tracking-tight leading-none mb-4 drop-shadow-lg">
+              The Haven
             </h2>
-            <div className="w-10 h-px bg-white/25 mb-5" />
-            <p className="text-[13px] text-white/45 leading-relaxed max-w-[220px]">
+            <div className="w-10 h-[1px] bg-white/40 mb-4" />
+            <p className="text-[13px] text-white/80 leading-relaxed max-w-[240px] drop-shadow-md font-medium">
               A piece crafted for those who appreciate comfort and elegance.
             </p>
           </div>
@@ -188,7 +156,35 @@ const PromoPage = () => {
 
         {/* Right Content Panel */}
         <div className="flex-1 flex flex-col justify-center p-7 sm:p-10 lg:p-12 relative overflow-y-auto">
-          {subscribed && generatedCode ? (
+          {loading ? (
+            /* ── Loading State ── */
+            <div className="flex flex-col items-center justify-center h-full opacity-60 min-h-[300px]">
+              <div className="promo-spinner w-8 h-8 border-[2px] border-[rgba(139,26,26,0.12)] border-t-[#8b1a1a] rounded-full mb-4" />
+              <p className="text-[13px] text-black/50 tracking-wide">
+                Verifying exclusive access...
+              </p>
+            </div>
+          ) : !isOpen && !subscribed ? (
+            /* ── Closed / Invalid State ── */
+            <div className="text-center promo-fade-in flex flex-col items-center justify-center h-full min-h-[300px]">
+              <div className="text-4xl text-black/10 mb-4">
+                <LuSparkles />
+              </div>
+              <h1 className="text-xl font-bold text-[#222] mb-2">
+                Offer Unavailable
+              </h1>
+              <p className="text-[13px] text-black/40 leading-relaxed mb-6 max-w-[280px] mx-auto">
+                This exclusive offer is no longer available or has reached its
+                limit.
+              </p>
+              <Link
+                to="/"
+                className="text-[12px] font-semibold text-[#8b1a1a] no-underline tracking-wide hover:underline"
+              >
+                ← Back to Shop
+              </Link>
+            </div>
+          ) : subscribed && generatedCode ? (
             /* ── Success State ── */
             <div className="promo-fade-in text-center">
               <div className="promo-success-icon text-5xl text-[#8b1a1a] mb-3 inline-flex justify-center">
@@ -300,8 +296,74 @@ const PromoPage = () => {
               {/* Divider */}
               <div className="h-px bg-gradient-to-r from-[rgba(139,26,26,0.5)] to-transparent mb-6" />
 
+              {/* Discount Badge */}
+              <div className="inline-flex items-center gap-2.5 bg-[rgba(139,26,26,0.05)] border border-[rgba(139,26,26,0.12)] rounded-[10px] px-4 py-2.5 mb-4">
+                <span className="text-base font-bold text-[#8b1a1a] tracking-wide">
+                  {campaign?.discountValue || 5}% OFF
+                </span>
+                <span className="text-xs text-black/40 font-medium">
+                  Exclusive Discount
+                </span>
+              </div>
+
+              {/* Remaining spots */}
+              {remainingSpots !== null && remainingSpots > 0 && (
+                <p className="text-xs text-[rgba(139,26,26,0.7)] mb-4 font-medium">
+                  {remainingSpots} spot{remainingSpots !== 1 ? "s" : ""}{" "}
+                  remaining
+                </p>
+              )}
+
+              {/* Error */}
+              {error && (
+                <div className="bg-red-500/[0.06] border border-red-500/25 text-red-700 px-3.5 py-2.5 rounded-lg text-[13px] mb-3.5 leading-normal">
+                  {error}
+                </div>
+              )}
+
+              {/* Form */}
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-2.5 mb-3"
+              >
+                <label className="text-[13px] font-semibold text-[#111]">
+                  Enter your email
+                </label>
+                <input
+                  type="email"
+                  placeholder="example@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={submitting}
+                  className="w-full bg-[#fafafa] border border-black/30 rounded-xl px-4 py-3.5 text-[#111] text-sm transition-all duration-200 focus:outline-none focus:border-[#8b1a1a] focus:ring-[3px] focus:ring-[rgba(139,26,26,0.12)] placeholder:text-black/40 disabled:opacity-60"
+                  aria-label="Email address"
+                />
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className={`promo-btn w-full bg-gradient-to-br from-[#8b1a1a] to-[#6b0f0f] text-white py-3.5 rounded-xl text-sm font-semibold tracking-wide shadow-[0_4px_24px_rgba(139,26,26,0.3)] transition-all duration-200 ${
+                    submitting
+                      ? "opacity-70 cursor-not-allowed"
+                      : "cursor-pointer hover:shadow-[0_6px_28px_rgba(139,26,26,0.4)]"
+                  }`}
+                >
+                  {submitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="promo-btn-spinner inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full" />
+                      Claiming...
+                    </span>
+                  ) : (
+                    "Get My Exclusive Code"
+                  )}
+                </button>
+              </form>
+
+              <p className="text-[12px] text-black/50 text-center mb-6">
+                Your email is only used to deliver your code. No spam, ever.
+              </p>
+
               {/* Benefits */}
-              <div className="flex flex-col gap-3.5 mb-5">
+              <div className="flex flex-col gap-3.5">
                 {campaign?.isDeliveryFree && (
                   <div className="flex items-start gap-3">
                     <div className="w-9 h-9 rounded-[10px] bg-[rgba(139,26,26,0.06)] flex items-center justify-center text-base shrink-0 text-[#8b1a1a]">
@@ -344,69 +406,6 @@ const PromoPage = () => {
                   </div>
                 </div>
               </div>
-
-              {/* Discount Badge */}
-              <div className="inline-flex items-center gap-2.5 bg-[rgba(139,26,26,0.05)] border border-[rgba(139,26,26,0.12)] rounded-[10px] px-4 py-2.5 mb-4">
-                <span className="text-base font-bold text-[#8b1a1a] tracking-wide">
-                  {campaign?.discountValue || 5}% OFF
-                </span>
-                <span className="text-xs text-black/40 font-medium">
-                  Exclusive Discount
-                </span>
-              </div>
-
-              {/* Remaining spots */}
-              {remainingSpots !== null && remainingSpots > 0 && (
-                <p className="text-xs text-[rgba(139,26,26,0.7)] mb-4 font-medium">
-                  {remainingSpots} spot{remainingSpots !== 1 ? "s" : ""}{" "}
-                  remaining
-                </p>
-              )}
-
-              {/* Error */}
-              {error && (
-                <div className="bg-red-500/[0.06] border border-red-500/25 text-red-700 px-3.5 py-2.5 rounded-lg text-[13px] mb-3.5 leading-normal">
-                  {error}
-                </div>
-              )}
-
-              {/* Form */}
-              <form
-                onSubmit={handleSubmit}
-                className="flex flex-col gap-2.5 mb-3"
-              >
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={submitting}
-                  className="w-full bg-[#fafafa] border border-black/10 rounded-xl px-4 py-3.5 text-[#111] text-sm transition-all duration-200 focus:outline-none focus:border-[#8b1a1a] focus:ring-[3px] focus:ring-[rgba(139,26,26,0.12)] placeholder:text-black/28 disabled:opacity-60"
-                  aria-label="Email address"
-                />
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className={`promo-btn w-full bg-gradient-to-br from-[#8b1a1a] to-[#6b0f0f] text-white py-3.5 rounded-xl text-sm font-semibold tracking-wide shadow-[0_4px_24px_rgba(139,26,26,0.3)] transition-all duration-200 ${
-                    submitting
-                      ? "opacity-70 cursor-not-allowed"
-                      : "cursor-pointer hover:shadow-[0_6px_28px_rgba(139,26,26,0.4)]"
-                  }`}
-                >
-                  {submitting ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <span className="promo-btn-spinner inline-block w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full" />
-                      Claiming...
-                    </span>
-                  ) : (
-                    "Get My Exclusive Code"
-                  )}
-                </button>
-              </form>
-
-              <p className="text-[11px] text-black/30 text-center">
-                Your email is only used to deliver your code. No spam, ever.
-              </p>
             </div>
           )}
         </div>
