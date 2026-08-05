@@ -127,7 +127,7 @@ const PromoPage = () => {
       {/* Main Card */}
       <div className="promo-card flex flex-col sm:flex-row w-full max-w-[1000px] sm:min-h-[600px] rounded-[32px] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.12),0_0_0_1px_rgba(0,0,0,0.04)] bg-white mt-2 sm:mt-8">
         {/* Left Visual Panel */}
-        <div className="promo-visual shrink-0 w-full sm:w-[48%] relative flex items-end justify-center overflow-hidden min-h-[270px] sm:min-h-0 bg-[#e8e0da]">
+        <div className="promo-visual shrink-0 w-full sm:w-[48%] relative flex items-end justify-center overflow-hidden min-h-[220px] sm:min-h-0 bg-[#e8e0da]">
           <img
             src={assets.haven_img}
             alt="The Haven"
