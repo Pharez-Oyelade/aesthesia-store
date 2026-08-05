@@ -75,6 +75,8 @@ import peace4 from "./peace4.webp";
 import verify from "./verify.png";
 import waitlist_bg from "./waitlist_bg.webp";
 
+import haven_img from "./TEO_2557.webp";
+
 export const assets = {
   logo,
   logo_light,
@@ -148,4 +150,5 @@ export const assets = {
   // user_color_code
   verify,
   waitlist_bg,
+  haven_img,
 };
