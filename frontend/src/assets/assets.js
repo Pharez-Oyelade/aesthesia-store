@@ -76,6 +76,8 @@ import verify from "./verify.png";
 import waitlist_bg from "./waitlist_bg.webp";
 
 import haven_img from "./TEO_2557.webp";
+import haven_bg from "./haven_bg.webp";
+import haven_bg_2 from "./haven_bg_2.webp";
 
 export const assets = {
   logo,
@@ -151,4 +153,6 @@ export const assets = {
   verify,
   waitlist_bg,
   haven_img,
+  haven_bg,
+  haven_bg_2,
 };

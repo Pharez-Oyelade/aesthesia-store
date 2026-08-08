@@ -4,6 +4,14 @@ import { Link } from "react-router-dom";
 
 const slides = [
   {
+    image: assets.haven_bg,
+    image_mobile: assets.haven_bg,
+    title: "The Haven",
+    subtitle: "Made for comfort, designed for Elegance. Shop the Haven",
+    b_text: "SHOP NOW",
+    link: "/product/6a6a48abef6b304775cfc095",
+  },
+  {
     image: assets.first_bloom2,
     image_mobile: assets.first_bloom2,
     title: "First Bloom - A Fresh Palette",
@@ -15,18 +23,20 @@ const slides = [
     image: assets.peace4,
     image_mobile: assets.peace4,
     title: "Àlàáfíà - Peace",
-    subtitle: "Experience the signature Àlàáfíà, reimagined in Green and Purple",
+    subtitle:
+      "Experience the signature Àlàáfíà, reimagined in Green and Purple",
     b_text: "SHOP NOW",
     link: "/product/6928e4a7d56b7f9f684dd04e",
   },
-  {
-    image: assets.first_bloom3,
-    image_mobile: assets.first_bloom3,
-    title: "FIRST BLOOM RETURNS",
-    subtitle: "Where confidence blossoms in every shade - Magenta & Onion and Soft Blue & Pastel Yellow",
-    b_text: "SHOP NOW",
-    link: "/product/6928eb30d56b7f9f684dd2cf",
-  },
+  // {
+  //   image: assets.first_bloom3,
+  //   image_mobile: assets.first_bloom3,
+  //   title: "FIRST BLOOM RETURNS",
+  //   subtitle:
+  //     "Where confidence blossoms in every shade - Magenta & Onion and Soft Blue & Pastel Yellow",
+  //   b_text: "SHOP NOW",
+  //   link: "/product/6928eb30d56b7f9f684dd2cf",
+  // },
   {
     image: assets.first_bloom1,
     image_mobile: assets.first_bloom1,
@@ -55,6 +65,14 @@ const slides = [
 
 const mobileAdditionalSlides = [
   {
+    image: assets.haven_bg,
+    image_mobile: assets.haven_bg,
+    title: "The Haven",
+    subtitle: "Made for comfort, designed for Elegance. Shop the Haven",
+    b_text: "SHOP NOW",
+    link: "/product/6a6a48abef6b304775cfc095",
+  },
+  {
     image: assets.first_bloom2,
     image_mobile: assets.first_bloom2,
     title: "FIRST BLOOM",
@@ -66,18 +84,19 @@ const mobileAdditionalSlides = [
     image: assets.alaafia_bg_mobile_2,
     image_mobile: assets.alaafia_bg_mobile_2,
     title: "Àlàáfíà - Peace",
-    subtitle: "Experience the signature Àlàáfíà, reimagined in Green and Purple",
+    subtitle:
+      "Experience the signature Àlàáfíà, reimagined in Green and Purple",
     b_text: "SHOP NOW",
     link: "/product/6928e4a7d56b7f9f684dd04e",
   },
-  {
-    image: assets.first_bloom3,
-    image_mobile: assets.first_bloom3,
-    title: "FIRST BLOOM RETURNS",
-    subtitle: "Where confidence blossoms in every shade - Magenta & Onion and Soft Blue & Pastel Yellow",
-    b_text: "SHOP NOW",
-    link: "/product/6928eb30d56b7f9f684dd2cf",
-  },
+  // {
+  //   image: assets.first_bloom3,
+  //   image_mobile: assets.first_bloom3,
+  //   title: "FIRST BLOOM RETURNS",
+  //   subtitle: "Where confidence blossoms in every shade - Magenta & Onion and Soft Blue & Pastel Yellow",
+  //   b_text: "SHOP NOW",
+  //   link: "/product/6928eb30d56b7f9f684dd2cf",
+  // },
   {
     image: assets.first_bloom1,
     image_mobile: assets.first_bloom1,
