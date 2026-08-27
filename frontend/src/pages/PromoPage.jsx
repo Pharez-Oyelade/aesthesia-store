@@ -259,15 +259,13 @@ const PromoPage = () => {
                       community, get early previews of upcoming drops, and never
                       miss an exclusive offer.
                     </p>
-                    <a
-                      href="https://www.instagram.com/channel/AbZIbbk-9CDGZ5LC/"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      to="/inner-circle"
                       className="inline-flex items-center justify-center gap-2 bg-white border border-black/10 text-[#111] px-5 py-2.5 rounded-xl text-[13px] font-semibold transition-all duration-200 hover:bg-gray-50 hover:border-black/20 hover:shadow-sm"
                     >
                       <LuInstagram size={16} className="text-[#e1306c]" />
-                      <span>Join Instagram Channel</span>
-                    </a>
+                      <span>Step 2: Join VIP Channel</span>
+                    </Link>
                   </div>
                 </div>
               </div>

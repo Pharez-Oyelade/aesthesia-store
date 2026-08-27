@@ -33,6 +33,7 @@ const PreNav = lazy(() => import("./components/Prenav"));
 const CollectionPage = lazy(() => import("./pages/CollectionPage"));
 const ShippingPolicy = lazy(() => import("./pages/ShippingPolicy"));
 const PromoPage = lazy(() => import("./pages/PromoPage"));
+const ChannelPage = lazy(() => import("./pages/ChannelPage"));
 
 // Loading component for fallback
 const LoadingFallback = () => (
@@ -49,6 +50,7 @@ const App = () => {
   const isRere = pathname === "/rere-collection";
   const isJewelry = pathname === "/jewelry";
   const isPromo = pathname.startsWith("/promo");
+  const isChannel = pathname === "/inner-circle";
 
   useEffect(() => {
     // Defer Clarity until browser is idle to keep it off the critical path.
@@ -92,7 +94,7 @@ const App = () => {
         <Navbar />
         <SearchBar />
         <MetaPageTracker />
-        {isHome || isClothing || isWig || isRere || isJewelry || isPromo ? (
+        {isHome || isClothing || isWig || isRere || isJewelry || isPromo || isChannel ? (
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/clothing" element={<Clothings />} />
@@ -100,6 +102,7 @@ const App = () => {
             <Route path="/rere-collection" element={<RereCollection />} />
             <Route path="/jewelry" element={<Jewelry />} />
             <Route path="/promo/:campaignId" element={<PromoPage />} />
+            <Route path="/inner-circle" element={<ChannelPage />} />
           </Routes>
         ) : (
           <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] mt-20 pt-10">
