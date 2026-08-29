@@ -147,10 +147,11 @@ const Product = () => {
 
   // Only require measurements for clothing
   const requiresMeasurements =
-    (productData && productData.section === "The RERE Collection") ||
-    (productData && productData.section === "The Color Code Collection") ||
-    (productData && productData.section === "Unfold") ||
-    (productData && productData.section === "The Haven");
+    // (productData && productData.section === "The RERE Collection") ||
+    // (productData && productData.section === "The Color Code Collection") ||
+    // (productData && productData.section === "Unfold") ||
+    // (productData && productData.section === "The Haven");
+    productData && productData.section !== "Still Her";
   const availableSizes =
     productData && productData.sizes
       ? productData.sizes.slice().sort((a, b) => Number(a) - Number(b))
@@ -358,29 +359,33 @@ const Product = () => {
                   Tall - 5'11
                 </p> */}
 
-                <div className="space-y-5 mb-5">
-                  <div>
-                    <p className="font-bold">Petite</p>
-                    <p>
-                      For women <span className="font-semibold">5'0"-5'5"</span>
-                    </p>
-                  </div>
+                {requiresMeasurements && (
+                  <div className="space-y-5 mb-5">
+                    <div>
+                      <p className="font-bold">Petite</p>
+                      <p>
+                        For women{" "}
+                        <span className="font-semibold">5'0"-5'5"</span>
+                      </p>
+                    </div>
 
-                  <div>
-                    <p className="font-bold">Regular</p>
-                    <p>
-                      For women <span className="font-semibold">5'6"-5'8"</span>
-                    </p>
-                  </div>
+                    <div>
+                      <p className="font-bold">Regular</p>
+                      <p>
+                        For women{" "}
+                        <span className="font-semibold">5'6"-5'8"</span>
+                      </p>
+                    </div>
 
-                  <div>
-                    <p className="font-bold">Tall</p>
-                    <p>
-                      For women{" "}
-                      <span className="font-semibold">5'9"-5'11"</span>
-                    </p>
+                    <div>
+                      <p className="font-bold">Tall</p>
+                      <p>
+                        For women{" "}
+                        <span className="font-semibold">5'9"-5'11"</span>
+                      </p>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <p className="mb-5 font-semibold">
                   {productData.specificDetails}
@@ -516,36 +521,41 @@ const Product = () => {
                     </div>
                   </div>
                 )}
-                <div className="mt-4 p-4 border-l-4 border-red-600 bg-red-50 dark:bg-red-900 text-red-800 dark:text-red-100 rounded-md text-sm">
-                  <h4 className="font-semibold mb-1">
-                    Size Selection and Custom Fit Disclaimer
-                  </h4>
-                  <p className="mb-1">
-                    Please Select your preferred size from the available
-                    options. You may also provide your{" "}
-                    <span className="font-medium">exact body measurements</span>{" "}
-                    for a more tailored fit.{" "}
-                  </p>
-                  <p className="mb-1">
-                    If you{" "}
-                    <span className="font-semibold">
-                      do not enter your measurements
-                    </span>{" "}
-                    , your order will be processed using our{" "}
-                    <span className="font-semibold">standard sizing </span>
-                    based on the size you selected.
-                  </p>{" "}
-                  <p>
-                    Need help choosing a size?{" "}
-                    <a
-                      onClick={() => setActiveTab("size-guide")}
-                      href="#size-guide"
-                      className="underline font-medium text-blue-600 hover:text-blue-800"
-                    >
-                      View our Size Guide
-                    </a>
-                  </p>
-                </div>
+                {requiresMeasurements && (
+                  <div className="mt-4 p-4 border-l-4 border-red-600 bg-red-50 dark:bg-red-900 text-red-800 dark:text-red-100 rounded-md text-sm">
+                    <h4 className="font-semibold mb-1">
+                      Size Selection and Custom Fit Disclaimer
+                    </h4>
+                    <p className="mb-1">
+                      Please Select your preferred size from the available
+                      options. You may also provide your{" "}
+                      <span className="font-medium">
+                        exact body measurements
+                      </span>{" "}
+                      for a more tailored fit.{" "}
+                    </p>
+                    <p className="mb-1">
+                      If you{" "}
+                      <span className="font-semibold">
+                        do not enter your measurements
+                      </span>{" "}
+                      , your order will be processed using our{" "}
+                      <span className="font-semibold">standard sizing </span>
+                      based on the size you selected.
+                    </p>{" "}
+                    <p>
+                      Need help choosing a size?{" "}
+                      <a
+                        onClick={() => setActiveTab("size-guide")}
+                        href="#size-guide"
+                        className="underline font-medium text-blue-600 hover:text-blue-800"
+                      >
+                        View our Size Guide
+                      </a>
+                    </p>
+                  </div>
+                )}
+
                 {/* Measurements Form */}
                 {requiresMeasurements && (
                   <form
@@ -623,19 +633,21 @@ const Product = () => {
                         +
                       </button>
                     </div>
-                    <button
-                      onClick={handleAddToCart}
-                      className="w-full md:w-auto bg-gradient-to-r from-[#691110] to-red-700 hover:from-red-800 hover:to-red-600 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95 mt-4"
-                      disabled={productData.soldOut}
-                    >
-                      {`${
-                        productData.soldOut
-                          ? "Sold Out"
-                          : productData.preorder
-                            ? "Preorder Now"
-                            : "Add to Cart"
-                      }`}
-                    </button>
+                    <div className="fixed md:static bottom-0 left-0 w-full bg-white md:bg-transparent p-4 md:p-0 border-t md:border-none border-gray-200 shadow-[0_-4px_10px_-2px_rgba(0,0,0,0.1)] md:shadow-none z-50 mt-4 flex items-center justify-center md:justify-start">
+                      <button
+                        onClick={handleAddToCart}
+                        className="w-full md:w-auto bg-gradient-to-r from-[#691110] to-red-700 hover:from-red-800 hover:to-red-600 text-white px-8 py-3.5 md:py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95"
+                        disabled={productData.soldOut}
+                      >
+                        {`${
+                          productData.soldOut
+                            ? "Sold Out"
+                            : productData.preorder
+                              ? "Preorder Now"
+                              : "Add to Cart"
+                        }`}
+                      </button>
+                    </div>
                   </form>
                 )}
                 {/* If not clothing, show quantity and add to cart */}
@@ -661,28 +673,21 @@ const Product = () => {
                         +
                       </button>
                     </div>
-                    <button
-                      onClick={
-                        !token ? () => navigate("/login") : handleAddToCart
-                      }
-                      className="w-full md:w-auto bg-gradient-to-r from-red-700 to-red-500 hover:from-red-800 hover:to-red-600 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95 mt-4"
-                      disabled={productData.soldOut}
-                    >
-                      {!token
-                        ? "Login to Add to Cart"
-                        : `${
-                            productData.soldOut
-                              ? "Sold Out"
-                              : productData.preorder
-                                ? "Preorder Now"
-                                : "Add to Cart"
-                          }`}
-                      {/* {productData.soldOut
-                      ? "Sold Out"
-                      : productData.preorder
-                      ? "Preorder Now"
-                      : "Add to Cart"} */}
-                    </button>
+                    <div className="fixed md:static bottom-0 left-0 w-full bg-white md:bg-transparent p-4 md:p-0 border-t md:border-none border-gray-200 shadow-[0_-4px_10px_-2px_rgba(0,0,0,0.1)] md:shadow-none z-50 mt-4 flex items-center justify-center md:justify-start">
+                      <button
+                        onClick={handleAddToCart}
+                        className="w-full md:w-auto bg-gradient-to-r from-red-700 to-red-500 hover:from-red-800 hover:to-red-600 text-white px-8 py-3.5 md:py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95"
+                        disabled={productData.soldOut}
+                      >
+                        {`${
+                          productData.soldOut
+                            ? "Sold Out"
+                            : productData.preorder
+                              ? "Preorder Now"
+                              : "Add to Cart"
+                        }`}
+                      </button>
+                    </div>
                   </div>
                 )}
                 <button
@@ -743,7 +748,7 @@ const Product = () => {
         </div>
 
         {/* Related Products */}
-        <div className="max-w-6xl mx-auto px-4 mt-12">
+        <div className="max-w-6xl mx-auto px-4 mt-12 pb-24 md:pb-0">
           <RelatedProducts section={productData.section} />
         </div>
       </div>
