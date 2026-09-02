@@ -79,6 +79,9 @@ import haven_img from "./TEO_2557.webp";
 import haven_bg from "./haven_bg.webp";
 import haven_bg_2 from "./haven_bg_2.webp";
 
+import still_her from "./still_her.png";
+import message_card from "./message_card.jpg";
+
 export const assets = {
   logo,
   logo_light,
@@ -155,4 +158,7 @@ export const assets = {
   haven_img,
   haven_bg,
   haven_bg_2,
+
+  still_her,
+  message_card,
 };
