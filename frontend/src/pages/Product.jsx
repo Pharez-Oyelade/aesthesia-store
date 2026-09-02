@@ -57,6 +57,7 @@ const Product = () => {
 
   const [isCustom, setIsCustom] = useState(false);
   const [note, setNote] = useState("");
+  const [formError, setFormError] = useState("");
 
   // Show the note field only while the custom color option is selected.
   useEffect(() => {
@@ -129,6 +130,7 @@ const Product = () => {
       setLength("");
       setFitLength("");
       setQuantity(1);
+      setFormError("");
     }
   }, [products, productId, id]);
 
@@ -162,16 +164,18 @@ const Product = () => {
   // Add to cart handler
   const handleAddToCart = (e) => {
     e.preventDefault();
+    setFormError("");
+    
     // if (!token) {
     //   navigate("/login");
     //   return;
     // }
     if (availableSizes.length > 0 && !size) {
-      alert("Please select a size");
+      setFormError("Please select a size");
       return;
     }
     if (availableColors.length > 0 && !color) {
-      alert("Please select a color");
+      setFormError("Please select a color");
       return;
     }
     if (
@@ -179,19 +183,19 @@ const Product = () => {
       productData.fitLength.length > 0 &&
       !fitLength
     ) {
-      alert("Please select a fit length");
+      setFormError("Please select a length");
       return;
     }
     if (color === CUSTOM_COLOR_OPTION && !note.trim()) {
-      alert("Please enter a custom color");
+      setFormError("Please enter a custom color");
       return;
     }
     // if (productData.length && productData.length.length > 0 && !length) {
-    //   alert("Please select a length");
+    //   setFormError("Please select a length");
     //   return;
     // }
     // if (requiresMeasurements && Object.values(measurements).some((v) => !v)) {
-    //   alert("Please fill all measurements");
+    //   setFormError("Please fill all measurements");
     //   return;
     // }
     addToCart(
@@ -271,11 +275,25 @@ const Product = () => {
               </div>
             </div>
             {/* Product Details */}
-            <div className="flex-1 flex flex-col gap-6 justify-between">
+            <div className="flex-1 flex flex-col gap-6 justify-between md:sticky md:top-24 md:self-start md:h-fit">
               <div>
                 <h1 className="font-bold text-3xl md:text-4xl text-gray-900 mb-2">
                   {productData.name}
                 </h1>
+
+                {/* Social Proof Reviews Anchor */}
+                {displayedReviews.length > 0 && (
+                  <a href="#reviews-section" className="flex items-center gap-2 mb-4 cursor-pointer hover:underline text-sm text-gray-600">
+                    <div className="flex text-yellow-400">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <svg key={star} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                          <path fillRule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005z" clipRule="evenodd" />
+                        </svg>
+                      ))}
+                    </div>
+                    <span>({displayedReviews.length} Reviews)</span>
+                  </a>
+                )}
 
                 {/* Preorder Tag */}
                 {productData.preorder && !productData.soldOut && (
@@ -633,20 +651,44 @@ const Product = () => {
                         +
                       </button>
                     </div>
-                    <div className="fixed md:static bottom-0 left-0 w-full bg-white md:bg-transparent p-4 md:p-0 border-t md:border-none border-gray-200 shadow-[0_-4px_10px_-2px_rgba(0,0,0,0.1)] md:shadow-none z-50 mt-4 flex items-center justify-center md:justify-start">
-                      <button
-                        onClick={handleAddToCart}
-                        className="w-full md:w-auto bg-gradient-to-r from-[#691110] to-red-700 hover:from-red-800 hover:to-red-600 text-white px-8 py-3.5 md:py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95"
-                        disabled={productData.soldOut}
-                      >
-                        {`${
-                          productData.soldOut
-                            ? "Sold Out"
-                            : productData.preorder
-                              ? "Preorder Now"
-                              : "Add to Cart"
-                        }`}
-                      </button>
+                    <div className="fixed md:static bottom-0 left-0 w-full bg-white md:bg-transparent p-4 md:p-0 border-t md:border-none border-gray-200 shadow-[0_-4px_10px_-2px_rgba(0,0,0,0.1)] md:shadow-none z-50 mt-4 flex flex-col gap-2">
+                      {formError && (
+                        <div className="flex items-center justify-center md:justify-start gap-1.5 text-red-600 font-semibold text-sm animate-pulse">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                          </svg>
+                          <p>{formError}</p>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-3 justify-center md:justify-start w-full">
+                        <button
+                          onClick={handleAddToCart}
+                          className="flex-1 md:flex-none w-full md:w-auto bg-gradient-to-r from-[#691110] to-red-700 hover:from-red-800 hover:to-red-600 text-white px-8 py-3.5 md:py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95"
+                          disabled={productData.soldOut}
+                        >
+                          {`${
+                            productData.soldOut
+                              ? "Sold Out"
+                              : productData.preorder
+                                ? "Preorder Now"
+                                : "Add to Cart"
+                          }`}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => addToWishlist(productData._id)}
+                          className={`p-3.5 md:p-3 rounded-xl border-2 transition-all flex items-center justify-center shrink-0 ${
+                            wishlist && wishlist.includes(productData._id)
+                              ? "border-red-600 bg-red-50 text-red-600"
+                              : "border-gray-300 bg-white text-gray-500 hover:border-gray-400"
+                          }`}
+                          title="Add to Wishlist"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill={wishlist && wishlist.includes(productData._id) ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </form>
                 )}
@@ -673,40 +715,73 @@ const Product = () => {
                         +
                       </button>
                     </div>
-                    <div className="fixed md:static bottom-0 left-0 w-full bg-white md:bg-transparent p-4 md:p-0 border-t md:border-none border-gray-200 shadow-[0_-4px_10px_-2px_rgba(0,0,0,0.1)] md:shadow-none z-50 mt-4 flex items-center justify-center md:justify-start">
-                      <button
-                        onClick={handleAddToCart}
-                        className="w-full md:w-auto bg-gradient-to-r from-red-700 to-red-500 hover:from-red-800 hover:to-red-600 text-white px-8 py-3.5 md:py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95"
-                        disabled={productData.soldOut}
-                      >
-                        {`${
-                          productData.soldOut
-                            ? "Sold Out"
-                            : productData.preorder
-                              ? "Preorder Now"
-                              : "Add to Cart"
-                        }`}
-                      </button>
+                    <div className="fixed md:static bottom-0 left-0 w-full bg-white md:bg-transparent p-4 md:p-0 border-t md:border-none border-gray-200 shadow-[0_-4px_10px_-2px_rgba(0,0,0,0.1)] md:shadow-none z-50 mt-4 flex flex-col gap-2">
+                      {formError && (
+                        <div className="flex items-center justify-center md:justify-start gap-1.5 text-red-600 font-semibold text-sm animate-pulse">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                          </svg>
+                          <p>{formError}</p>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-3 justify-center md:justify-start w-full">
+                        <button
+                          onClick={handleAddToCart}
+                          className="flex-1 md:flex-none w-full md:w-auto bg-gradient-to-r from-red-700 to-red-500 hover:from-red-800 hover:to-red-600 text-white px-8 py-3.5 md:py-3 rounded-xl text-lg font-bold shadow-lg transition-all duration-200 active:scale-95"
+                          disabled={productData.soldOut}
+                        >
+                          {`${
+                            productData.soldOut
+                              ? "Sold Out"
+                              : productData.preorder
+                                ? "Preorder Now"
+                                : "Add to Cart"
+                          }`}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => addToWishlist(productData._id)}
+                          className={`p-3.5 md:p-3 rounded-xl border-2 transition-all flex items-center justify-center shrink-0 ${
+                            wishlist && wishlist.includes(productData._id)
+                              ? "border-red-600 bg-red-50 text-red-600"
+                              : "border-gray-300 bg-white text-gray-500 hover:border-gray-400"
+                          }`}
+                          title="Add to Wishlist"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill={wishlist && wishlist.includes(productData._id) ? "currentColor" : "none"} viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
-                <button
-                  onClick={() => addToWishlist(productData._id)}
-                  className={`mt-4 px-4 py-2 rounded ${
-                    wishlist && wishlist.includes(productData._id)
-                      ? "bg-red-400 text-white"
-                      : "bg-gray-200"
-                  }`}
-                >
-                  {wishlist && wishlist.includes(productData._id)
-                    ? "In Wishlist"
-                    : "Add to Wishlist"}
-                </button>
               </div>
-              <div className="border-t pt-6 mt-6 text-sm text-gray-500 flex flex-col gap-1">
-                <p>✔️ 100% Original Product</p>
-                <p>✔️ Online Payment Available</p>
-                <p>✔️ 7-10 working days production time after confirmation</p>
+              <div className="border-t pt-6 mt-6 text-sm text-gray-600 flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="bg-green-50 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-green-600">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+                    </svg>
+                  </div>
+                  <p className="font-medium">100% Original Product</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="bg-blue-50 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-blue-600">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                  </div>
+                  <p className="font-medium">Secure Online Payment</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="bg-orange-50 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-orange-600">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <p className="font-medium">7-10 working days production time</p>
+                </div>
               </div>
             </div>
           </div>
@@ -743,7 +818,7 @@ const Product = () => {
         </div>
 
         {/* Reviews */}
-        <div className="max-w-6xl mx-auto px-4 mt-12">
+        <div id="reviews-section" className="max-w-6xl mx-auto px-4 mt-12 scroll-mt-24">
           <ProductReview reviews={displayedReviews} />
         </div>
 
