@@ -215,7 +215,7 @@ const CollectionPage = () => {
               onClick={() => navigate(`/product/${product._id}`)}
               className="cursor-pointer group"
             >
-              <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden bg-gray-200 group-hover:opacity-75 rounded-2xl">
+              <div className="aspect-[3/4] w-full overflow-hidden bg-gray-200 group-hover:opacity-75 rounded-2xl">
                 <img
                   src={product.image[0].url}
                   alt={product.name}
