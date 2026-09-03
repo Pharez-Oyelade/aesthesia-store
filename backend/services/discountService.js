@@ -271,9 +271,12 @@ export const resolveDiscountForCode = async ({ code, items = [] }) => {
     campaign.discountValue,
   );
 
+  const hasValidBenefit =
+    discountAmount > 0 || Boolean(campaign.isDeliveryFree);
+
   return {
-    success: discountAmount > 0,
-    reason: discountAmount > 0 ? "APPLIED" : "NO_DISCOUNT_VALUE",
+    success: hasValidBenefit,
+    reason: hasValidBenefit ? "APPLIED" : "NO_DISCOUNT_VALUE",
     code: subscriber ? subscriber.code : campaign.code,
     campaignId: campaign._id,
     discountAmount,
@@ -286,9 +289,10 @@ export const resolveDiscountForCode = async ({ code, items = [] }) => {
     cartSubtotal: base.cartSubtotal,
     expiresAt,
     isDeliveryFree: campaign.isDeliveryFree || false,
-    message:
-      discountAmount > 0
+    message: hasValidBenefit
+      ? discountAmount > 0
         ? "Discount code applied successfully"
-        : "This discount is not currently configured with a usable value.",
+        : "Free delivery applied successfully!"
+      : "This discount is not currently configured with a usable value.",
   };
 };
