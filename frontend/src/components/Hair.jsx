@@ -5,17 +5,17 @@ import { shopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
 
-const NewProducts = () => {
+const HairSection = () => {
   const { products } = useContext(shopContext);
-  const [latestProducts, setLatestProducts] = useState([]);
+  const [hairs, sethairs] = useState([]);
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // setLatestProducts(products.reverse().slice(0, 10));
-    setLatestProducts(
+    sethairs(
       [...products]
-        .filter((item) => item.section !== "Still Her")
+        .filter((item) => item.section === "Still Her")
         .reverse()
         .slice(0, 10),
     );
@@ -34,15 +34,15 @@ const NewProducts = () => {
     <div>
       <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] py-10">
         <div className="text-center  py-8 text-3xl">
-          <Title text1={"NEW"} text2={"PRODUCTS"} />
+          <Title text1={"Hair"} text2={"Collection"} />
           <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600">
-            Elevate your everyday with our latest products
+            Hair Made Effortless
           </p>
         </div>
 
         {/* Render Products */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6">
-          {latestProducts.map((lp, index) => (
+          {hairs.map((lp, index) => (
             <ProductItem
               key={index}
               id={lp._id}
@@ -62,4 +62,4 @@ const NewProducts = () => {
   );
 };
 
-export default NewProducts;
+export default HairSection;

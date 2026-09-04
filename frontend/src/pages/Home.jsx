@@ -9,6 +9,7 @@ import Title from "../components/Title";
 import PromotionBanner from "../components/PromotionBanner";
 import Reviews from "../components/Reviews";
 import { assets } from "../assets/assets";
+import HairSection from "../components/Hair";
 
 const Home = () => {
   return (
@@ -37,6 +38,7 @@ const Home = () => {
         </div>
       </div>
 
+      <HairSection />
       <NewProducts />
       <Policy />
 
@@ -45,11 +47,23 @@ const Home = () => {
       {/* Why choose us */}
       <div className="flex justify-center items-center gap-3 sm:gap-10 mt-10 mb-20">
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 w-60 text-center">
-          <img src={assets.badge} alt="Premium quality" className="w-10" width={40} height={40} />
+          <img
+            src={assets.badge}
+            alt="Premium quality"
+            className="w-10"
+            width={40}
+            height={40}
+          />
           <h3 className="font-semibold text-lg">Premium Quality</h3>
         </div>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 w-60 text-center">
-          <img src={assets.reliability} alt="Reliability" className="w-10" width={40} height={40} />
+          <img
+            src={assets.reliability}
+            alt="Reliability"
+            className="w-10"
+            width={40}
+            height={40}
+          />
           <h3 className="font-semibold text-lg">Reliable Delivery</h3>
         </div>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 w-60 text-center">
