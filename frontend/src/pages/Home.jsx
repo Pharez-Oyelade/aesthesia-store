@@ -38,8 +38,9 @@ const Home = () => {
         </div>
       </div>
 
-      <HairSection />
       <NewProducts />
+      <HairSection />
+
       <Policy />
 
       <FeaturedGrid />
