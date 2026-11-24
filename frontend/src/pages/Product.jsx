@@ -1,6 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useParams } from "react-router-dom";
+import { LuMaximize2 } from "react-icons/lu";
 import { shopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
@@ -12,10 +19,7 @@ import {
 import { getOptimizedUrl } from "../utils/cloudinaryHelper";
 import { productReviews } from "../../data/productReview";
 import ProductReview from "../components/ProductReview";
-
-// import { RxCaretLeft } from "react-icons/rx";
-// import { RxCaretRight } from "react-icons/rx";
-// import { IoMdClose } from "react-icons/io";
+import ProductImageLightbox from "../components/ProductImageLightbox";
 
 const Product = () => {
   const { productId, id } = useParams();
@@ -37,7 +41,8 @@ const Product = () => {
 
   // Find product after products are loaded
   const [productData, setProductData] = useState(null);
-  const [image, setImage] = useState("");
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [size, setSize] = useState("");
   const [color, setColor] = useState("");
   const [length, setLength] = useState("");
@@ -70,14 +75,19 @@ const Product = () => {
     }
   }, [color, CUSTOM_COLOR_OPTION]);
 
-  // const [isImageModal, setIsImageModal] = useState(false);
-  // const [modalIndex, setModalIndex] = useState(0);
+  const productImages = useMemo(
+    () => (productData?.image || []).filter((item) => Boolean(item?.url)),
+    [productData],
+  );
+  const activeImageIndex =
+    productImages.length > 0
+      ? Math.min(selectedImageIndex, productImages.length - 1)
+      : 0;
+  const image = productImages[activeImageIndex]?.url || "";
 
-  // useEffect(() => {
-  //   const handleEsc = (e) => e.key === "Escape" && setIsImageModal(false);
-  //   window.addEventListener("keydown", handleEsc);
-  //   return () => window.removeEventListener("keydown", handleEsc);
-  // }, []);
+  const closeImageModal = useCallback(() => {
+    setIsImageModalOpen(false);
+  }, []);
 
   const tabs = [
     {
@@ -122,9 +132,8 @@ const Product = () => {
     if (products && products.length > 0) {
       const prod = products.find((item) => item._id === (productId || id));
       setProductData(prod || null);
-      setImage(
-        prod && prod.image && prod.image[0].url ? prod.image[0].url : "",
-      );
+      setSelectedImageIndex(0);
+      setIsImageModalOpen(false);
       setSize("");
       setColor("");
       setLength("");
@@ -250,29 +259,57 @@ const Product = () => {
           <div className=" flex flex-col md:flex-row gap-12">
             {/* Product Images */}
             <div className="flex-1 flex flex-col gap-6">
-              <div className="w-full aspect-square bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden shadow-md">
-                <img
-                  src={getOptimizedUrl(image, 800)}
-                  className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
-                  alt={productData.name}
-                />
+              <div className="w-full aspect-square bg-gray-50 rounded-2xl flex items-center justify-center overflow-hidden shadow-md relative group">
+                {image ? (
+                  <button
+                    type="button"
+                    onClick={() => setIsImageModalOpen(true)}
+                    className="relative w-full h-full cursor-zoom-in focus:outline-none focus-visible:ring-2 focus-visible:ring-[#691110] rounded-2xl overflow-hidden block"
+                    aria-label={`View full size image of ${productData.name}`}
+                  >
+                    <img
+                      src={getOptimizedUrl(image, 800)}
+                      className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                      alt={productData.name}
+                    />
+                    <span className="pointer-events-none absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-black/65 backdrop-blur-sm px-3 py-1.5 text-xs font-medium text-white shadow-md opacity-90 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 transition-opacity duration-200">
+                      <LuMaximize2 className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span>Expand</span>
+                    </span>
+                  </button>
+                ) : (
+                  <div className="text-sm text-gray-400">
+                    No image available
+                  </div>
+                )}
               </div>
-              <div className="flex flex-wrap gap-3 justify-center mt-2">
-                {productData.image.map((item, index) => (
-                  <img
-                    onClick={() => setImage(item?.url)}
-                    loading="lazy"
-                    src={getOptimizedUrl(item.url, 400)}
-                    key={index}
-                    className={`w-16 h-16 object-cover rounded-lg border-2 cursor-pointer transition-all duration-200 ${
-                      image === item.url
-                        ? "border-red-600 scale-105"
-                        : "border-gray-200"
-                    }`}
-                    alt={productData.name + " thumbnail"}
-                  />
-                ))}
-              </div>
+              {productImages.length > 0 && (
+                <div className="flex flex-wrap gap-3 justify-center mt-2">
+                  {productImages.map((item, index) => (
+                    <button
+                      type="button"
+                      key={`${item.url}-${index}`}
+                      onClick={() => setSelectedImageIndex(index)}
+                      aria-label={`View ${productData.name} image ${index + 1}`}
+                      aria-current={
+                        activeImageIndex === index ? "true" : undefined
+                      }
+                      className={`w-16 h-16 rounded-lg border-2 cursor-pointer overflow-hidden transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#691110] ${
+                        activeImageIndex === index
+                          ? "border-red-600 scale-105"
+                          : "border-gray-200 hover:border-gray-400"
+                      }`}
+                    >
+                      <img
+                        loading="lazy"
+                        src={getOptimizedUrl(item.url, 400)}
+                        className="w-full h-full object-cover block"
+                        alt={`${productData.name} thumbnail ${index + 1}`}
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             {/* Product Details */}
             <div className="flex-1 flex flex-col gap-6 justify-between md:sticky md:top-24 md:self-start md:h-fit">
@@ -932,45 +969,14 @@ const Product = () => {
           <RelatedProducts section={productData.section} />
         </div>
       </div>
-      {/* {isImageModal && (
-        <div className="absolute w-full h-[100vh] top-0 left-0 bg-black/50 flex items-center justify-center">
-          <div className="relative flex items-center justify-center">
-            <button
-              onClick={() =>
-                setModalIndex((prev) =>
-                  prev === 0 ? productData.image.length - 1 : prev - 1
-                )
-              }
-              className="px-4 py-2 text-7xl font-bold cursor-pointer text-white"
-            >
-              <RxCaretLeft />
-            </button>
-            <img
-              src={productData.image[modalIndex]?.url}
-              alt="Product"
-              className="max-w-4xl mt-20 h-[60%] w-[50%] object-contain"
-              onClick={() => setIsImageModal(false)}
-            />
-            <button
-              onClick={() =>
-                setModalIndex((prev) =>
-                  prev === productData.image.length - 1 ? 0 : prev + 1
-                )
-              }
-              className=" px-4 py-2 text-7xl font-bold cursor-pointer text-white"
-            >
-              <RxCaretRight />
-            </button>
-
-            <button
-              onClick={() => setIsImageModal(false)}
-              className="absolute top-40 right-0 text-4xl cursor-pointer text-white"
-            >
-              <IoMdClose />
-            </button>
-          </div>
-        </div>
-      )} */}
+      <ProductImageLightbox
+        isOpen={isImageModalOpen}
+        images={productImages}
+        currentIndex={activeImageIndex}
+        productName={productData.name}
+        onClose={closeImageModal}
+        onSelectIndex={setSelectedImageIndex}
+      />
     </div>
   );
 };
