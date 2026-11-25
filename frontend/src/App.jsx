@@ -84,7 +84,7 @@ const App = () => {
   }, []);
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-clip">
       {isDiscountWaitlistEnabled && <WaitlistPopup />}
       <InstagramIcon />
       <ScrollToTop />
