@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FaInstagram } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 const InstagramIcon = () => {
   const [isHelpVisible, setIsHelpVisible] = useState(false);
+  const { pathname } = useLocation();
+  const isProductPage = pathname.startsWith("/product/");
 
   // show help text with timeout and hide after 3 seconds
   const showHelpText = () => {
@@ -22,7 +25,13 @@ const InstagramIcon = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-8 right-8 z-50 hover:scale-110 transition-transform duration-200 flex flex-row-reverse gap-3 items-center justify-center">
+    <div
+      className={`fixed z-40 hover:scale-110 transition-transform duration-200 flex flex-row-reverse gap-3 items-center justify-center ${
+        isProductPage
+          ? "bottom-28 right-4 md:bottom-8 md:right-8"
+          : "bottom-8 right-8"
+      }`}
+    >
       <a
         href="https://ig.me/m/aesthesia_haven"
         target="_blank"

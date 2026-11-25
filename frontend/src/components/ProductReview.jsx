@@ -22,6 +22,10 @@ const ProductReview = ({ reviews }) => {
   };
 
   useEffect(() => {
+    setCurrentIndex(0);
+  }, [reviews]);
+
+  useEffect(() => {
     if (scrollRef.current) {
       const scrollAmount = currentIndex * scrollRef.current.offsetWidth;
       scrollRef.current.scrollTo({ left: scrollAmount, behavior: "smooth" });
@@ -33,7 +37,7 @@ const ProductReview = ({ reviews }) => {
   }
 
   if (!reviews || reviews.length === 0) {
-    return;
+    return null;
   }
 
   return (
@@ -56,9 +60,16 @@ const ProductReview = ({ reviews }) => {
             >
               {/* <p className="font-bold text-sm">{review.name}</p> */}
               <div className="text-gray-600">
-                <div className="flex items-center">
+                <div
+                  className="flex items-center"
+                  aria-label={`${review.rating} out of 5 stars`}
+                >
                   {[...Array(review.rating)].map((_, i) => (
-                    <FaStar key={i} className="text-yellow-500" />
+                    <FaStar
+                      key={i}
+                      className="text-yellow-500"
+                      aria-hidden="true"
+                    />
                   ))}
                 </div>
                 <p className="mt-2">{review.comment}</p>
@@ -81,7 +92,8 @@ const ProductReview = ({ reviews }) => {
 
                     <img
                       src={assets.verify}
-                      alt="Verified"
+                      alt=""
+                      aria-hidden="true"
                       className="w-3 h-3 ml-1"
                     />
                   </div>
@@ -92,22 +104,32 @@ const ProductReview = ({ reviews }) => {
         </div>
 
         {/* Navigation buttons */}
-        <div className="absolute top-1/2 transform -translate-y-1/2 left-0">
-          <button
-            className="bg-gray-300/20 p-3 rounded-full shadow-md hover:bg-gray-400/20 transition-colors duration-300"
-            onClick={handlePrev}
-          >
-            &#8592;
-          </button>
-        </div>
-        <div className="absolute top-1/2 transform -translate-y-1/2 right-0">
-          <button
-            className="bg-gray-300/20 p-3 rounded-full shadow-md hover:bg-gray-400/20 transition-colors duration-300"
-            onClick={handleNext}
-          >
-            &#8594;
-          </button>
-        </div>
+        {reviews.length > 1 && (
+          <>
+            <div className="absolute top-1/2 transform -translate-y-1/2 left-0">
+              <button
+                type="button"
+                aria-label="Previous reviews"
+                disabled={currentIndex === 0}
+                className="bg-gray-300/30 p-3 rounded-full shadow-md hover:bg-gray-400/30 transition-colors duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                onClick={handlePrev}
+              >
+                &#8592;
+              </button>
+            </div>
+            <div className="absolute top-1/2 transform -translate-y-1/2 right-0">
+              <button
+                type="button"
+                aria-label="Next reviews"
+                disabled={currentIndex >= reviews.length - 1}
+                className="bg-gray-300/30 p-3 rounded-full shadow-md hover:bg-gray-400/30 transition-colors duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                onClick={handleNext}
+              >
+                &#8594;
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

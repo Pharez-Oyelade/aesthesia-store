@@ -199,6 +199,7 @@ const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [wishlist, setWishlist] = useState([]);
   const [products, setProducts] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(true);
   const [collection, setCollection] = useState([]);
   const [token, setToken] = useState("");
   const [userData, setUserData] = useState({ name: "", email: "" });
@@ -685,12 +686,14 @@ const ShopContextProvider = (props) => {
   };
 
   const addToWishlist = async (productId) => {
-    if (wishlist.includes(productId)) {
-      toast.info("Product already in wishlist");
-      return;
+    const isAlreadyWishlisted = wishlist.includes(productId);
+    if (isAlreadyWishlisted) {
+      setWishlist((prev) => prev.filter((id) => id !== productId));
+      toast.info("Removed from wishlist");
+    } else {
+      setWishlist((prev) => [...prev, productId]);
+      toast.success("Added to wishlist");
     }
-    setWishlist((prev) => [...prev, productId]);
-    toast.success("Added to wishlist");
 
     if (token) {
       try {
@@ -710,6 +713,7 @@ const ShopContextProvider = (props) => {
   };
 
   const getProductsData = async () => {
+    setProductsLoading(true);
     try {
       const response = await axios.get(backendUrl + "/api/product/list");
       if (response.data.success) {
@@ -720,6 +724,8 @@ const ShopContextProvider = (props) => {
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+    } finally {
+      setProductsLoading(false);
     }
   };
 
@@ -1018,6 +1024,7 @@ const ShopContextProvider = (props) => {
 
   const value = {
     products,
+    productsLoading,
     collection,
     // currency,
     currency: currencySymbols[currencyCode],
